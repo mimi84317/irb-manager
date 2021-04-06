@@ -1,4 +1,4 @@
-# IRB 檔案上傳功能 
+# IRB 後臺管理 
 ## 目錄
 
 * [說明](#說明)
@@ -11,24 +11,44 @@
 * [其他設定](#其他設定)
 * [使用](#使用)
     * [啟動伺服器](#啟動伺服器)
-    * [API](#api)
 * [參考資料](#參考資料)
 * [備註](#備註)
 
 ## 說明
-為解決 Agentflow 檔案上傳功能無法自訂上傳清單，及提供 PDF 檔案合併功能而開發的擴充功能。  
-使用 JWT 驗證應用系統 (如 Agentflow) 到開啟上傳頁面的權限
+為解決IRB後臺管理無法應用在Agentflow上，因此另外利用laravel建立新平台供管理員管理IRB部分功能
 
-### TODO LIST
-- [x] JWT 驗證  
-- [x] PDF 合併
-- [x] 檔案上傳
-- [ ] 檔案上傳至指定 filepool
-- [ ] PostTooLarge Exception 50MB?
-- [ ] filepool 外移
-- [ ] 刪除、下載按鈕
-- [ ] 檔案下載
-- [ ] 檔案清單管理 
+### 測試機資訊
+* 網址 : http://demo-iirb.ncgm.sinica.edu.tw/iirb07/home
+* 管理員帳號 : jylin@gate.sinica.edu.tw
+* 管理員密碼 : 2015test
+
+### 測試機功能 & TODO LIST
+* 審查案管理功能
+    * [ ] 外部案件匯入
+    * [ ] 管理未正進行的計畫
+    * [ ] 管理全部計畫與追蹤審查預定日
+    * [ ] 瀏覽全部審查案
+    * [ ] 設定追蹤審查提醒信週期
+    * [ ] 管理追蹤審查預定日功能
+    * [ ] 查詢系統寄信紀錄
+* 委員會管理功能
+    * [ ] 設定委員會
+    * [ ] 設定委員會議程
+    * [ ] 管理委員帳號 (?)
+* 專家管理功能
+    * [ ] 設定專家清單
+    * [ ] 設定專家類別
+* 審核流程管理功能
+    * [ ] 設定送審文件清單與說明
+    * [ ] 設定系統信件內容
+    * [ ] 編輯郵件簽名檔
+    * [ ] 案件預設承辦人設定管理
+    * [ ] 審查人員管理
+* 其他管理功能
+    * [ ] 設定所長
+    * [ ] 設定申請人所屬機構
+    * [ ] 設定執行醫院清單
+    * [ ] 更換許可書
 
 ## 安裝
 由於開發區伺服器沒有對外網路，建立全新專案時建議於本機 (PC) 安裝 composer ，創建專案後上傳 gitlab ，再從開發區 git clone，建立全新專案詳細方法請見[參考資料](#參考資料)。若沒有要另外安裝套件可直接 clone 此專案無須安裝 composer。
@@ -89,14 +109,6 @@ extension=pdo_sqlite
 #### 安裝 PHP
 待補
 
-#### 安裝 MariaDB
-(可能請 DBA 處理?)  
-管理 client 及登入紀錄  
-
-#### 安裝 phpMyAdmin
-(可能請 DBA 處理?)  
-方便管理及查看 log  
-
 #### Clone 專案至資料夾
 1. 建立資料夾
 ```console
@@ -105,7 +117,7 @@ extension=pdo_sqlite
 2. 從資服處 gitlab clone 專案
 ```console
 # cd /home/vhost/irb
-# git clone https://glab01.ascc.sinica.edu.tw/ryan4559/irb-fileupload.git
+# git clone https://glab01.ascc.sinica.edu.tw/ryan4559/irb-manager.git
 ```
 *若因防火牆阻擋而 timeout 可暫時關閉防火牆或聯絡系統科*  
 *關閉防火牆：*
@@ -117,16 +129,16 @@ extension=pdo_sqlite
 # systemctl start nftables
 ```
 
-3. 重新命名資料夾為 `fileupload`
+3. 重新命名資料夾為 `manager`
 ```console
-# mv irb-fileupload fileupload 
+# mv irb-manager manager 
 ```
 #### 更改資料夾權限
 更改擁有者為 apache
 > storage 和 bootstrap/cache 目錄中的目錄必須讓你的伺服器有寫入權限，否則 Laravel 就無法執行
  ```console
  # cd /home/vhost/irb
- # chown -R apache:apache fileupload
+ # chown -R apache:apache manager
  ```
 
 ## 設定
@@ -159,20 +171,14 @@ $app->useEnvironmentPath(dirname(__DIR__) . '/../config/');
 ```
 **另外請注意 APP_KEY 值會影響雜湊與加密，因此相同資料庫的專案 APP_KEY 需設定為一樣**
 
-* **JWT_SECRET**：  
-若 JWT_SECRET 為空值，可執行以下指令產出，  
-若憑證為空值，則被視為不合法身分  
-```console
-# php artisan jwt:secret
-```
 ### 設定 Apache vhosts
 範例將資料夾至於 `home/vhost/irb`，於 `/etc/httpd/conf.d/` 新增 `httpd-vhost.conf` 檔案，內容如下：
 ```apache
 <VirtualHost *:80>
-    DocumentRoot /home/vhosts/irb/fileupload/public
+    DocumentRoot /home/vhosts/irb/manager/public
     ServerName localhost:8000
 
-    <Directory /home/vhosts/irb/fileupload>
+    <Directory /home/vhosts/irb/manager>
         DirectoryIndex index.php
         AllowOverride All
         Require all granted
@@ -207,80 +213,18 @@ $app->useEnvironmentPath(dirname(__DIR__) . '/../config/');
     'timezone' => 'Asia/Taipei',
 ```
 
-### Provider 設定
-增加 JWT Provider，`config/app.php` 增加  
-> Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-```php
-    /*
-    |--------------------------------------------------------------------------
-    | Autoloaded Service Providers
-    |--------------------------------------------------------------------------
-    |
-    | The service providers listed here will be automatically loaded on the
-    | request to your application. Feel free to add your own services to
-    | this array to grant expanded functionality to your applications.
-    |
-    */
-
-    'providers' => [
-
-        ...
-
-        /*
-         * Package Service Providers...
-         */
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-
-        ...
-```
-
 ## 使用
 ### 啟動伺服器
-cd 至 `home/vhost/irb/fileupload`  
+cd 至 `home/vhost/irb/manager`  
 ```console
 # php artisan serve
 ```
 
-### API
-| API | Method | 功能 | Header | Body (form-data) | 回傳 | 備註 |
-|---|---|---|---|---|---|---|
-| /api/auth/login | POST | 取得 JWT | No Auth | <ul><li>username (ex: testSSO)</li><li>clientid</li><li>client_secret</li></ul>| JSON | 可能有 GET 方式但未測試 |
-| /api/auth/logout | POST | 撤銷 JWT | Authorization: Bearer Token<br/> Accept: application/json | <ul></ul>| JSON | 未使用 |
-| /api/auth/logout | POST | 撤銷 JWT (無法自訂 Header 時使用) | N/A | <ul><li>token</li></ul>| JSON | 未使用，可能有 GET 方式但未測試 |
-| **/auth/fileupload** <br/>注意沒有/api | POST | 開啟檔案上傳頁面 | Authorization: Bearer Token<br/> Accept: application/json | <ul></ul>| HTML(view) |  |
-| **/auth/fileupload** <br/>注意沒有/api | POST | 開啟檔案上傳頁面 (無法自訂 Header 時使用) | N/A | <ul><li>token</li></ul>| HTML(view) | Agentflow 目前用這種 |
-| **/auth/fileupload** <br/>注意沒有/api | GET | 開啟檔案上傳頁面 (無法 POST 時使用，如：直接在瀏覽器網址開啟) | N/A | 網址接 /?token=[JWT_TOKEN] | HTML(view) | 不建議將 token 放在網址讓使用者看到 |
-| /api/auth/refresh | POST | 未使用 | Authorization: Bearer Token (JWT)<br/> Accept: application/json |  | JSON | 未使用 |
-
-#### 呼叫 API 範例
-使用 Postman 呼叫 API
-
-* Method : POST
-* URL : http://10.109.233.21/api/auth/login (IRB檔案功能開發機)
-* Authorization : No Auth
-* Body : 選擇 form-data
-    * username : testsso
-    * clientid : test
-    * client_secret : 123456
----
-* 回傳
-    * status : 200 OK
-    * Body : 
-```json
-{
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMC4xMDkuMjMzLjIxXC9hcGlcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjE1OTQ5MTM0LCJleHAiOjE2MTU5NTA5MzQsIm5iZiI6MTYxNTk0OTEzNCwianRpIjoiSmpNbnRhamRVdFo0MjhCOSIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSIsImNsaWVudGlkIjoidGVzdCJ9.bVcAMYmH8TMEPKc1iHdp-tbQwRy8B5EwYMFDXRTxWaM",
-    "token_type": "bearer",
-    "expires_in": 1800,
-    "username": "testsso",
-    "dbret": true
-} 
-```
 ### BPM API
 說明文件：[BPMAPI.md](/BPMAPI.md)
 
 ## 參考資料
 * [JSON Web Tokens - jwt.io](https://jwt.io/)
-* [Home - jwt-auth (laravel JWT 套件)](https://jwt-auth.readthedocs.io/en/develop/)
 * [Win 環境建置for網頁組 - HackMD](https://hackmd.io/@Fc8E38JgQMSVXEdA0xXtxA/SJo2l1ECP)
 * [Laravel專案初始化 - HackMD](https://hackmd.io/@Fc8E38JgQMSVXEdA0xXtxA/ByfIXTyWP#%E9%96%8B%E7%99%BC%E5%8D%80%E5%BB%BA%E7%AB%8B%E5%B0%88%E6%A1%88) 
 * [Laravel 與 JWT 搭配運用 - HackMD](https://hackmd.io/@8irD0FCGSQqckvMnLpAmzw/SkqRnxqIM?type=view)
