@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Login_log;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -55,9 +57,87 @@ class AuthController extends Controller
 
         // insert to log
         $clientid = auth()->payload()->get('clientid');
+        $user = auth()->payload()->get('user');
         $username = auth()->payload()->get('username');
-        $this->insertAccessLog($clientid, $username);
-        return view('newCaseFilelist', ['username'=> $username, 'clientid'=> $clientid] );
+        $this->insertAccessLog($clientid, $user);
+
+        $case = auth()->payload()->get('case');
+        $caseType = 'UNKNOWN';
+        $ansid = auth()->payload()->get('ansid');
+        $owner = auth()->payload()->get('owner');
+        $token = request('token');
+        $expireTime = auth()->payload()->get('exp');
+
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        switch($case)
+        {
+            case 'newcase':
+                //upload filelist left join filepool
+                $response = Http::asForm()->withHeaders([
+                    'Accept' => 'application/json'
+                ])->post($bpmapi, [
+                    'funName' => 'callDBApi',
+                    'Data' => '{"DB":"BPM","TbName":"IRB_new_case_upload_filelist","condition":" LEFT JOIN (SELECT * FROM IRB_filepool WHERE ansid = \''.$ansid.'\') AS Temp ON IRB_new_case_upload_filelist.chname = Temp.field_name ORDER BY sort ","statements":"select"}',
+                    'conArr' => '{}',
+                    'column' => ''
+                ]);
+                $caseType = '新案';
+                break;
+            case 'midterm':
+                //upload filelist left join filepool
+                $response = Http::asForm()->withHeaders([
+                    'Accept' => 'application/json'
+                ])->post($bpmapi, [
+                    'funName' => 'callDBApi',
+                    'Data' => '{"DB":"BPM","TbName":"IRB_midterm_upload_filelist","condition":" LEFT JOIN (SELECT * FROM IRB_filepool WHERE ansid = \''.$ansid.'\') AS Temp ON IRB_midterm_upload_filelist.chname = Temp.field_name ORDER BY sort ","statements":"select"}',
+                    'conArr' => '{}',
+                    'column' => ''
+                ]);
+                $caseType = '期中';
+                break;
+            default:
+                // $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+                // $response = Http::asForm()->withHeaders([
+                //     'Accept' => 'application/json'
+                // ])->post($bpmapi, [
+                //     'funName' => 'callDBApi',
+                //     'Data' => '{"DB":"BPM","TbName":"IRB_new_case_upload_filelist","condition":" ORDER BY sort","statements":"select"}',
+                //     'conArr' => '{}',
+                //     'column' => ''
+                // ]);
+                // $httpcode = $response->status();
+                // return view('newCaseFilelist', compact('username', 'user', 'clientid', 'httpcode', 'case', 'ansid') )->with('filelist', json_decode($response->Body(), true));
+                return view('notFound', ['var' => '案件類別'.$case]);
+        }
+
+        $httpcode = $response->status();
+
+        // get files in disk but not in db
+        $path = $this->checkDir($owner, $ansid);
+        $disk_files = Storage::disk('filepool')->allFiles($path);
+        $db_files = json_decode($response->Body(), true);
+        $result_array = $disk_files;
+
+        foreach($db_files as $file)
+        {
+            if(in_array( $file['file_id'], $disk_files))
+            {
+                $result_array = array_diff( $result_array, [$file['file_id']] );
+            }
+        }
+        $size = 0;
+
+        if(Storage::disk('filepool')->exists($path.'/'.$owner.'_'.$ansid.'.pdf'))
+        {
+            $size = Storage::disk('filepool')->size($path.'/'.$owner.'_'.$ansid.'.pdf');
+            $size = $this->humanFileSize($size);
+        }
+
+        return view('newCaseFilelist', compact('token', 'expireTime', 'username', 'user', 'clientid', 'httpcode', 'case', 'caseType', 'ansid', 'owner') )
+                        ->with('filelist', json_decode($response->Body(), true))
+                        ->with('diffFilelist', $result_array)
+                        ->with('size', $size);
+
     }
 
     /**
@@ -155,4 +235,5 @@ class AuthController extends Controller
         }
         return false;
     }
+
 }

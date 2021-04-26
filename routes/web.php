@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+//use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,23 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+/*Route::get('/', function () {
+    //return view('welcome');
+    return view('uploadFilelist');
+    //return view('testhtml');
+});*/
+
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+    //Route::post('fileuploadlist', 'AuthController@selectUploadFileList')->name('fileuploadlist');
+    //Route::get('fileuploadlist', ['AuthController@selectUploadFileList', 'newcase' => 'case']);
+    Route::get('fileuploadlist', 'ShowController@showFileuploadlist');
+    Route::get('fileuploadlist/setting', ['case' => 'ShowController@showFileuploadlistSetting'])->name('fileuploadlist.setting');
 });
 
-
-// Route::get('/file-upload', 'FileUploadController@fileUpload')->name('file.upload');
-Route::post('/file-upload', 'FileUploadController@fileUploadPost')->name('file.upload.post');
-Route::get('/auth/fileupload', 'AuthController@me')->middleware('api');
-Route::post('/auth/fileupload', 'AuthController@me')->middleware('api');
-Route::get('expired', 'RegisterController@invalid')->name('login'); // except跳轉位置
-
-// Route::group([
-
-//     'middleware' => 'api',
-//     'prefix' => 'auth'
-
-// ], function ($router) {
-//     Route::post('fileupload', 'AuthController@me');
-//     Route::get('fileupload', 'AuthController@me');
-// });

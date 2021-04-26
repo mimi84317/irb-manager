@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('register', 'RegisterController@register');
+/*Route::post('register', 'RegisterController@register');
 // Route::get('expired', 'RegisterController@invalid')->name('login'); // 搬到web.php
 
 Route::group([
@@ -29,4 +29,4 @@ Route::group([
 
 
     // Route::get('fileupload', 'AuthController@me');
-});
+});*/
