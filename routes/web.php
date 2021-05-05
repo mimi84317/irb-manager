@@ -26,9 +26,9 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-    //Route::post('fileuploadlist', 'AuthController@selectUploadFileList')->name('fileuploadlist');
-    //Route::get('fileuploadlist', ['AuthController@selectUploadFileList', 'newcase' => 'case']);
-    Route::get('fileuploadlist', 'ShowController@showFileuploadlist');
-    Route::get('fileuploadlist/setting', ['case' => 'ShowController@showFileuploadlistSetting'])->name('fileuploadlist.setting');
+    Route::get('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist');
+    
+    Route::get('fileuploadlist/setting/{caseType}', 'ShowController@showFileuploadlistSetting')->name('fileuploadlist.setting');
+    Route::post('fileuploadlist', 'UpdateController@updateFileuploadlistSetting')->name('fileuploadlist.update');
 });
 

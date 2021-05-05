@@ -9,17 +9,17 @@
                 color: #000093;
                 text-align: left;
                 font-weight: bold;
-                font-size: 40px;
+                font-size: 30px;
             }
         </style>
     </head>
     <body>
-        <div>
+        <div class="container">
             <div class="col-form-label">
                 <p class="titleText">設定案件上傳清單</p>
             </div>
-            <div class="col-8">
-                <table class="table">
+            <div class="col-12">
+                <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">案件類型</th>
@@ -37,7 +37,7 @@
                                     {{ $newFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td><a href = "{{ route('fileuploadlist.setting', ['case' => 'newcase']) }}">編輯</a></td>
+                            <td><a class="btn btn-outline-primary" href="{{ route('fileuploadlist.setting', ['caseType' => 'newcase']) }}" role="button">編輯</a></td>
                         </tr>
                         <tr>
                             <td>期中審查</td>
@@ -47,7 +47,7 @@
                                     {{ $midFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td>編輯</td>
+                            <td><a class="btn btn-outline-primary" href="{{ route('fileuploadlist.setting', ['caseType' => 'midcase']) }}" role="button">編輯</a></td>
                         </tr>
                         <tr>
                             <td>結案審查</td>
@@ -57,7 +57,7 @@
                                     {{ $closedFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td>編輯</td>
+                            <td><a class="btn btn-outline-primary" href="{{ route('fileuploadlist.setting', ['caseType' => 'closedcase']) }}" role="button">編輯</a></td>
                         </tr>
                         <tr>
                             <td>修正審查</td>
@@ -67,7 +67,7 @@
                                     {{ $fixFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td>編輯</td>
+                            <td><a class="btn btn-outline-primary" href="{{ route('fileuploadlist.setting', ['caseType' => 'fixcase']) }}" role="button">編輯</a></td>
                         </tr>
                         <tr>
                             <td>異常審查(院內)</td>
@@ -77,7 +77,7 @@
                                     {{ $abnormalFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td>編輯</td>
+                            <td><a class="btn btn-outline-primary" href="{{ route('fileuploadlist.setting', ['caseType' => 'abnormalcase']) }}" role="button">編輯</a></td>
                         </tr>
                     </tbody>
                 </table>
