@@ -168,7 +168,7 @@
                              'content':$('.contentTable tr:eq(1)').children('th.case-desc').text()};
             
             console.log(filelistUpdate);
-            /*$.ajaxSetup({
+            $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
@@ -180,7 +180,7 @@
                 success:function(data){
                     console.log(data);
                 }
-            });*/
+            });
         });
     </script>
 

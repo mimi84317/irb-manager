@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::get('/', function () {
-    //return view('welcome');
-    return view('uploadFilelist');
+Route::get('/', function () {
+    return view('welcome');
+    //return view('uploadFilelist');
     //return view('testhtml');
-});*/
+});
 
 Route::group([
 
