@@ -9,6 +9,8 @@ trait showData
     public function DBData($table, $condition, $state, $obj)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+
+        $update = "";
         
         if($state == "select"){
             $response  = Http::asForm()->withHeaders([
@@ -38,6 +40,7 @@ trait showData
                 'conArr' => '{}',
                 'updateObj' => $obj
             ]);
+            return $response;
         }
         else if($state == "delete"){
             $response  = Http::asForm()->withHeaders([
@@ -48,10 +51,8 @@ trait showData
                 'conArr' => '{}',
                 'column' => ''
             ]);
+            return $update;
         }
-        
-
-        //$newcaseHttpcode = $newcaseResponse->status();
         
         return $response;
     }

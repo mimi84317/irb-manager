@@ -37,22 +37,26 @@
                             <tbody>
                                 @foreach($caseList as $case)
                                     <tr>
-                                        <th class="row-id">{{ $case['id'] }}</th>
+                                        <th class="row-sort">{{ $case['sort'] }}</th>
                                         <th class="row-name"><input type="text" class="form-control name-value" value="{{ $case['chname'] }}"></th>
-                                        <th class="row-desc"><textarea class="form-control" rows="3">{{ $case['example_desc'] }}</textarea></th>
+                                        <th class="row-desc"><textarea class="form-control desc-value" rows="3">{{ $case['example_desc'] }}</textarea></th>
                                         <th class="row-require">
                                             @if ($case['required'] == "Y")
-                                                <input class="form-check-input" type="checkbox" checked>
+                                                <input class="form-check-input require-checked" type="checkbox" checked>
                                             @elseif ($case['required'] == "N")
-                                            <input class="form-check-input" type="checkbox">
+                                                <input class="form-check-input require-checked" type="checkbox">
                                             @endif
                                         </th>
                                         <th><input class="form-control" type="file" id="formFile"></th>
                                         <th class="row-file"><a href="http://10.109.233.21/api/example/download?clientid=test&caseType={{ $caseType }}&file={{ $case['example_name'] }}">{{ $case['example_name'] }}</a></th>
                                         <th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>
-                                        <th>
-                                            <button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>
-                                            <button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>
+                                        <th class="row-move">
+                                            @if (!($loop->first))
+                                                <button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>
+                                            @endif
+                                            @if (!($loop->last))
+                                                <button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>
+                                            @endif
                                         </th>
                                     </tr>
                                 @endforeach
@@ -76,7 +80,7 @@
                             </tr>
                             <tr>
                                 <th scope="col" class="col-1">說明</th>
-                                <th class="case-desc"><textarea class="form-control" rows="15">{{ $caseContent[0]['review_desc'] }}</textarea></th>
+                                <th class="case-desc"><textarea class="form-control case-desc-value" rows="15">{{ $caseContent[0]['review_desc'] }}</textarea></th>
                             </tr>
                         </tbody>
                     </table>
@@ -92,29 +96,43 @@
     </body>
     <script type="text/javascript">
 
-        $('.btn-moveUp').click(function() {
+        $('.filelistTable').on('click', '.btn-moveUp', function() {
             var row = $(this).parents('tr:first');
-            var order = row.children('th.row-id').text();
-            var prevorder = row.prev().children('th.row-id').text();
-            row.children('th.row-id').text(prevorder);
-            row.prev().children('th.row-id').text(order);
+            var order = row.children('th.row-sort').text();
+            var prevorder = row.prev().children('th.row-sort').text();
+
+            if(prevorder == "1"){
+                row.prev().children('th.row-move').append('<button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>');
+                row.children('th.row-move').children('.btn-moveUp').remove();
+            }
+            
+            row.children('th.row-sort').text(prevorder);
+            row.prev().children('th.row-sort').text(order);
             row.insertBefore(row.prev());
         });
 
-        $('.btn-moveDown').click(function(){
+        $('.filelistTable').on('click', '.btn-moveDown', function(){
             var row = $(this).parents('tr:first');
-            var order = row.children('th.row-id').text();
-            var nextorder = row.next().children('th.row-id').text();
-            row.children('th.row-id').text(nextorder);
-            row.next().children('th.row-id').text(order);
+            var order = row.children('th.row-sort').text();
+            var nextorder = row.next().children('th.row-sort').text();
+
+            var lastorder = $('.filelistTable tr:last').children('th.row-sort').text();
+            if(nextorder == lastorder){
+                row.next().children('th.row-move').append('<button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>');
+                row.children('th.row-move').children('.btn-moveDown').remove();
+            }
+
+            row.children('th.row-sort').text(nextorder);
+            row.next().children('th.row-sort').text(order);
             row.insertAfter(row.next());
         });
 
-        $('.btn-delete').click(function(){
+        $('.filelistTable').on('click', '.btn-delete', function(){
             var row = $(this).parents('tr:first');
-            var deleteorder = row.children('th.row-id').text();
+            var deleteorder = row.children('th.row-sort').text();
             row.remove();
-            var orderlist = $('th.row-id').text();
+            $('.filelistTable tr:last').children('th.row-move').children('.btn-moveDown').remove();
+            var orderlist = $('th.row-sort').text();
             var newOrderlist = new Array(orderlist.length);
             for(var i = 0; i < orderlist.length; i++){ 
                 if(orderlist[i] > deleteorder){
@@ -124,50 +142,65 @@
                 else{
                     newOrderlist[i] = orderlist[i];
                 }
-                $(".row-id:eq("+i+")").text(newOrderlist[i]);
+                $(".row-sort:eq("+i+")").text(newOrderlist[i]);
             }
         });
 
-        $('.btn-addlist').click(function(){
-            var lastorder = $('.filelistTable tr:last').children('th.row-id').text();
+        $('.btn-addlist').on('click', function(){
+            var lastorder = $('.filelistTable tr:last').children('th.row-sort').text();
+            $('.filelistTable tr:last').children('th.row-move').append('<button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>');
+
             var newlastorder = parseInt(lastorder) + 1;
             var newrow = '';
             newrow += '<tr>';
-            newrow += '<th class="row-id">' + newlastorder + '</th>';
-            newrow += '<th><input type="text" class="form-control" value=""></th>';
-            newrow += '<th><textarea class="form-control" rows="3"></textarea></th>';
-            newrow += '<th><input class="form-check-input" type="checkbox"></th>';
+            newrow += '<th class="row-sort">' + newlastorder + '</th>';
+            newrow += '<th class="row-name"><input type="text" class="form-control name-value" value=""></th>';
+            newrow += '<th class="row-desc"><textarea class="form-control desc-value" rows="3"></textarea></th>';
+            newrow += '<th class="row-require"><input class="form-check-input require-checked" type="checkbox"></th>';
             newrow += '<th><input class="form-control" type="file" id="formFile"></th>';
-            newrow += '<th></th>';
-            newrow += '<th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></button></th>';
-            newrow += '<th>';
+            newrow += '<th class="row-file"></th>';
+            newrow += '<th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>';
+            newrow += '<th class="row-move">';
             newrow += '<button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>';
-            newrow += '<button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>';
+            //newrow += '<button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>';
             newrow += '</th>';
             newrow += "</tr>";
             $('.filelistTable').append(newrow);
         });
 
-        $('.btn-update').click(function(e){
+        $('.btn-update').on('click',function(e){
             var filelistTableLength = $('.filelistTable tr').length;
             var contentTableLength = $('.contentTable tr').length;
-            var caseType = "{{ $showCase }}";
+            var caseType = "{{ $caseType }}";
             var filelistUpdate = {};
             var contentUpdate = {};
 
             for(var i = 1; i < filelistTableLength; i++){
                 filelistUpdate[i-1] = {};
-                filelistUpdate[i-1]['id'] = $('.filelistTable tr:eq('+i+')').children('th.row-id').text();
-                filelistUpdate[i-1]['name'] = $('.filelistTable tr:eq('+i+')').children('th.row-name').children('.name-value').val();
-                filelistUpdate[i-1]['desc'] = $('.filelistTable tr:eq('+i+')').children('th.row-desc').text();
-                filelistUpdate[i-1]['require'] = $('.filelistTable tr:eq('+i+')').children('th.row-require').text();
-                filelistUpdate[i-1]['file'] = $('.filelistTable tr:eq('+i+')').children('th.row-file').text();
+                var name = $('.filelistTable tr:eq('+i+')').children('th.row-name').children('.name-value').val();
+                if(name == ""){
+                    alert("文件名稱不可空白!!!");
+                    break;
+                }
+                else{
+                    filelistUpdate[i-1]['sort'] = $('.filelistTable tr:eq('+i+')').children('th.row-sort').text();
+                    filelistUpdate[i-1]['chname'] = $('.filelistTable tr:eq('+i+')').children('th.row-name').children('.name-value').val();
+                    filelistUpdate[i-1]['example_desc'] = $('.filelistTable tr:eq('+i+')').children('th.row-desc').children('.desc-value').val();
+                    
+                    if($('.filelistTable tr:eq('+i+')').children('th.row-require').children('.require-checked').is(":checked"))
+                        filelistUpdate[i-1]['required'] = "Y";
+                    else
+                        filelistUpdate[i-1]['required'] = "N";
+                    
+                    //filelistUpdate[i-1]['file'] = $('.filelistTable tr:eq('+i+')').children('th.row-file').text();
+                }
+                
             }
 
-            contentUpdate = {'subject': $('.contentTable tr:eq(0)').children('th.case-title').children('.case-title-value').val(),
-                             'content':$('.contentTable tr:eq(1)').children('th.case-desc').text()};
+            contentUpdate = {'review_subj': $('.contentTable tr:eq(0)').children('th.case-title').children('.case-title-value').val(),
+                             'review_desc':$('.contentTable tr:eq(1)').children('th.case-desc').children(".case-desc-value").val(),
+                             'modified_date':''};
             
-            console.log(filelistUpdate);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -179,6 +212,13 @@
                 data: {caseType:caseType, filelistUpdate:filelistUpdate, contentUpdate:contentUpdate},
                 success:function(data){
                     console.log(data);
+                    if(data != 0){
+                        alert("更新失敗，請洽系統管理員");
+                    }
+                    else{
+                        alert("更新成功");
+                        $(window).attr("location", "{{ route('fileuploadlist') }}"); 
+                    }
                 }
             });
         });

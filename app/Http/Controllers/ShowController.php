@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 
 use App\Traits\showData;
+use SebastianBergmann\Environment\Console;
 
 class ShowController extends Controller
 {
