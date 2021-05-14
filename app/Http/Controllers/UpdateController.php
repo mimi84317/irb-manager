@@ -87,8 +87,8 @@ class UpdateController extends Controller
                     $caseState = "delete";
                     $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, null);
                 }
-                if($caseResponse != "Update Success"){
-                    return -1;
+                if(strpos($caseResponse ,' ') == false){
+                    return $caseResponse;
                 }
             }
         }
@@ -109,8 +109,8 @@ class UpdateController extends Controller
                     $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
                     $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
                 }
-                if($caseResponse != "Update Success"){
-                    return -1;
+                if(strpos($caseResponse ,'Success') == false){
+                    return $caseResponse;
                 }
             }
         }
@@ -122,8 +122,8 @@ class UpdateController extends Controller
         $contentUpdate = json_encode($contentUpdate, JSON_UNESCAPED_UNICODE);
         $contentCondition = "where type_name='".$typeName."'";
         $contentResponse = $this->DBData($filelistTableNmae, $contentCondition, $contentState, $contentUpdate);
-        if($contentResponse != "Update Success"){
-            return -1;
+        if(strpos($contentResponse ,'Success') == false){
+            return $contentResponse;
         }
 
         return 0;

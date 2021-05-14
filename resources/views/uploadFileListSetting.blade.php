@@ -130,9 +130,13 @@
         $('.filelistTable').on('click', '.btn-delete', function(){
             var row = $(this).parents('tr:first');
             var deleteorder = row.children('th.row-sort').text();
-            row.remove();
-            $('.filelistTable tr:last').children('th.row-move').children('.btn-moveDown').remove();
-            var orderlist = $('th.row-sort').text();
+            
+            /*var filelistTableLength = $('.filelistTable tr').length;
+            var orderlist = new Array(filelistTableLength-1);
+            for(var i = 1; i < filelistTableLength; i++){
+                orderlist[i-1] = $('.filelistTable tr:eq('+i+')').children('th.row-sort').text();
+            }
+            //console.log(filelistTableLength, orderlist.length);
             var newOrderlist = new Array(orderlist.length);
             for(var i = 0; i < orderlist.length; i++){ 
                 if(orderlist[i] > deleteorder){
@@ -142,7 +146,16 @@
                 else{
                     newOrderlist[i] = orderlist[i];
                 }
+                console.log(deleteorder, ",", orderlist[i], ",", newOrderlist[i]);
+                
                 $(".row-sort:eq("+i+")").text(newOrderlist[i]);
+            }*/
+            
+            row.remove();
+            $('.filelistTable tr:last').children('th.row-move').children('.btn-moveDown').remove();
+            var filelistTableLength = $('.filelistTable tr').length - 1;
+            for(var i = 0; i < filelistTableLength; i++){
+                $(".row-sort:eq("+i+")").text(i+1);
             }
         });
 
