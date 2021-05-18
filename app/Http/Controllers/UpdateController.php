@@ -14,7 +14,7 @@ class UpdateController extends Controller
     use showData;
     public function updateFileuploadlistSetting(Request $request)
     {
-        
+
         $caseType = $request->caseType;
 
         //更新上傳清單
@@ -22,7 +22,7 @@ class UpdateController extends Controller
         $caseTableName = "";
         $caseCondition = "";
         $caseState = "";
-        
+
         //更新送審須知+更新時間
         $contentUpdate = $request->contentUpdate;
         $filelistTableNmae = "IRB_upload_filelist_content";
@@ -55,10 +55,10 @@ class UpdateController extends Controller
                 $typeName = "異常審查(院內)";
                  break;
             default:
-                
+
                 return view('notFound', ['var' => '案件類別'.$caseType]);
         }
-        
+
         //更新上傳清單
         $searchOldDataCondition = "";
         $searchOldDataState = "select";
@@ -75,7 +75,7 @@ class UpdateController extends Controller
         if($oldDatacount > $newDataCount){
             for($i = 0; $i < $oldDatacount; $i++){
                 //更新
-                if($i < $newDataCount){ 
+                if($i < $newDataCount){
                     $caseCondition = "where sort='".$filelistUpdate[$i]['sort']."'";
                     $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
                     $caseState = "update";
@@ -87,9 +87,9 @@ class UpdateController extends Controller
                     $caseState = "delete";
                     $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, null);
                 }
-                if(strpos($caseResponse ,' ') == false){
+                /*if(strpos($caseResponse ,' ') == false){
                     return $caseResponse;
-                }
+                }*/
             }
         }
         //舊資料數<新資料數 => 新增新資料，其餘更新
@@ -114,9 +114,9 @@ class UpdateController extends Controller
                 }
             }
         }
-        
 
-        
+
+
         //更新送審須知+更新時間
         $contentUpdate['modified_date'] = $updateDate;
         $contentUpdate = json_encode($contentUpdate, JSON_UNESCAPED_UNICODE);
@@ -128,5 +128,5 @@ class UpdateController extends Controller
 
         return 0;
     }
-    
+
 }
