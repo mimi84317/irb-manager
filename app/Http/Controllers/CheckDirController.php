@@ -1,12 +1,15 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class CheckDirController extends Controller{
 
     public function checkDir($memid, $ans){
-        $root = "/home/vhosts/irb/pdfmerger";
+        $root = env('CHECK_DIR_ROOT') ;
+
         if(!file_exists($root)){
             mkdir($root);
         }

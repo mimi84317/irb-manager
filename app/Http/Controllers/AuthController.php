@@ -9,9 +9,12 @@ use App\Http\Controllers\Controller;
 use App\Login_log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\CheckDir;
+use App\Traits\showData;
 
 class AuthController extends Controller
 {
+    //use CheckDir;
     /**
      * Create a new AuthController instance.
      *
@@ -27,22 +30,34 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login($case= null, $ansid= null, $owner= null)
     {
         $credentials = request(['clientid', 'client_secret']);
         $username = request('username');
+        $user = request('user');
         $clientid = $credentials['clientid'];
 
-        // add username to custom claims
-        auth()->claims(['username' => $username]);
+        if ($owner==null)
+        {
+            $owner = $user;
+        }
 
-        if (! $token = auth()->attempt($credentials)) {
+        // add custom claims
+        auth()->claims([
+            'username' => $username,
+            'user' => $user,
+            'case' => $case,
+            'ansid'=> $ansid,
+            'owner'=> $owner
+            ]);
+
+        if (! $token = auth()->attempt($credentials)) { // get a JWT
             // insert log success or not
-            $this->insertLoginLog($clientid, $username, false);
+            $this->insertLoginLog($clientid, $user, false);
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         // insert log success or not
-        $dbret = $this->insertLoginLog($clientid, $username, true);
+        $dbret = $this->insertLoginLog($clientid, $user, true);
         return $this->respondWithToken($token, $username, $dbret);
     }
 
@@ -51,10 +66,14 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    use showData;
     public function me()
     {
         // return response()->json(auth()->user());
 
+    }
+    public function showFileuploadlist()
+    {
         // insert to log
         $clientid = auth()->payload()->get('clientid');
         $user = auth()->payload()->get('user');
@@ -69,76 +88,109 @@ class AuthController extends Controller
         $expireTime = auth()->payload()->get('exp');
 
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
-        switch($case)
-        {
-            case 'newcase':
-                //upload filelist left join filepool
-                $response = Http::asForm()->withHeaders([
-                    'Accept' => 'application/json'
-                ])->post($bpmapi, [
-                    'funName' => 'callDBApi',
-                    'Data' => '{"DB":"BPM","TbName":"IRB_new_case_upload_filelist","condition":" LEFT JOIN (SELECT * FROM IRB_filepool WHERE ansid = \''.$ansid.'\') AS Temp ON IRB_new_case_upload_filelist.chname = Temp.field_name ORDER BY sort ","statements":"select"}',
-                    'conArr' => '{}',
-                    'column' => ''
-                ]);
-                $caseType = '新案';
-                break;
-            case 'midterm':
-                //upload filelist left join filepool
-                $response = Http::asForm()->withHeaders([
-                    'Accept' => 'application/json'
-                ])->post($bpmapi, [
-                    'funName' => 'callDBApi',
-                    'Data' => '{"DB":"BPM","TbName":"IRB_midterm_upload_filelist","condition":" LEFT JOIN (SELECT * FROM IRB_filepool WHERE ansid = \''.$ansid.'\') AS Temp ON IRB_midterm_upload_filelist.chname = Temp.field_name ORDER BY sort ","statements":"select"}',
-                    'conArr' => '{}',
-                    'column' => ''
-                ]);
-                $caseType = '期中';
-                break;
-            default:
-                // $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
-                // $response = Http::asForm()->withHeaders([
-                //     'Accept' => 'application/json'
-                // ])->post($bpmapi, [
-                //     'funName' => 'callDBApi',
-                //     'Data' => '{"DB":"BPM","TbName":"IRB_new_case_upload_filelist","condition":" ORDER BY sort","statements":"select"}',
-                //     'conArr' => '{}',
-                //     'column' => ''
-                // ]);
-                // $httpcode = $response->status();
-                // return view('newCaseFilelist', compact('username', 'user', 'clientid', 'httpcode', 'case', 'ansid') )->with('filelist', json_decode($response->Body(), true));
-                return view('notFound', ['var' => '案件類別'.$case]);
-        }
+        $state = "select";
+        $condition = "";
+        $obj = "";
+        $state = "select";
+        $condition = "";
+        $obj = "";
 
-        $httpcode = $response->status();
+        //新案審查
+        $newCase = "IRB_new_case_upload_filelist";
+        $newcaseResponse = $this->DBData($newCase,$condition, $state, $obj);
 
-        // get files in disk but not in db
-        $path = $this->checkDir($owner, $ansid);
-        $disk_files = Storage::disk('filepool')->allFiles($path);
-        $db_files = json_decode($response->Body(), true);
-        $result_array = $disk_files;
+        //期中審查
+        $midCase = "IRB_midterm_upload_filelist";
+        $midcaseResponse = $this->DBData($midCase,$condition, $state, $obj);
 
-        foreach($db_files as $file)
-        {
-            if(in_array( $file['file_id'], $disk_files))
-            {
-                $result_array = array_diff( $result_array, [$file['file_id']] );
-            }
-        }
-        $size = 0;
+        //結案審查
+        $closedCase = "IRB_closed_case_upload_filelist";
+        $closedcaseResponse = $this->DBData($closedCase,$condition, $state, $obj);
 
-        if(Storage::disk('filepool')->exists($path.'/'.$owner.'_'.$ansid.'.pdf'))
-        {
-            $size = Storage::disk('filepool')->size($path.'/'.$owner.'_'.$ansid.'.pdf');
-            $size = $this->humanFileSize($size);
-        }
+        //修正審查
+        $fixCase = "IRB_fix_upload_filelist";
+        $fixcaseResponse = $this->DBData($fixCase,$condition, $state, $obj);
 
-        return view('newCaseFilelist', compact('token', 'expireTime', 'username', 'user', 'clientid', 'httpcode', 'case', 'caseType', 'ansid', 'owner') )
-                        ->with('filelist', json_decode($response->Body(), true))
-                        ->with('diffFilelist', $result_array)
-                        ->with('size', $size);
+        //異常審查(院內)
+        $abnormalCase = "IRB_abnormal_upload_filelist";
+        $abnormalcaseResponse = $this->DBData($abnormalCase,$condition, $state, $obj);
+
+        //建立/修改日期
+        $modifiedDateTable = "IRB_upload_filelist_content";
+        $modifiedDateResponse = $this->DBData($modifiedDateTable,$condition, $state, $obj);
+
+        return view('uploadFilelist' )
+                        ->with('newFilelist', json_decode($newcaseResponse->Body(), true))
+                        ->with('midFilelist', json_decode($midcaseResponse->Body(), true))
+                        ->with('closedFilelist', json_decode($closedcaseResponse->Body(), true))
+                        ->with('fixFilelist', json_decode($fixcaseResponse->Body(), true))
+                        ->with('abnormalFilelist', json_decode($abnormalcaseResponse->Body(), true))
+                        ->with('modifiedDateList', json_decode($modifiedDateResponse->Body(), true));
+
+
+        //return view('welcome');
 
     }
+
+    public function showFileuploadlistSetting($caseType)
+    {
+        // insert to log
+        $clientid = auth()->payload()->get('clientid');
+        $user = auth()->payload()->get('user');
+        $username = auth()->payload()->get('username');
+        $this->insertAccessLog($clientid, $user);
+
+        $case = auth()->payload()->get('case');
+        $caseType = 'UNKNOWN';
+        $ansid = auth()->payload()->get('ansid');
+        $owner = auth()->payload()->get('owner');
+        $token = request('token');
+        $expireTime = auth()->payload()->get('exp');
+
+        $data['caseType'] = $caseType;
+        $showCase = "";
+        $caseTableName = "";
+        $caseCondition = "";
+        $state = "select";
+        $obj = "";
+        switch($caseType){
+            case 'newcase':
+                $showCase = "新案審查";
+                $caseTableName = "IRB_new_case_upload_filelist";
+                break;
+            case 'midcase':
+                $showCase = "期中審查";
+                $caseTableName = "IRB_midterm_upload_filelist";
+                break;
+            case 'closedcase':
+                $showCase = "結案審查";
+                $caseTableName = "IRB_closed_case_upload_filelist";
+                break;
+            case 'fixcase':
+                $showCase = "修正審查";
+                $caseTableName = "IRB_fix_upload_filelist";
+                break;
+            case 'abnormalcase':
+                $showCase = "異常審查(院內)";
+                $caseTableName = "IRB_abnormal_upload_filelist";
+                 break;
+            default:
+
+                return view('notFound', ['var' => '案件類別'.$caseType]);
+
+        }
+        $caseResponse = $this->DBData($caseTableName, $caseCondition, $state, $obj);
+
+        $contentRableName = "IRB_upload_filelist_content";
+        $contentCondition = "where type_name='".$showCase."'";
+        $contentResponse = $this->DBData($contentRableName, $contentCondition, $state, $obj);
+
+        return view('uploadFileListSetting', compact('caseType') )
+                    ->with('showCase', $showCase)
+                    ->with('caseList', json_decode($caseResponse->Body(), true))
+                    ->with('caseContent', json_decode($contentResponse->Body(), true));
+    }
+
 
     /**
      * Log the user out (Invalidate the token).
@@ -149,8 +201,8 @@ class AuthController extends Controller
     {
         // insert to log
         $clientid = auth()->payload()->get('clientid');
-        $username = auth()->payload()->get('username');
-        $this->insertLogoutLog($clientid, $username);
+        $user = auth()->payload()->get('user');
+        $this->insertLogoutLog($clientid, $user);
 
         // logout
         auth()->logout();
@@ -165,7 +217,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh(), 'refresh test', false);
+        return $this->respondWithToken(auth()->refresh(), 'refresh', true);
     }
 
     /**
@@ -175,13 +227,13 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token, $username, $dbret)
+    protected function respondWithToken($token, $user, $dbret)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'username' => $username,
+            'user' => $user,
             'dbret' => $dbret
         ]);
     }
@@ -191,11 +243,11 @@ class AuthController extends Controller
      *
      * @return bool
      */
-    protected function insertLoginLog($clientid, $username, $isSuccess)
+    protected function insertLoginLog($clientid, $user, $isSuccess)
     {
         $data = [
             'clientid' => $clientid,
-            'username' => $username,
+            'user' => $user,
             'event_type_id' => ($isSuccess? 1 : 2) //event type id => login sucess : 1 , fail : 2
         ];
         $ret = Login_log::create($data);
@@ -206,11 +258,11 @@ class AuthController extends Controller
         return false;
     }
 
-    protected function insertLogoutLog($clientid, $username)
+    protected function insertLogoutLog($clientid, $user)
     {
         $data = [
             'clientid' => $clientid,
-            'username' => $username,
+            'user' => $user,
             'event_type_id' => 4 //event type id => logout : 4
         ];
         $ret = Login_log::create($data);
@@ -221,11 +273,11 @@ class AuthController extends Controller
         return false;
     }
 
-    protected function insertAccessLog($clientid, $username)
+    protected function insertAccessLog($clientid, $user)
     {
         $data = [
             'clientid' => $clientid,
-            'username' => $username,
+            'user' => $user,
             'event_type_id' => 5 //event type id => access : 5
         ];
         $ret = Login_log::create($data);
@@ -236,4 +288,14 @@ class AuthController extends Controller
         return false;
     }
 
+    // code from : https://stackoverflow.com/questions/15188033/human-readable-file-size
+    protected function humanFileSize($size,$unit="") {
+        if( (!$unit && $size >= 1<<30) || $unit == "GB")
+          return number_format($size/(1<<30),2)."GB";
+        if( (!$unit && $size >= 1<<20) || $unit == "MB")
+          return number_format($size/(1<<20),2)."MB";
+        if( (!$unit && $size >= 1<<10) || $unit == "KB")
+          return number_format($size/(1<<10),2)."KB";
+        return number_format($size)." bytes";
+      }
 }

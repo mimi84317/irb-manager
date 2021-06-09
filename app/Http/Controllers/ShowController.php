@@ -6,12 +6,23 @@ use App\Http\Controllers\Controller;
 
 use App\Traits\showData;
 use SebastianBergmann\Environment\Console;
+use App\Login_log;
 
 class ShowController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login']]);
+    }
+
     use showData;
     public function showFileuploadlist()
     {
+
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        $state = "select";
+        $condition = "";
+        $obj = "";
         $state = "select";
         $condition = "";
         $obj = "";
@@ -39,8 +50,8 @@ class ShowController extends Controller
         //建立/修改日期
         $modifiedDateTable = "IRB_upload_filelist_content";
         $modifiedDateResponse = $this->DBData($modifiedDateTable,$condition, $state, $obj);
-       
-        return view('uploadFilelist', compact('case') )
+
+        return view('uploadFilelist' )
                         ->with('newFilelist', json_decode($newcaseResponse->Body(), true))
                         ->with('midFilelist', json_decode($midcaseResponse->Body(), true))
                         ->with('closedFilelist', json_decode($closedcaseResponse->Body(), true))
@@ -49,7 +60,7 @@ class ShowController extends Controller
                         ->with('modifiedDateList', json_decode($modifiedDateResponse->Body(), true));
 
     }
-    
+
     public function showFileuploadlistSetting($caseType){
         $data['caseType'] = $caseType;
         $showCase = "";
@@ -79,7 +90,7 @@ class ShowController extends Controller
                 $caseTableName = "IRB_abnormal_upload_filelist";
                  break;
             default:
-                
+
                 return view('notFound', ['var' => '案件類別'.$caseType]);
 
         }
@@ -88,7 +99,7 @@ class ShowController extends Controller
         $contentRableName = "IRB_upload_filelist_content";
         $contentCondition = "where type_name='".$showCase."'";
         $contentResponse = $this->DBData($contentRableName, $contentCondition, $state, $obj);
-        
+
         return view('uploadFileListSetting', compact('caseType') )
                     ->with('showCase', $showCase)
                     ->with('caseList', json_decode($caseResponse->Body(), true))

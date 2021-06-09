@@ -65,6 +65,11 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'filepool' => [
+            'driver' => 'local',
+            'root' => dirname(__DIR__).'/../filepool',
+        ],
+
     ],
 
     /*

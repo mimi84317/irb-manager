@@ -15,7 +15,7 @@ class Login_log extends Model
     // 可以大量指定異動的欄位
     protected $fillable = [
         'clientid',
-        'username',
+        'user',
         'event_type_id',
     ];
 

@@ -8,25 +8,16 @@ use App\User;
 
 class RegisterController extends Controller
 {
-    /**
-     * redirect when JWT invalid
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function invalid()
-    {
-        return view('exception');
-    }
-
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'clientid' => 'required',
+            'name' => 'required | alpha_dash | between:0,255',
+            'clientid' => 'required | alpha_dash | between:0,255',
             'client_secret' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['errorFlag' => '404'], 401);
+            // return response()->json(['errorMsg' => $validator->messages()], 401);
         }
         try {
             $user = User::create([
@@ -35,34 +26,8 @@ class RegisterController extends Controller
                 "client_secret" => bcrypt($request->client_secret),
             ]);
         } catch (\Exception $e) {
-            return response()->json(['errorFlag' => '1'], 401);
+            return response()->json(['success' => false], 401);
         }
-       return response()->json(['errorFlag' => '0'], 201); //201 Created
+       return response()->json(['success' => true], 201); //201 Created
     }
-
-    /**
-     * API Register
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // public function register(Request $request)
-    // {
-    //     $rules = [
-    //         'name' => 'unique:users|required',
-    //         'email'    => 'unique:users|required',
-    //         'password' => 'required',
-    //     ];
-
-    //     $input     = $request->only('name', 'email', 'password');
-    //     $validator = Validator::make($input, $rules);
-
-    //     if ($validator->fails()) {
-    //         return response()->json(['success' => false, 'error' => $validator->messages()]);
-    //     }
-    //     $name = $request->name;
-    //     $email    = $request->email;
-    //     $password = $request->password;
-    //     $user     = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password)]);
-    // }
 }

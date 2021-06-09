@@ -16,7 +16,7 @@ class CreateLoginLogsTable extends Migration
         Schema::create('login_logs', function (Blueprint $table) {
             $table->id();
             $table->string('clientid');
-            $table->string('username');
+            $table->string('user');
             $table->integer('event_type_id');
             $table->timestamps();
         });

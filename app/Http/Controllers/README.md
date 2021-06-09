@@ -32,13 +32,13 @@ public function me()
 ```php
 public function logout()
 ```
-JWT 套件提供，未使用
+JWT 套件提供
 
 ### 更新
 ```php
 public function refresh()
 ```
-JWT 套件提供，未使用
+JWT 套件提供
 
 ## CheckDirController
 ```php
@@ -55,8 +55,102 @@ function moveFile()
 ## Controller
 Laravel 內建 Controller
 
+## ExampleFileManagController
+管理範例檔案，存取限制未設定
+
+### 上傳範例檔案
+```php
+public function upload(Request $request)
+```
+上傳檔案至 `filepool/{clientid}/example/{caseType}`  
+**注意資料夾權限設定，如出現權限問題可設定擁有者為 apache**  
+POST 參數：  
+| 名稱 | 說明 |
+| - | - |
+| clientid | client ID |
+| caseType | 案件類型 |
+HTML 檔案標籤名稱：file
+```html
+<input type="file" name="file[]">
+```
+
+### 刪除範例檔案
+```php
+public function delete()
+```
+刪除 `filepool/{clientid}/example/{caseType}/{file}`  
+POST 參數：  
+| 名稱 | 說明 |
+| - | - |
+| clientid | client ID |
+| caseType | 案件類型 |
+| file | 欲刪除的檔案名稱 |  
+
+### 下載範例檔案
+```php
+public function download()
+```
+傳入網址下載檔案  
+例如：`http://localhost:8000/api/example/download?clientid=test&caseType=testcase&file=範例.pdf`  
+GET 參數：  
+| 名稱 | 說明 |
+| - | - |
+| clientid | client ID |
+| caseType | 案件類型 |
+| file | 檔案名稱 |  
+
 ## FileUploadController
-測試上傳檔案用
+管理使用者檔案用，使用 jwt 中介層檢查
+### 上傳檔案
+```php
+public function fileUploadPost(Request $request)
+```
+限制副檔名為 pdf ，及限制大小。
+以 form 格式接收，可一次接收多列檔案資料，
+須注意總檔案大小不可超過 php.ini 的設定大小。  
+**Form 欄位：**
+| 名稱| 說明 |
+|-|-|
+| description | 檔案說明 |
+| fieldName | 檔案中文名稱 |
+| file | Form 的檔案 |
+
+### 刪除檔案
+```php
+public function fileDelete(Request $request)
+```
+傳入 token 及 filename 刪除檔案  
+(檔案路徑於 token 中取出 clientid、owner、ansid 重新組合)
+
+### 刪除資料夾
+```php
+public function deleteDirectory()
+```
+傳入 token 刪除整個 ans 資料夾
+
+### 下載檔案
+```php
+public function fileDownloadPage($path)
+```
+傳入 token 及 filename  
+(檔案路徑於 token 中取出 clientid、owner、ansid 重新組合)  
+啟動瀏覽器下載檔案功能
+
+### 下載範例檔案
+```php
+public function fileDownloadExample($case, $filename)
+```
+傳入 token、案件類型及 filename  
+(檔案路徑於 token 中取出 clientid 重新組合)  
+啟動瀏覽器下載檔案功能
+
+### 預覽檔案
+```php
+public function filePreviewPage($path)
+```
+傳入 token 及 filename  
+(檔案路徑於 token 中取出 clientid、owner、ansid 重新組合)  
+回傳開啟瀏覽器內建 PDF reader
 
 ## PDFMergerController
 ```php
@@ -68,14 +162,11 @@ function pdfMerge($dir, $memid, $ans)
 * $ans : 申請人表單編號
 
 ## RegisterController
-內部新增 client 使用，  
-**！！！尚未設定存取限制！！！**
-
-### 例外錯誤
-```php
-public function invalid()
+新增 client 使用，  
+中介層 IP 白名單於 .env 中設定
 ```
-回傳 exception.blade.php，用於發生錯誤時，例如：JWT expired。
+WHITELIST = 127.0.0.1;10.109.193.14
+```
 
 ### 註冊 client
 ```php
@@ -85,21 +176,37 @@ public function register(Request $request)
 輸入以下參數註冊客戶端到資料庫
 | 參數名稱 | 說明 | 備註 |
 |---|---|---|
-| name | 客戶端名稱 | 必填 |
-| clientid | 客戶端 ID | 必填 |
+| name | 客戶端名稱 | 必填，不可含有特殊符號 |
+| clientid | 客戶端 ID | 必填，不可含有特殊符號 |
 | client_secret | 客戶端密碼 | 必填，資料庫中會經過加密，非明碼 |
 
 #### 回傳
 * 註冊成功
 ```json
 {
-    "errorFlag": "0"
+    "success": true
 }
 ```
 
 * 註冊失敗
 ```json
 {
-    "errorFlag": "1"
+    "success": false
 }
 ```
+
+* 不符規定
+```json
+{
+    "errorFlag": "404"
+}
+```
+
+## ViewController
+回傳各種 view
+
+### 例外錯誤
+```php
+public function invalid()
+```
+回傳 exception.blade.php，用於發生錯誤時，例如：JWT expired。

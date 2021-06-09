@@ -11,7 +11,7 @@ trait showData
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
 
         $update = "";
-        
+
         if($state == "select"){
             $response  = Http::asForm()->withHeaders([
                 'Accept' => 'application/json'
@@ -53,7 +53,7 @@ trait showData
             ]);
             return $update;
         }
-        
+
         return $response;
     }
 }

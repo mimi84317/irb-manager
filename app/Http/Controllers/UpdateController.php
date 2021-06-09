@@ -11,6 +11,11 @@ use SebastianBergmann\Environment\Console;
 
 class UpdateController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login']]);
+    }
+
     use showData;
     public function updateFileuploadlistSetting(Request $request)
     {
