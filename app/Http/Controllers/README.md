@@ -210,3 +210,26 @@ public function register(Request $request)
 public function invalid()
 ```
 回傳 exception.blade.php，用於發生錯誤時，例如：JWT expired。
+
+## ShowController
+顯示資料
+
+### 顯示「設定案件上傳清單」
+```php
+public function showFileuploadlist()
+```
+從資料庫搜尋「設定案件上傳清單」相關資料並顯示於uploadFilelist.blade.php
+
+### 顯示「設定案件上傳清單」-編輯
+```php
+public function showFileuploadlistSetting($caseType)
+```
+從資料庫搜尋「設定案件上傳清單」-編輯相關資料並顯示於uploadFileListSetting.blade.php，$caseType為案件類型
+
+## UpdateController
+更新資料
+### 更新「設定案件上傳清單」
+```php
+public function updateFileuploadlistSetting(Request $request)
+```
+將在網頁上進行修改的內容利用post更新至資料庫

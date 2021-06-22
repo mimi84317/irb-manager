@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\showData;
 use SebastianBergmann\Environment\Console;
 use App\Login_log;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ShowController extends Controller
 {
@@ -18,7 +19,6 @@ class ShowController extends Controller
     use showData;
     public function showFileuploadlist()
     {
-
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
         $condition = "";
@@ -51,7 +51,7 @@ class ShowController extends Controller
         $modifiedDateTable = "IRB_upload_filelist_content";
         $modifiedDateResponse = $this->DBData($modifiedDateTable,$condition, $state, $obj);
 
-        return view('uploadFilelist' )
+        return view('uploadFilelist')
                         ->with('newFilelist', json_decode($newcaseResponse->Body(), true))
                         ->with('midFilelist', json_decode($midcaseResponse->Body(), true))
                         ->with('closedFilelist', json_decode($closedcaseResponse->Body(), true))

@@ -89,10 +89,10 @@
             <br>
             <div>
                 <button type="button" class="btn btn-outline-primary btn-update">更新</button>
-                <a class="btn btn-outline-primary" href="{{ route('fileuploadlist') }}" role="button">返回上一頁</a>
+                <button type="button" class="btn btn-outline-primary btn-back">返回上一頁</button>
             </div>
         </div>
-        
+
     </body>
     <script type="text/javascript">
 
@@ -105,7 +105,7 @@
                 row.prev().children('th.row-move').append('<button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>');
                 row.children('th.row-move').children('.btn-moveUp').remove();
             }
-            
+
             row.children('th.row-sort').text(prevorder);
             row.prev().children('th.row-sort').text(order);
             row.insertBefore(row.prev());
@@ -130,27 +130,7 @@
         $('.filelistTable').on('click', '.btn-delete', function(){
             var row = $(this).parents('tr:first');
             var deleteorder = row.children('th.row-sort').text();
-            
-            /*var filelistTableLength = $('.filelistTable tr').length;
-            var orderlist = new Array(filelistTableLength-1);
-            for(var i = 1; i < filelistTableLength; i++){
-                orderlist[i-1] = $('.filelistTable tr:eq('+i+')').children('th.row-sort').text();
-            }
-            //console.log(filelistTableLength, orderlist.length);
-            var newOrderlist = new Array(orderlist.length);
-            for(var i = 0; i < orderlist.length; i++){ 
-                if(orderlist[i] > deleteorder){
-                    var newOrder = parseInt(orderlist[i], 10) - 1;
-                    newOrderlist[i] = newOrder;
-                }
-                else{
-                    newOrderlist[i] = orderlist[i];
-                }
-                console.log(deleteorder, ",", orderlist[i], ",", newOrderlist[i]);
-                
-                $(".row-sort:eq("+i+")").text(newOrderlist[i]);
-            }*/
-            
+
             row.remove();
             $('.filelistTable tr:last').children('th.row-move').children('.btn-moveDown').remove();
             var filelistTableLength = $('.filelistTable tr').length - 1;
@@ -181,6 +161,62 @@
             $('.filelistTable').append(newrow);
         });
 
+        function openPostWindow(url, name, token, username, clientid, client_secret, user)
+        {
+            var tempForm = document.createElement("form");
+            tempForm.id = "tempForm1";
+            tempForm.method = "post";
+            tempForm.action = url;
+            tempForm.target = name;
+
+            var hideInput1 = document.createElement("input");
+            hideInput1.type = "hidden";
+            hideInput1.name = "token";
+            hideInput1.value = token;
+
+            var hideInput2 = document.createElement("input");
+            hideInput2.type = "hidden";
+            hideInput2.name = "username";
+            hideInput2.value = username;
+
+            var hideInput3 = document.createElement("input");
+            hideInput3.type = "hidden";
+            hideInput3.name = "clientid";
+            hideInput3.value = clientid;
+
+            var hideInput4 = document.createElement("input");
+            hideInput4.type = "hidden";
+            hideInput4.name = "client_secret";
+            hideInput4.value = client_secret;
+
+            var hideInput5 = document.createElement("input");
+            hideInput5.type = "hidden";
+            hideInput5.name = "user";
+            hideInput5.value = user;
+
+            tempForm.appendChild(hideInput1);
+            tempForm.appendChild(hideInput2);
+            tempForm.appendChild(hideInput3);
+            tempForm.appendChild(hideInput4);
+            tempForm.appendChild(hideInput5);
+
+            if(document.all){
+                tempForm.attachEvent("onsubmit",function(){});        //IE
+            }else{
+                var subObj = tempForm.addEventListener("submit",function(){},false);    //firefox
+            }
+            document.body.appendChild(tempForm);
+            if(document.all){
+                tempForm.fireEvent("onsubmit");
+            }else{
+                tempForm.dispatchEvent(new Event("submit"));
+            }
+            //console.log(tempForm);
+            tempForm.submit();
+
+            document.body.removeChild(tempForm);
+        }
+
         $('.btn-update').on('click',function(e){
             var filelistTableLength = $('.filelistTable tr').length;
             var contentTableLength = $('.contentTable tr').length;
@@ -199,30 +235,31 @@
                     filelistUpdate[i-1]['sort'] = $('.filelistTable tr:eq('+i+')').children('th.row-sort').text();
                     filelistUpdate[i-1]['chname'] = $('.filelistTable tr:eq('+i+')').children('th.row-name').children('.name-value').val();
                     filelistUpdate[i-1]['example_desc'] = $('.filelistTable tr:eq('+i+')').children('th.row-desc').children('.desc-value').val();
-                    
+
                     if($('.filelistTable tr:eq('+i+')').children('th.row-require').children('.require-checked').is(":checked"))
                         filelistUpdate[i-1]['required'] = "Y";
                     else
                         filelistUpdate[i-1]['required'] = "N";
-                    
+
                     //filelistUpdate[i-1]['file'] = $('.filelistTable tr:eq('+i+')').children('th.row-file').text();
                 }
-                
+
             }
 
             contentUpdate = {'review_subj': $('.contentTable tr:eq(0)').children('th.case-title').children('.case-title-value').val(),
                              'review_desc':$('.contentTable tr:eq(1)').children('th.case-desc').children(".case-desc-value").val(),
                              'modified_date':''};
-            
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            token = "{{ app('request')->input('token') }}";
             $.ajax({
                 method:'post',
                 url:"{{ route('fileuploadlist.update') }}",
-                data: {caseType:caseType, filelistUpdate:filelistUpdate, contentUpdate:contentUpdate},
+                data: {caseType:caseType, filelistUpdate:filelistUpdate, contentUpdate:contentUpdate, token:token},
                 success:function(data){
                     console.log(data);
                     if(data != 0){
@@ -230,8 +267,38 @@
                     }
                     else{
                         alert("更新成功");
-                        $(window).attr("location", "{{ route('fileuploadlist') }}"); 
+                        username = "{{ app('request')->input('username') }}";
+                        clientid = "{{ app('request')->input('clientid') }}";
+                        client_secret = "{{ app('request')->input('client_secret') }}";
+                        user = "{{ app('request')->input('user') }}";
+                        loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
+                        console.log(loginURL);
+                        $.ajax({
+                            method:'post',
+                            url:loginURL,
+                            data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                            success:function(data){
+                                openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                            }
+                        });
                     }
+                }
+            });
+        });
+
+        $('.btn-back').on('click',function(e){
+            username = "{{ app('request')->input('username') }}";
+            clientid = "{{ app('request')->input('clientid') }}";
+            client_secret = "{{ app('request')->input('client_secret') }}";
+            user = "{{ app('request')->input('user') }}";
+            loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
+            console.log(loginURL);
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user);
                 }
             });
         });

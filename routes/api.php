@@ -39,6 +39,10 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh')->name('jwt.refresh');
     // Route::post('fileupload', 'AuthController@me');
 
+    Route::post('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist.post');
+    //Route::post('fileuploadlist/setting/{caseType}', 'ShowController@showFileuploadlistSetting')->name('fileuploadlist.setting.post');
+    //Route::post('fileuploadlist', 'UpdateController@updateFileuploadlistSetting')->name('fileuploadlist.update');
+
 
     // Route::get('fileupload', 'AuthController@me');
 });
@@ -46,3 +50,4 @@ Route::group([
 Route::post('example/upload', 'ExampleFileManageController@upload');//->middleware('auth:api');
 Route::post('example/delete', 'ExampleFileManageController@delete');//->middleware('auth:api');
 Route::get('example/download', 'ExampleFileManageController@download');//->middleware('auth:api');
+

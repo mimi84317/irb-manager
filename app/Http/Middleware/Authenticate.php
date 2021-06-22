@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Authenticate extends Middleware
 {
@@ -14,8 +15,11 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+        /*$token= $request->access_token;
+        JWTAuth::setToken($token);*/
         if (! $request->expectsJson()) {
             return route('login');
         }
     }
+
 }
