@@ -174,6 +174,27 @@ BPMAPI_URL = http://10.109.226.17
 ```console
 BPMAPI_URL = http://10.109.51.120
 ```
+<br><br>
+* **SERVER_URL**： <br>
+根據不同環境，設置對應SERVER_URL<br>
+
+正式機
+```console
+BPMAPI_URL = http://
+```
+測試機
+```console
+BPMAPI_URL = http://10.109.228.22
+```
+開發機
+```console
+BPMAPI_URL = http://10.109.233.22
+```
+個人PC
+```console
+BPMAPI_URL = http://127.0.0.1:8000
+```
+<br><br>
 * **JWT_SECRET**：  
 若 JWT_SECRET 為空值，可執行以下指令產出，  
 若憑證為空值，則被視為不合法身分  
@@ -252,39 +273,7 @@ BPMAPI_URL = http://10.109.51.120
 
         ...
 ```
-### post 設定
-將views資料夾底下的程式，如果有類似以下內容
-```javascript
-$('.btn-setting').on('click',function(e){
-    username = "{{ app('request')->input('username') }}";
-    clientid = "{{ app('request')->input('clientid') }}";
-    client_secret = "{{ app('request')->input('client_secret') }}";
-    user = "{{ app('request')->input('user') }}";
-    caseType = e.target.id;
-    loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFileListSetting/" + username;
-            console.log(loginURL);
-    $.ajax({
-        method:'post',
-        url:loginURL,
-        data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
-        success:function(data){
-           openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user);         
-        }
-    });
-});
-```
-請將loginURL改為(PC端)
-```javascript
-loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFileListSetting/" + username;
-```
-或(開發機)
-```javascript
-loginURL = "http://10.109.233.22/api/auth/login/uploadFileListSetting/" + username;
-```
-或(測試機)
-```javascript
-loginURL = "http://10.109.228.22/api/auth/login/uploadFileListSetting/" + username;
-```
+
 ## 使用
 ### 啟動伺服器
 cd 至 `/home/vhost/irb/fileupload`  

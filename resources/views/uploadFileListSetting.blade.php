@@ -271,8 +271,9 @@
                         clientid = "{{ app('request')->input('clientid') }}";
                         client_secret = "{{ app('request')->input('client_secret') }}";
                         user = "{{ app('request')->input('user') }}";
-                        loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
-                        console.log(loginURL);
+                        //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
+                        loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
+                        //console.log(loginURL);
                         $.ajax({
                             method:'post',
                             url:loginURL,
@@ -291,8 +292,9 @@
             clientid = "{{ app('request')->input('clientid') }}";
             client_secret = "{{ app('request')->input('client_secret') }}";
             user = "{{ app('request')->input('user') }}";
-            loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
-            console.log(loginURL);
+            //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
+            //console.log(loginURL);
             $.ajax({
                 method:'post',
                 url:loginURL,

@@ -147,8 +147,9 @@
             client_secret = "{{ app('request')->input('client_secret') }}";
             user = "{{ app('request')->input('user') }}";
             caseType = e.target.id;
-            loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFileListSetting"+caseType+"/" + username;
-            console.log(loginURL);
+            //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFileListSetting"+caseType+"/" + username;
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFileListSetting_" + caseType + "/" + username;
+            //console.log(loginURL);
             $.ajax({
                 method:'post',
                 url:loginURL,

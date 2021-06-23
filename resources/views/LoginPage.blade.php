@@ -86,8 +86,9 @@
             clientid = $('#clientid').val();
             client_secret = $('#client_secret').val();
             user = $('#user').val();
-            loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
-            console.log(loginURL);
+            //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
+            //console.log(loginURL);
             $.ajax({
                 method:'post',
                 url:loginURL,
