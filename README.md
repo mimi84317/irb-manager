@@ -158,7 +158,6 @@ $app->useEnvironmentPath(dirname(__DIR__) . '/../config/');
 # php artisan key:generate
 ```
 **另外請注意 APP_KEY 值會影響雜湊與加密，因此相同資料庫的專案 APP_KEY 需設定為一樣**
-<br><br>
 * **BPMAPI_URL**： <br>
 後台機需要至BPM API抓取所需資料，需要在.env中加入BPMAPI_URL<br>
 
@@ -174,7 +173,6 @@ BPMAPI_URL = http://10.109.226.17
 ```console
 BPMAPI_URL = http://10.109.51.120
 ```
-<br><br>
 * **SERVER_URL**： <br>
 根據不同環境，設置對應SERVER_URL<br>
 
@@ -194,7 +192,6 @@ BPMAPI_URL = http://10.109.233.22
 ```console
 BPMAPI_URL = http://127.0.0.1:8000
 ```
-<br><br>
 * **JWT_SECRET**：  
 若 JWT_SECRET 為空值，可執行以下指令產出，  
 若憑證為空值，則被視為不合法身分  
