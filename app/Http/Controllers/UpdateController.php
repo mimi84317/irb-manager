@@ -134,4 +134,31 @@ class UpdateController extends Controller
         return 0;
     }
 
+    public function updateCommittee(Request $request)
+    {
+
+        $caseType = $request->caseType;
+
+        //更新送審須知+更新時間
+        $committeeUpdate = $request->committeeUpdate;
+        $tableNmae = "IRB_committee";
+        $typeName = "";
+        $committeeCondition = "";
+        $committeeState = "insert";
+
+        $time = Carbon::now();
+        $updateDate = $time->format('Y/m/d');
+
+        //更新送審須知+更新時間
+        $committeeUpdate['modified_date'] = $updateDate;
+        $committeeUpdate = json_encode($committeeUpdate, JSON_UNESCAPED_UNICODE);
+        $committeeResponse = $this->DBData($tableNmae, $committeeCondition, $committeeState, $committeeUpdate);
+        if(strpos($committeeResponse ,'Success') == false){
+            return $committeeResponse;
+        }
+
+        return 0;
+    }
+
+
 }

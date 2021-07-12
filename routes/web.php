@@ -43,13 +43,23 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-    Route::post('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist.post');
+    //設定案件上傳清單
     Route::get('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist');
+    Route::post('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist.post');
 
     Route::get('fileuploadlist/setting/{caseType}', 'ShowController@showFileuploadlistSetting')->name('fileuploadlist.setting');
     Route::post('fileuploadlist/setting/{caseType}', 'ShowController@showFileuploadlistSetting')->name('fileuploadlist.setting.post');
 
     Route::post('fileuploadlist', 'UpdateController@updateFileuploadlistSetting')->name('fileuploadlist.update');
+
+    //設定委員會議程
+    Route::get('committee', 'ShowController@showCommittee')->name('committee');
+    Route::post('committee', 'ShowController@showCommittee')->name('committee.post');
+
+    Route::get('committee/committeeNew', 'ShowController@showCommitteeNew')->name('committeeNew');
+    Route::post('committee/committeeNew', 'ShowController@showCommitteeNew')->name('committeeNew.post');
+
+    Route::post('committee', 'UpdateController@updateCommittee')->name('committee.update');
 
 });
 

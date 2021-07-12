@@ -38,26 +38,26 @@
                                 @foreach($caseList as $case)
                                     <tr>
                                         <th class="row-sort">{{ $case['sort'] }}</th>
-                                        <th class="row-name"><input type="text" class="form-control name-value" value="{{ $case['chname'] }}"></th>
-                                        <th class="row-desc"><textarea class="form-control desc-value" rows="3">{{ $case['example_desc'] }}</textarea></th>
-                                        <th class="row-require">
+                                        <td class="row-name"><input type="text" class="form-control name-value" value="{{ $case['chname'] }}"></td>
+                                        <td class="row-desc"><textarea class="form-control desc-value" rows="3">{{ $case['example_desc'] }}</textarea></td>
+                                        <td class="row-require">
                                             @if ($case['required'] == "Y")
                                                 <input class="form-check-input require-checked" type="checkbox" checked>
                                             @elseif ($case['required'] == "N")
                                                 <input class="form-check-input require-checked" type="checkbox">
                                             @endif
-                                        </th>
-                                        <th><input class="form-control" type="file" id="formFile"></th>
-                                        <th class="row-file"><a href="http://10.109.233.21/api/example/download?clientid=test&caseType={{ $caseType }}&file={{ $case['example_name'] }}">{{ $case['example_name'] }}</a></th>
-                                        <th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>
-                                        <th class="row-move">
+                                        </td>
+                                        <td><input class="form-control" type="file" id="formFile"></td>
+                                        <td class="row-file"><a href="http://10.109.233.21/api/example/download?clientid=test&caseType={{ $caseType }}&file={{ $case['example_name'] }}">{{ $case['example_name'] }}</a></td>
+                                        <td><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></td>
+                                        <td class="row-move">
                                             @if (!($loop->first))
                                                 <button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>
                                             @endif
                                             @if (!($loop->last))
                                                 <button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>
                                             @endif
-                                        </th>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -147,16 +147,16 @@
             var newrow = '';
             newrow += '<tr>';
             newrow += '<th class="row-sort">' + newlastorder + '</th>';
-            newrow += '<th class="row-name"><input type="text" class="form-control name-value" value=""></th>';
-            newrow += '<th class="row-desc"><textarea class="form-control desc-value" rows="3"></textarea></th>';
-            newrow += '<th class="row-require"><input class="form-check-input require-checked" type="checkbox"></th>';
-            newrow += '<th><input class="form-control" type="file" id="formFile"></th>';
-            newrow += '<th class="row-file"></th>';
-            newrow += '<th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>';
-            newrow += '<th class="row-move">';
+            newrow += '<td class="row-name"><input type="text" class="form-control name-value" value=""></td>';
+            newrow += '<td class="row-desc"><textarea class="form-control desc-value" rows="3"></textarea></td>';
+            newrow += '<td class="row-require"><input class="form-check-input require-checked" type="checkbox"></td>';
+            newrow += '<td><input class="form-control" type="file" id="formFile"></td>';
+            newrow += '<td class="row-file"></td>';
+            newrow += '<td><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></td>';
+            newrow += '<td class="row-move">';
             newrow += '<button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>';
             //newrow += '<button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>';
-            newrow += '</th>';
+            newrow += '</td>';
             newrow += "</tr>";
             $('.filelistTable').append(newrow);
         });

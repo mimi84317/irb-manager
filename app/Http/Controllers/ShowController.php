@@ -105,4 +105,41 @@ class ShowController extends Controller
                     ->with('caseList', json_decode($caseResponse->Body(), true))
                     ->with('caseContent', json_decode($contentResponse->Body(), true));
     }
+
+    public function showCommittee()
+    {
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        $state = "select";
+        $condition = "";
+        $obj = "";
+        $state = "select";
+        $condition = "";
+        $obj = "";
+
+        //新案審查
+        $caseType = "IRB_committee";
+        $response = $this->DBData($caseType, $condition, $state, $obj);
+
+        return view('committeeHome')
+                        ->with('committeeList', json_decode($response->Body(), true));
+
+
+        //return view('committeeHome');
+
+    }
+
+    public function showCommitteeNew()
+    {
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        $state = "select";
+        $condition = "";
+        $obj = "";
+        $state = "select";
+        $condition = "";
+        $obj = "";
+
+
+        return view('committeeNew');
+
+    }
 }

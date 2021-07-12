@@ -20,7 +20,9 @@
             clientid  <input type="text" value="test" id="clientid"><br>
             client_secret  <input type="text" value="123456" id="client_secret"><br>
             user  <input type="text" value="MEMC_6002124" id="user"><br>
-            <button type="button" class="btn btn-outline-primary btn-login">登入</button>
+            <button type="button" class="btn btn-outline-primary btn-login" id="uploadFilelist">設定案件上傳清單</button>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-login" id="committee">設定委員會議程</button>
         </div>
 
     </body>
@@ -86,15 +88,28 @@
             clientid = $('#clientid').val();
             client_secret = $('#client_secret').val();
             user = $('#user').val();
+            caseType = e.target.id;
             //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
-            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
+            if(caseType == "uploadFilelist"){
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
+            }
+            else if(caseType == "committee"){
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
+            }
+
             //console.log(loginURL);
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                    if(caseType == "uploadFilelist"){
+                        openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                    }
+                    else if(caseType == "committee"){
+                        openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                    }
+
                 }
             });
         });

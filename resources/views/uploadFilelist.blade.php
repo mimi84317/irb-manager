@@ -30,7 +30,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>新案審查</td>
+                            <th>新案審查</th>
                             <td>{{ $modifiedDateList[0]['modified_date'] }}</td>
                             <td>
                                 @foreach($newFilelist as $newFile)
@@ -40,7 +40,7 @@
                             <td><button type="button" class="btn btn-outline-primary btn-setting" id="newCase">編輯</button></td>
                         </tr>
                         <tr>
-                            <td>期中審查</td>
+                            <th>期中審查</th>
                             <td>{{ $modifiedDateList[1]['modified_date'] }}</td>
                             <td>
                                 @foreach($midFilelist as $midFile)
@@ -50,7 +50,7 @@
                             <td><button type="button" class="btn btn-outline-primary btn-setting" id="midCase">編輯</button></td>
                         </tr>
                         <tr>
-                            <td>結案審查</td>
+                            <th>結案審查</th>
                             <td>{{ $modifiedDateList[2]['modified_date'] }}</td>
                             <td>
                                 @foreach($closedFilelist as $closedFile)
@@ -60,7 +60,7 @@
                             <td><button type="button" class="btn btn-outline-primary btn-setting" id="closedCase">編輯</button></td>
                         </tr>
                         <tr>
-                            <td>修正審查</td>
+                            <th>修正審查</th>
                             <td>{{ $modifiedDateList[3]['modified_date'] }}</td>
                             <td>
                                 @foreach($fixFilelist as $fixFile)
@@ -70,7 +70,7 @@
                             <td><button type="button" class="btn btn-outline-primary btn-setting" id="fixCase">編輯</button></td>
                         </tr>
                         <tr>
-                            <td>異常審查(院內)</td>
+                            <th>異常審查(院內)</th>
                             <td>{{ $modifiedDateList[4]['modified_date'] }}</td>
                             <td>
                                 @foreach($abnormalFilelist as $abnormalFile)
