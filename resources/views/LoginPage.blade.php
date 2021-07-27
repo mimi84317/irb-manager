@@ -27,7 +27,7 @@
 
     </body>
     <script>
-        function openPostWindow(url, name, token, username, clientid, client_secret, user)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -60,11 +60,17 @@
             hideInput5.name = "user";
             hideInput5.value = user;
 
+            var hideInput6 = document.createElement("input");
+            hideInput6.type = "hidden";
+            hideInput6.name = "condition";
+            hideInput6.value = condition;
+
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
             tempForm.appendChild(hideInput4);
             tempForm.appendChild(hideInput5);
+            tempForm.appendChild(hideInput6);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -89,6 +95,7 @@
             client_secret = $('#client_secret').val();
             user = $('#user').val();
             caseType = e.target.id;
+            condition = "";
             //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
             if(caseType == "uploadFilelist"){
                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
@@ -104,10 +111,11 @@
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
                     if(caseType == "uploadFilelist"){
-                        openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                        openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
                     else if(caseType == "committee"){
-                        openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+
+                        openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
 
                 }

@@ -8,6 +8,7 @@ use App\Traits\showData;
 use SebastianBergmann\Environment\Console;
 use App\Login_log;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Http\Request;
 
 class ShowController extends Controller
 {
@@ -17,14 +18,13 @@ class ShowController extends Controller
     }
 
     use showData;
-    public function showFileuploadlist()
+    public function showFileuploadlist(Request $request)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
-        $condition = "";
         $obj = "";
         $state = "select";
-        $condition = "";
+        $condition = $request->condition;
         $obj = "";
 
         //新案審查
@@ -61,11 +61,11 @@ class ShowController extends Controller
 
     }
 
-    public function showFileuploadlistSetting($caseType){
+    public function showFileuploadlistSetting($caseType, Request $request){
         $data['caseType'] = $caseType;
         $showCase = "";
         $caseTableName = "";
-        $caseCondition = "";
+        $caseCondition = $request->condition;
         $state = "select";
         $obj = "";
         switch($caseType){
@@ -106,14 +106,13 @@ class ShowController extends Controller
                     ->with('caseContent', json_decode($contentResponse->Body(), true));
     }
 
-    public function showCommittee()
+    public function showCommittee(Request $request)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
-        $condition = "";
         $obj = "";
         $state = "select";
-        $condition = "";
+        $condition = $request->condition;
         $obj = "";
 
         //新案審查
@@ -127,6 +126,27 @@ class ShowController extends Controller
         //return view('committeeHome');
 
     }
+
+    /*public function searchCommittee(Request $request)
+    {
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        $state = "select";
+        $obj = "";
+        $state = "select";
+        $condition = $request->condition;
+        $obj = "";
+
+        //新案審查
+        $caseType = "IRB_committee";
+        $response = $this->DBData($caseType, $condition, $state, $obj);
+
+        return view('committeeHome')
+                        ->with('committeeList', json_decode($response->Body(), true));
+
+
+        //return view('committeeHome');
+
+    }*/
 
     public function showCommitteeNew()
     {

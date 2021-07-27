@@ -55,11 +55,13 @@ Route::group([
     //設定委員會議程
     Route::get('committee', 'ShowController@showCommittee')->name('committee');
     Route::post('committee', 'ShowController@showCommittee')->name('committee.post');
+    //Route::post('committee', 'ShowController@showCommittee')->name('committee.search');
 
     Route::get('committee/committeeNew', 'ShowController@showCommitteeNew')->name('committeeNew');
     Route::post('committee/committeeNew', 'ShowController@showCommitteeNew')->name('committeeNew.post');
 
     Route::post('committee', 'UpdateController@updateCommittee')->name('committee.update');
+    //Route::post('committee', 'ShowController@showCommittee')->name('committeeNew.search');
 
 });
 

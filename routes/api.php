@@ -41,6 +41,7 @@ Route::group([
 
     Route::post('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist.post');
     Route::post('committee', 'ShowController@showCommittee')->name('committee.post');
+    //Route::post('committee', 'ShowController@showCommittee')->name('committee.search');
     //Route::post('fileuploadlist/setting/{caseType}', 'ShowController@showFileuploadlistSetting')->name('fileuploadlist.setting.post');
     //Route::post('fileuploadlist', 'UpdateController@updateFileuploadlistSetting')->name('fileuploadlist.update');
 

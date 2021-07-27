@@ -66,8 +66,8 @@
                             <tr>
                                 <th></th>
                                 <td>
-                                    <button type="button" class="btn btn-outline-primary btn-search">查詢</button>
-                                    <button type="button" class="btn btn-outline-primary btn-clear">重設</button>
+                                    <button type="button" class="btn btn-outline-info btn-search">查詢</button>
+                                    <button type="button" class="btn btn-outline-info btn-clear">重設</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -76,7 +76,7 @@
                 </div>
 
                 <div>
-                    <table class="table table-hover">
+                    <table class="table table-hover committeeTable">
                         <thead>
                             <tr>
                                 <th scope="col">會議名稱</th>
@@ -94,9 +94,9 @@
                                     <th>{{ $committee['committeeName'] }}</th>
                                     <th>{{ $committee['committeeDate'] }}</th>
                                     <th>{{ $committee['selectCommittee'] }}</th>
-                                    <th>編輯</th>
+                                    <th class="committee-edit"><button type="button" class="btn btn-outline-primary btn-edit">編輯</th>
                                     <th>清單</th>
-                                    <th>刪除</th>
+                                    <th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>
                                     <th>編輯</th>
                                 </tr>
                             @endforeach
@@ -174,18 +174,54 @@
             client_secret = "{{ app('request')->input('client_secret') }}";
             user = "{{ app('request')->input('user') }}";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeNew/" + username;
+            condition = "";
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeNew.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                    openPostWindow("{{ route('committeeNew.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                 }
             });
         });
 
         $('.btn-search').on('click',function(e){
+            var committe = $('#selectCommittee').val();
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
 
+            if(selectCommittee == "none"){
+                selectCommittee = "";
+            }
+            else if(selectCommittee == "biomedical"){
+                selectCommittee = "醫學研究倫理委員會";
+            }
+            else if(selectCommittee == "humanities"){
+                selectCommittee = "人文社會科學研究倫理委員會";
+            }
+
+            var username = "{{ app('request')->input('username') }}";
+            var clientid = "{{ app('request')->input('clientid') }}";
+            var client_secret = "{{ app('request')->input('client_secret') }}";
+            var user = "{{ app('request')->input('user') }}";
+            var condition = "where selectCommittee='" + selectCommittee + "' and committeeDate between '" + fromDate + "' and '" + toDate + "'";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
+
+
+        });
+
+        $('.committeeTable').on('click', '.btn-delete', function(){
+            var row = $(this).parents('tr:first');
+            row.remove();
         });
 
         $('.btn-clear').on('click',function(e){
