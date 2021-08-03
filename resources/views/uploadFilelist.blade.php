@@ -148,6 +148,7 @@
             document.body.removeChild(tempForm);
         }
 
+        //編輯
         $('.btn-setting').on('click',function(e){
             username = "{{ app('request')->input('username') }}";
             clientid = "{{ app('request')->input('clientid') }}";

@@ -96,6 +96,7 @@
     </body>
     <script type="text/javascript">
 
+        //調整順序-上
         $('.filelistTable').on('click', '.btn-moveUp', function() {
             var row = $(this).parents('tr:first');
             var order = row.children('th.row-sort').text();
@@ -111,6 +112,7 @@
             row.insertBefore(row.prev());
         });
 
+        //調整順序-下
         $('.filelistTable').on('click', '.btn-moveDown', function(){
             var row = $(this).parents('tr:first');
             var order = row.children('th.row-sort').text();
@@ -127,6 +129,7 @@
             row.insertAfter(row.next());
         });
 
+        //刪除
         $('.filelistTable').on('click', '.btn-delete', function(){
             var row = $(this).parents('tr:first');
             var deleteorder = row.children('th.row-sort').text();
@@ -139,6 +142,7 @@
             }
         });
 
+        //新增清單
         $('.btn-addlist').on('click', function(){
             var lastorder = $('.filelistTable tr:last').children('th.row-sort').text();
             $('.filelistTable tr:last').children('th.row-move').append('<button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>');
@@ -223,6 +227,7 @@
             document.body.removeChild(tempForm);
         }
 
+        //更新
         $('.btn-update').on('click',function(e){
             var filelistTableLength = $('.filelistTable tr').length;
             var contentTableLength = $('.contentTable tr').length;
@@ -294,6 +299,7 @@
             });
         });
 
+        //返回上一頁
         $('.btn-back').on('click',function(e){
             username = "{{ app('request')->input('username') }}";
             clientid = "{{ app('request')->input('clientid') }}";

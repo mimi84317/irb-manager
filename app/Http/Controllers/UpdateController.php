@@ -30,7 +30,7 @@ class UpdateController extends Controller
 
         //更新送審須知+更新時間
         $contentUpdate = $request->contentUpdate;
-        $filelistTableNmae = "IRB_upload_filelist_content";
+        $filelistTableName = "IRB_upload_filelist_content";
         $typeName = "";
         $contentCondition = "";
         $contentState = "update";
@@ -126,7 +126,7 @@ class UpdateController extends Controller
         $contentUpdate['modified_date'] = $updateDate;
         $contentUpdate = json_encode($contentUpdate, JSON_UNESCAPED_UNICODE);
         $contentCondition = "where type_name='".$typeName."'";
-        $contentResponse = $this->DBData($filelistTableNmae, $contentCondition, $contentState, $contentUpdate);
+        $contentResponse = $this->DBData($filelistTableName, $contentCondition, $contentState, $contentUpdate);
         if(strpos($contentResponse ,'Success') == false){
             return $contentResponse;
         }
@@ -136,28 +136,39 @@ class UpdateController extends Controller
 
     public function updateCommittee(Request $request)
     {
-
-        $caseType = $request->caseType;
-
-        //更新送審須知+更新時間
         $committeeUpdate = $request->committeeUpdate;
-        $tableNmae = "IRB_committee";
-        $typeName = "";
-        $committeeCondition = "";
-        $committeeState = "insert";
+        $updateType = $request->updateType;
+        $tableName = "IRB_committee";
+        if($updateType == "update"){
+            $committeeCondition = $request->condition;
+        }
+        else if($updateType == "insert"){
+            $committeeCondition = "";
+        }
+        
 
         $time = Carbon::now();
         $updateDate = $time->format('Y/m/d');
 
-        //更新送審須知+更新時間
         $committeeUpdate['modified_date'] = $updateDate;
         $committeeUpdate = json_encode($committeeUpdate, JSON_UNESCAPED_UNICODE);
-        $committeeResponse = $this->DBData($tableNmae, $committeeCondition, $committeeState, $committeeUpdate);
+        $committeeResponse = $this->DBData($tableName, $committeeCondition, $updateType, $committeeUpdate);
         if(strpos($committeeResponse ,'Success') == false){
             return $committeeResponse;
         }
 
         return 0;
+    }
+
+    public function deleteCommittee(Request $request)
+    {
+        $committeeDelete = $request->committeeDelete;
+        $tableName = "IRB_committee";
+        $committeeCondition = "";
+        $committeeState = "delete";
+
+        $committeeCondition = "where sort='".$committeeDelete['Id']."'";
+        $committeeResponse = $this->DBData($tableName, $committeeCondition, $committeeState, null);
     }
 
 

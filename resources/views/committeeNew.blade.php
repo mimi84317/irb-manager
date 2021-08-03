@@ -31,14 +31,17 @@
 
         <div class="container">
             <div class="col-form-label">
-                <p class="titleText">新增倫理委員會議</p>
+                @if (count($committeeContent) > 0)
+                    <p class="titleText">修改倫理委員會議</p>    
+                @elseif (count($committeeContent) == 0)
+                    <p class="titleText">新增倫理委員會議</p>
+                @endif
             </div>
             <div class="col-12">
                 <div>
                     <div>
                         <p class="text-danger font-weight-bold">*</p>為必填欄位
                     </div>
-
                     <table class="table table-bordered">
                         <thead>
                         </thead>
@@ -46,42 +49,66 @@
                             <tr>
                                 <th><p class="text-danger font-weight-bold">*</p>委員會</th>
                                 <td>
-                                    <select class="form-select" aria-label="Default select example" id="selectCommittee">
-                                        <option value="none" selected>請選擇</option>
-                                        <option value="biomedical">醫學研究倫理委員會</option>
-                                        <option value="humanities">人文社會科學研究倫理委員會</option>
-                                    </select>
+                                    @if (count($committeeContent) > 0)
+                                        <p>{{ $committeeContent[0]['selectCommittee'] }}</p>
+                                    @elseif (count($committeeContent) == 0)
+                                        <select class="form-select" aria-label="Default select example" id="selectCommittee">
+                                            <option value="none" selected>請選擇</option>
+                                            <option value="biomedical">醫學研究倫理委員會</option>
+                                            <option value="humanities">人文社會科學研究倫理委員會</option>
+                                        </select>
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th><p class="text-danger font-weight-bold">*</p>會議名稱</th>
                                 <td>
-                                    <input type="text" class="form-control" value="" id="committeeName">
+                                    @if (count($committeeContent) > 0)
+                                    <input type="text" class="form-control" id="committeeName" value="{{ $committeeContent[0]['committeeName'] }}">
+                                    @elseif (count($committeeContent) == 0)
+                                        <input type="text" class="form-control" value="" id="committeeName">
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th><p class="text-danger font-weight-bold">*</p>會議日期</th>
                                 <td>
-                                    <input type="text" class="input-sm form-control" name="from" id="committeeDate">
+                                    @if (count($committeeContent) > 0)
+                                        <input type="text" class="input-sm form-control" id="committeeDate" value="{{ $committeeContent[0]['committeeDate'] }}" readonly>
+                                    @elseif (count($committeeContent) == 0)
+                                        <input type="text" class="input-sm form-control" id="committeeDate" readonly>
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>會議地點</th>
                                 <td>
-                                    <input type="text" class="input-sm form-control" name="from" id="committeePlace">
+                                    @if (count($committeeContent) > 0)
+                                        <input type="text" class="input-sm form-control" id="committeePlace" value="{{ $committeeContent[0]['committeePlace'] }}">
+                                    @elseif (count($committeeContent) == 0)
+                                        <input type="text" class="input-sm form-control" id="committeePlace">
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>會議說明</th>
                                 <td>
-                                    <textarea class="form-control desc-value" rows="10" id="committeeContent"></textarea>
+                                    @if (count($committeeContent) > 0)
+                                        <textarea class="form-control desc-value" rows="10" id="committeeContent">{{ $committeeContent[0]['committeeContent'] }}</textarea>
+                                    @elseif (count($committeeContent) == 0)
+                                        <textarea class="form-control desc-value" rows="10" id="committeeContent"></textarea>
+                                    @endif
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-outline-primary btn-update">新增</button>
+                    @if (count($committeeContent) > 0)
+                        <button type="button" class="btn btn-outline-primary btn-update">修改</button>
+                    @elseif (count($committeeContent) == 0)
+                        <button type="button" class="btn btn-outline-primary btn-update">新增</button>
+                    @endif
                     <button type="button" class="btn btn-outline-primary btn-back">返回上一頁</button>
                 </div>
             </div>
@@ -156,6 +183,7 @@
             });
         });
 
+        //更新+修改
         $('.btn-update').on('click',function(e){
             var selectCommittee = $('#selectCommittee').val();
             var committeeName = $('#committeeName').val();
@@ -196,10 +224,19 @@
                         }
                     });
                     token = "{{ app('request')->input('token') }}";
+
+                    @if (count($committeeContent) > 0)
+                        var updateType = "update";
+                        var condition = "where Id={{ $committeeContent[0]['Id'] }}";
+                    @elseif (count($committeeContent) == 0)
+                        var updateType = "insert";
+                        var condition = "";
+                    @endif
+
                     $.ajax({
                         method:'post',
                         url:"{{ route('committee.update') }}",
-                        data: {committeeUpdate:committeeUpdate, token:token},
+                        data: {committeeUpdate:committeeUpdate, updateType:updateType, condition:condition, token:token},
                         success:function(data){
                             console.log(data);
                             if(data != 0){
@@ -232,6 +269,9 @@
 
         });
 
+        
+
+        //返回上一頁
         $('.btn-back').on('click',function(e){
             username = "{{ app('request')->input('username') }}";
             clientid = "{{ app('request')->input('clientid') }}";

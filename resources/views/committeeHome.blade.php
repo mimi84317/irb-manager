@@ -74,11 +74,12 @@
                     </table>
 
                 </div>
-
                 <div>
                     <table class="table table-hover committeeTable">
                         <thead>
                             <tr>
+                                <th scope="col">id</th>
+                                <!--style="display:none"-->
                                 <th scope="col">會議名稱</th>
                                 <th scope="col">會議日期</th>
                                 <th scope="col">委員會</th>
@@ -91,6 +92,7 @@
                         <tbody>
                             @foreach($committeeList as $committee)
                                 <tr>
+                                    <th class="row-id">{{ $committee['Id'] }}</th>
                                     <th>{{ $committee['committeeName'] }}</th>
                                     <th>{{ $committee['committeeDate'] }}</th>
                                     <th>{{ $committee['selectCommittee'] }}</th>
@@ -107,7 +109,7 @@
         </div>
     </body>
     <script>
-        function openPostWindow(url, name, token, username, clientid, client_secret, user)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -140,11 +142,17 @@
             hideInput5.name = "user";
             hideInput5.value = user;
 
+            var hideInput6 = document.createElement("input");
+            hideInput6.type = "hidden";
+            hideInput6.name = "condition";
+            hideInput6.value = condition;
+
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
             tempForm.appendChild(hideInput4);
             tempForm.appendChild(hideInput5);
+            tempForm.appendChild(hideInput6);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -168,13 +176,14 @@
             });
         });
 
+        //新增倫理委員會
         $('.btn-addNewMeeting').on('click',function(e){
             username = "{{ app('request')->input('username') }}";
             clientid = "{{ app('request')->input('clientid') }}";
             client_secret = "{{ app('request')->input('client_secret') }}";
             user = "{{ app('request')->input('user') }}";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeNew/" + username;
-            condition = "";
+            condition = "where Id=0";
             $.ajax({
                 method:'post',
                 url:loginURL,
@@ -185,8 +194,9 @@
             });
         });
 
+        //查詢
         $('.btn-search').on('click',function(e){
-            var committe = $('#selectCommittee').val();
+            var selectCommittee = $('#selectCommittee').val();
             var fromDate = $('#fromDate').val();
             var toDate = $('#toDate').val();
 
@@ -199,6 +209,7 @@
             else if(selectCommittee == "humanities"){
                 selectCommittee = "人文社會科學研究倫理委員會";
             }
+            console.log(selectCommittee);
 
             var username = "{{ app('request')->input('username') }}";
             var clientid = "{{ app('request')->input('clientid') }}";
@@ -206,6 +217,7 @@
             var user = "{{ app('request')->input('user') }}";
             var condition = "where selectCommittee='" + selectCommittee + "' and committeeDate between '" + fromDate + "' and '" + toDate + "'";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
+            console.log(condition);
 
             $.ajax({
                 method:'post',
@@ -213,21 +225,51 @@
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
                     openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    location.reload();
                 }
             });
 
 
         });
 
-        $('.committeeTable').on('click', '.btn-delete', function(){
-            var row = $(this).parents('tr:first');
-            row.remove();
-        });
-
+        //重設
         $('.btn-clear').on('click',function(e){
             $('#selectCommittee').val("none");
             $('#fromDate').val("");
             $('#toDate').val("");
+        });
+
+        //會議內容-編輯
+        $('.btn-edit').on('click',function(e){
+            var row = $(this).parents('tr:first');
+            var id = row.children('th.row-id').text();
+            
+            var username = "{{ app('request')->input('username') }}";
+            var clientid = "{{ app('request')->input('clientid') }}";
+            var client_secret = "{{ app('request')->input('client_secret') }}";
+            var user = "{{ app('request')->input('user') }}";
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeNew/" + username;
+            var condition = "where Id=" + id;
+            console.log(condition);
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('committeeNew.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
+        });
+
+        //刪除會議
+        $('.committeeTable').on('click', '.btn-delete', function(){
+            var result = confirm('是否刪除會議?');
+            if(result == true){
+                var row = $(this).parents('tr:first');
+                var id = row.children('th.row-id').text();
+                row.remove();
+            }
+            
         });
 
     </script>

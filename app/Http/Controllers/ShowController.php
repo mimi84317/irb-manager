@@ -22,8 +22,6 @@ class ShowController extends Controller
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
-        $obj = "";
-        $state = "select";
         $condition = $request->condition;
         $obj = "";
 
@@ -110,20 +108,14 @@ class ShowController extends Controller
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
-        $obj = "";
-        $state = "select";
         $condition = $request->condition;
         $obj = "";
 
-        //新案審查
-        $caseType = "IRB_committee";
-        $response = $this->DBData($caseType, $condition, $state, $obj);
+        $tableName = "IRB_committee";
+        $response = $this->DBData($tableName, $condition, $state, $obj);
 
         return view('committeeHome')
                         ->with('committeeList', json_decode($response->Body(), true));
-
-
-        //return view('committeeHome');
 
     }
 
@@ -148,18 +140,19 @@ class ShowController extends Controller
 
     }*/
 
-    public function showCommitteeNew()
+    public function showCommitteeNew(Request $request)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
-        $condition = "";
-        $obj = "";
-        $state = "select";
-        $condition = "";
+        $condition = $request->condition;
         $obj = "";
 
+        $tableName = "IRB_committee";
+        $response = $this->DBData($tableName, $condition, $state, $obj);
 
-        return view('committeeNew');
+        //return view('committeeNew');
+        return view('committeeNew')->with('committeeContent', json_decode($response->Body(), true));
+        //return $response;
 
     }
 }
