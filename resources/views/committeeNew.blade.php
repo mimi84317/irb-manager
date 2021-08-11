@@ -39,15 +39,29 @@
             </div>
             <div class="col-12">
                 <div>
-                    <div>
-                        <p class="text-danger font-weight-bold">*</p>為必填欄位
-                    </div>
+                    <form class="form-inline">
+                        <div class="d-inline text-danger font-weight-bold">
+                            *
+                        </div>
+                        <div class="d-inline">
+                            為必填欄位
+                        </div>
+                    </form>
                     <table class="table table-bordered">
                         <thead>
                         </thead>
                         <tbody>
                             <tr>
-                                <th><p class="text-danger font-weight-bold">*</p>委員會</th>
+                                <th>
+                                    <form class="form-inline">
+                                        <div class="d-inline text-danger font-weight-bold">
+                                            *
+                                        </div>
+                                        <div class="d-inline">
+                                            委員會
+                                        </div>
+                                    </form>
+                                </th>
                                 <td>
                                     @if (count($committeeContent) > 0)
                                         <p>{{ $committeeContent[0]['selectCommittee'] }}</p>
@@ -61,7 +75,16 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th><p class="text-danger font-weight-bold">*</p>會議名稱</th>
+                                <th>
+                                    <form class="form-inline">
+                                        <div class="d-inline text-danger font-weight-bold">
+                                            *
+                                        </div>
+                                        <div class="d-inline">
+                                            會議名稱
+                                        </div>
+                                    </form>
+                                </th>
                                 <td>
                                     @if (count($committeeContent) > 0)
                                     <input type="text" class="form-control" id="committeeName" value="{{ $committeeContent[0]['committeeName'] }}">
@@ -71,7 +94,16 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th><p class="text-danger font-weight-bold">*</p>會議日期</th>
+                                <th>
+                                    <form class="form-inline">
+                                        <div class="d-inline text-danger font-weight-bold">
+                                            *
+                                        </div>
+                                        <div class="d-inline">
+                                            會議日期
+                                        </div>
+                                    </form>
+                                </th>
                                 <td>
                                     @if (count($committeeContent) > 0)
                                         <input type="text" class="input-sm form-control" id="committeeDate" value="{{ $committeeContent[0]['committeeDate'] }}" readonly>

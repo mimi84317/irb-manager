@@ -96,10 +96,10 @@
                                     <th>{{ $committee['committeeName'] }}</th>
                                     <th>{{ $committee['committeeDate'] }}</th>
                                     <th>{{ $committee['selectCommittee'] }}</th>
-                                    <th class="committee-edit"><button type="button" class="btn btn-outline-primary btn-edit">編輯</th>
+                                    <th class="committee-edit"><button type="button" class="btn btn-outline-primary btn-editContent">編輯</th>
                                     <th>清單</th>
                                     <th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>
-                                    <th>編輯</th>
+                                    <th class="committee-edit"><button type="button" class="btn btn-outline-primary btn-editRecord">編輯</th>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -240,7 +240,7 @@
         });
 
         //會議內容-編輯
-        $('.btn-edit').on('click',function(e){
+        $('.btn-editContent').on('click',function(e){
             var row = $(this).parents('tr:first');
             var id = row.children('th.row-id').text();
             
@@ -270,6 +270,28 @@
                 row.remove();
             }
             
+        });
+
+        //會議記錄-編輯
+        $('.btn-editRecord').on('click',function(e){
+            var row = $(this).parents('tr:first');
+            var id = row.children('th.row-id').text();
+            
+            var username = "{{ app('request')->input('username') }}";
+            var clientid = "{{ app('request')->input('clientid') }}";
+            var client_secret = "{{ app('request')->input('client_secret') }}";
+            var user = "{{ app('request')->input('user') }}";
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeNew/" + username;
+            var condition = "where Id=" + id;
+            console.log(condition);
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('committeeMinutes.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
         });
 
     </script>

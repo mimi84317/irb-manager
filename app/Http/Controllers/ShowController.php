@@ -150,9 +150,21 @@ class ShowController extends Controller
         $tableName = "IRB_committee";
         $response = $this->DBData($tableName, $condition, $state, $obj);
 
-        //return view('committeeNew');
         return view('committeeNew')->with('committeeContent', json_decode($response->Body(), true));
-        //return $response;
+
+    }
+
+    public function showCommitteeMinutes(Request $request)
+    {
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        $state = "select";
+        $condition = $request->condition;
+        $obj = "";
+
+        $tableName = "IRB_committee";
+        $response = $this->DBData($tableName, $condition, $state, $obj);
+
+        return view('committeeMinutes')->with('committeeContent', json_decode($response->Body(), true));
 
     }
 }
