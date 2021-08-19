@@ -140,7 +140,7 @@ class ShowController extends Controller
 
     }*/
 
-    public function showCommitteeNew(Request $request)
+    public function showCommitteeContent(Request $request)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
@@ -150,21 +150,14 @@ class ShowController extends Controller
         $tableName = "IRB_committee";
         $response = $this->DBData($tableName, $condition, $state, $obj);
 
-        return view('committeeNew')->with('committeeContent', json_decode($response->Body(), true));
+        $committeeType = $request->committeeType;
 
-    }
-
-    public function showCommitteeMinutes(Request $request)
-    {
-        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
-        $state = "select";
-        $condition = $request->condition;
-        $obj = "";
-
-        $tableName = "IRB_committee";
-        $response = $this->DBData($tableName, $condition, $state, $obj);
-
-        return view('committeeMinutes')->with('committeeContent', json_decode($response->Body(), true));
-
+        if($committeeType == "content"){
+            return view('committeeNew')->with('committeeContent', json_decode($response->Body(), true));
+        }
+        else if($committeeType == "minutes"){
+            return view('committeeMinutes')->with('committeeContent', json_decode($response->Body(), true));
+        }
+        
     }
 }

@@ -56,11 +56,8 @@ Route::group([
     Route::get('committee', 'ShowController@showCommittee')->name('committee');
     Route::post('committee', 'ShowController@showCommittee')->name('committee.post');
 
-    Route::get('committee/committeeNew', 'ShowController@showCommitteeNew')->name('committeeNew');
-    Route::post('committee/committeeNew', 'ShowController@showCommitteeNew')->name('committeeNew.post');
-
-    Route::get('committee/committeeMinutes', 'ShowController@showCommitteeMinutes')->name('committeeMinutes');
-    Route::post('committee/committeeMinutes', 'ShowController@showCommitteeMinutes')->name('committeeMinutes.post');
+    Route::get('committee/committeeContent', 'ShowController@showCommitteeContent')->name('committeeContent');
+    Route::post('committee/committeeContent', 'ShowController@showCommitteeContent')->name('committeeContent.post');
 
     Route::post('committee', 'UpdateController@updateCommittee')->name('committee.update');
 

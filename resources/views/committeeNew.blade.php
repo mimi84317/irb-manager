@@ -64,7 +64,7 @@
                                 </th>
                                 <td>
                                     @if (count($committeeContent) > 0)
-                                        <p>{{ $committeeContent[0]['selectCommittee'] }}</p>
+                                        <div>{{ $committeeContent[0]['selectCommittee'] }}</div>
                                     @elseif (count($committeeContent) == 0)
                                         <select class="form-select" aria-label="Default select example" id="selectCommittee">
                                             <option value="none" selected>請選擇</option>
@@ -106,9 +106,9 @@
                                 </th>
                                 <td>
                                     @if (count($committeeContent) > 0)
-                                        <input type="text" class="input-sm form-control" id="committeeDate" value="{{ $committeeContent[0]['committeeDate'] }}" readonly>
+                                        <input type="text" class="input form-control" id="committeeDate" value="{{ $committeeContent[0]['committeeDate'] }}" readonly>
                                     @elseif (count($committeeContent) == 0)
-                                        <input type="text" class="input-sm form-control" id="committeeDate" readonly>
+                                        <input type="text" class="input form-control" id="committeeDate" readonly>
                                     @endif
                                 </td>
                             </tr>
@@ -116,9 +116,9 @@
                                 <th>會議地點</th>
                                 <td>
                                     @if (count($committeeContent) > 0)
-                                        <input type="text" class="input-sm form-control" id="committeePlace" value="{{ $committeeContent[0]['committeePlace'] }}">
+                                        <input type="text" class="input form-control" id="committeePlace" value="{{ $committeeContent[0]['committeePlace'] }}">
                                     @elseif (count($committeeContent) == 0)
-                                        <input type="text" class="input-sm form-control" id="committeePlace">
+                                        <input type="text" class="input form-control" id="committeePlace">
                                     @endif
                                 </td>
                             </tr>
@@ -249,7 +249,7 @@
                                      'committeeContent' : committeeContent,
                                      'modified_date':''};
 
-                    console.log(committeeUpdate);
+                    //console.log(committeeUpdate);
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

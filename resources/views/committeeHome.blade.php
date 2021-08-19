@@ -109,7 +109,7 @@
         </div>
     </body>
     <script>
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, committeeType)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -147,12 +147,18 @@
             hideInput6.name = "condition";
             hideInput6.value = condition;
 
+            var hideInput7 = document.createElement("input");
+            hideInput7.type = "hidden";
+            hideInput7.name = "committeeType";
+            hideInput7.value = committeeType;
+
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
             tempForm.appendChild(hideInput4);
             tempForm.appendChild(hideInput5);
             tempForm.appendChild(hideInput6);
+            tempForm.appendChild(hideInput7);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -165,7 +171,6 @@
             }else{
                 tempForm.dispatchEvent(new Event("submit"));
             }
-            //console.log(tempForm);
             tempForm.submit();
             document.body.removeChild(tempForm);
         }
@@ -189,7 +194,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeNew.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                 }
             });
         });
@@ -248,15 +253,16 @@
             var clientid = "{{ app('request')->input('clientid') }}";
             var client_secret = "{{ app('request')->input('client_secret') }}";
             var user = "{{ app('request')->input('user') }}";
-            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeNew/" + username;
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeContent/" + username;
             var condition = "where Id=" + id;
-            console.log(condition);
+            var committeeType = "content";
+
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeNew.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType);
                 }
             });
         });
@@ -281,15 +287,16 @@
             var clientid = "{{ app('request')->input('clientid') }}";
             var client_secret = "{{ app('request')->input('client_secret') }}";
             var user = "{{ app('request')->input('user') }}";
-            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeNew/" + username;
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeMinutes/" + username;
             var condition = "where Id=" + id;
-            console.log(condition);
+            var committeeType = "minutes";
+
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeMinutes.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType);
                 }
             });
         });

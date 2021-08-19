@@ -41,80 +41,110 @@
                         <tbody>
                             <tr>
                                 <th>委員會</th>
-                                <td>
-                                    
-                                </td>
+                                <td><div>{{ $committeeContent[0]['selectCommittee'] }}</div></td>
                             </tr>
                             <tr>
                                 <th>會議名稱</th>
-                                <td>
-                                    
-                                </td>
+                                <td><div>{{ $committeeContent[0]['committeeName'] }}</div></td>
                             </tr>
                             <tr>
                                 <th>會議日期</th>
-                                <td>
-                                    
-                                </td>
+                                <td>{{ $committeeContent[0]['committeeDate'] }}</td>
                             </tr>
                             <tr>
                                 <th>會議地點</th>
-                                <td>
-                                    
-                                </td>
+                                <td>{{ $committeeContent[0]['committeePlace'] }}</td>
                             </tr>
                             <tr>
                                 <th>主席</th>
                                 <td>
-                                    <input type="text" class="form-control" value="" id="committeeChairPerson">
+                                    @if (count($committeeContent) > 0)
+                                        <input type="text" class="form-control" id="committeeChairPerson" value="{{ $committeeContent[0]['committeeChairPerson'] }}">
+                                    @elseif (count($committeeContent) == 0)
+                                        <input type="text" class="form-control" id="committeeChairPerson">
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>記錄</th>
                                 <td>
-                                    <input type="text" class="form-control" value="" id="committeeMinutesTaker">
+                                    @if (count($committeeContent) > 0)
+                                        <input type="text" class="form-control" id="committeeMinutesTaker" value="{{ $committeeContent[0]['committeeChairPerson'] }}">
+                                    @elseif (count($committeeContent) == 0)
+                                        <input type="text" class="form-control" id="committeeMinutesTaker" value="">
+                                    @endif
+                                    
                                 </td>
                             </tr>
                             <tr>
                                 <th>出席</th>
                                 <td>
-                                    <textarea class="form-control desc-value" rows="5" id="committeeAttendance"></textarea>
+                                    @if (count($committeeContent) > 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeAttendance">{{ $committeeContent[0]['committeeAttendance'] }}</textarea>
+                                    @elseif (count($committeeContent) == 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeAttendance"></textarea>
+                                    @endif
+                                    
                                 </td>
                             </tr>
                             <tr>
                                 <th>請假</th>
                                 <td>
-                                    <textarea class="form-control desc-value" rows="5" id="committeeAbsentee"></textarea>
+                                    @if (count($committeeContent) > 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeAbsentee">{{ $committeeContent[0]['committeeAbsentee'] }}</textarea>
+                                    @elseif (count($committeeContent) == 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeAbsentee"></textarea>
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>列席</th>
                                 <td>
-                                    <textarea class="form-control desc-value" rows="5" id="committeeVisitor"></textarea>
+                                    @if (count($committeeContent) > 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeVisitor">{{ $committeeContent[0]['committeeVisitor'] }}</textarea>
+                                    @elseif (count($committeeContent) == 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeVisitor"></textarea>
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>報告事項</th>
                                 <td>
-                                    <textarea class="form-control desc-value" rows="10" id="committeeReport"></textarea>
+                                    @if (count($committeeContent) > 0)
+                                        <textarea class="form-control desc-value" rows="10" id="committeeReport">{{ $committeeContent[0]['committeeReport'] }}</textarea>
+                                    @elseif (count($committeeContent) == 0)
+                                        <textarea class="form-control desc-value" rows="10" id="committeeReport"></textarea>
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>討論事項</th>
                                 <td>
-                                    <input type="text" class="form-control" value="" id="committeeDiscussion">
+                                    @if (count($committeeContent) > 0)
+                                        <input type="text" class="form-control" id="committeeDiscussion" value="{{ $committeeContent[0]['committeeDiscussion'] }}">
+                                    @elseif (count($committeeContent) == 0)
+                                        <input type="text" class="form-control" value="" id="committeeDiscussion">
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>臨時動議</th>
                                 <td>
-                                    <input type="text" class="form-control" value="" id="committeeMotion">
+                                    @if (count($committeeContent) > 0)
+                                        <input type="text" class="form-control" id="committeeMotion" value="{{ $committeeContent[0]['committeeMotion'] }}">
+                                    @elseif (count($committeeContent) == 0)
+                                        <input type="text" class="form-control" value="" id="committeeMotion">
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>散會時間</th>
                                 <td>
-                                    <input type="text" class="form-control" value="" id="committeeEndDateTime">
+                                    @if (count($committeeContent) > 0)
+                                        <input type="text" class="form-control" id="committeeEndDateTime" value="{{ $committeeContent[0]['committeeEndDateTime'] }}">
+                                    @elseif (count($committeeContent) == 0)
+                                        <input type="text" class="form-control" value="" id="committeeEndDateTime">
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
@@ -124,7 +154,11 @@
                                             本次會議出席人數
                                         </div>
                                         <div class="d-inline-block">
-                                            <input type="text" class="form-control" value="" id="committeePresentNumber">
+                                            @if (count($committeeContent) > 0)
+                                                <input type="text" class="form-control" id="committeePresentNumber" value="{{ $committeeContent[0]['committeePresentNumber'] }}">
+                                            @elseif (count($committeeContent) == 0)
+                                                <input type="text" class="form-control" value="" id="committeePresentNumber">
+                                            @endif
                                         </div>
                                         <div class="d-inline-block">
                                             人，並有非醫療專業委員及非試驗機構內委員與會，已達法定開會條件，主席宣布開會。
@@ -136,7 +170,8 @@
                     </table>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-outline-primary btn-refresh">更新</button>
+                    <button type="button" class="btn btn-outline-primary btn-update">更新</button>
+                    <button type="button" class="btn btn-outline-primary btn-back">返回上一頁</button>
                 </div>
             </div>
         </div>
@@ -207,7 +242,95 @@
             $('.input-daterange').datepicker({
                 autoclose: true
             });
-        });      
+        }); 
+
+        //更新
+        $('.btn-update').on('click',function(e){
+            var committeeChairPerson = $("#committeeChairPerson").val();
+            var committeeMinutesTaker = $("#committeeMinutesTaker").val();
+            var committeeAttendance = $("#committeeAttendance").val();
+            var committeeAbsentee = $("#committeeAbsentee").val();
+            var committeeVisitor = $("#committeeVisitor").val();
+            var committeeReport = $("#committeeReport").val();
+            var committeeDiscussion = $("#committeeDiscussion").val();
+            var committeeMotion = $("#committeeMotion").val();
+            var committeeEndDateTime = $("#committeeEndDateTime").val();
+            var committeePresentNumber = $("#committeePresentNumber").val();
+
+            committeeUpdate = { 'committeeChairPerson': committeeChairPerson,
+                                'committeeMinutesTaker': committeeMinutesTaker,
+                                'committeeAttendance': committeeAttendance,
+                                'committeeAbsentee' : committeeAbsentee,
+                                'committeeVisitor' : committeeVisitor,
+                                'committeeReport' : committeeReport,
+                                'committeeDiscussion' : committeeDiscussion,
+                                'committeeMotion' : committeeMotion,
+                                'committeeEndDateTime' : committeeEndDateTime,
+                                'committeePresentNumber' : committeePresentNumber,
+                                'modified_date':''};
+
+            //console.log(committeeUpdate);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            token = "{{ app('request')->input('token') }}";
+
+            var updateType = "update";
+            var condition = "where Id={{ $committeeContent[0]['Id'] }}";
+
+            $.ajax({
+                method:'post',
+                url:"{{ route('committee.update') }}",
+                data: {committeeUpdate:committeeUpdate, updateType:updateType, condition:condition, token:token},
+                success:function(data){
+                    console.log(data);
+                    if(data != 0){
+                        alert("更新失敗，請洽系統管理員");
+                    }
+                    else{
+                        alert("更新成功");
+                        username = "{{ app('request')->input('username') }}";
+                        clientid = "{{ app('request')->input('clientid') }}";
+                        client_secret = "{{ app('request')->input('client_secret') }}";
+                        user = "{{ app('request')->input('user') }}";
+                        condition = "";
+                        //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
+                        loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
+                        //console.log(loginURL);
+                        $.ajax({
+                            method:'post',
+                            url:loginURL,
+                            data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                            success:function(data){
+                                openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                            }
+                        });
+                    }
+                }
+            });
+        });     
+
+
+        //返回上一頁
+        $('.btn-back').on('click',function(e){
+            username = "{{ app('request')->input('username') }}";
+            clientid = "{{ app('request')->input('clientid') }}";
+            client_secret = "{{ app('request')->input('client_secret') }}";
+            user = "{{ app('request')->input('user') }}";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
+            //console.log(loginURL);
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                }
+            });
+        });     
 
     </script>
 </html>
