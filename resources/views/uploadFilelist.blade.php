@@ -86,6 +86,11 @@
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+        var username = "{{ app('request')->input('username') }}";
+        var clientid = "{{ app('request')->input('clientid') }}";
+        var client_secret = "{{ app('request')->input('client_secret') }}";
+        var user = "{{ app('request')->input('user') }}";
+
         function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
         {
             var tempForm = document.createElement("form");
@@ -150,10 +155,6 @@
 
         //編輯
         $('.btn-setting').on('click',function(e){
-            username = "{{ app('request')->input('username') }}";
-            clientid = "{{ app('request')->input('clientid') }}";
-            client_secret = "{{ app('request')->input('client_secret') }}";
-            user = "{{ app('request')->input('user') }}";
             condition = "";
             caseType = e.target.id;
             //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFileListSetting"+caseType+"/" + username;

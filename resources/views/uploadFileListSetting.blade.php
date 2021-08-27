@@ -95,6 +95,72 @@
 
     </body>
     <script type="text/javascript">
+        var username = "{{ app('request')->input('username') }}";
+        var clientid = "{{ app('request')->input('clientid') }}";
+        var client_secret = "{{ app('request')->input('client_secret') }}";
+        var user = "{{ app('request')->input('user') }}";
+
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
+        {
+            var tempForm = document.createElement("form");
+            tempForm.id = "tempForm1";
+            tempForm.method = "post";
+            tempForm.action = url;
+            tempForm.target = name;
+
+            var hideInput1 = document.createElement("input");
+            hideInput1.type = "hidden";
+            hideInput1.name = "token";
+            hideInput1.value = token;
+
+            var hideInput2 = document.createElement("input");
+            hideInput2.type = "hidden";
+            hideInput2.name = "username";
+            hideInput2.value = username;
+
+            var hideInput3 = document.createElement("input");
+            hideInput3.type = "hidden";
+            hideInput3.name = "clientid";
+            hideInput3.value = clientid;
+
+            var hideInput4 = document.createElement("input");
+            hideInput4.type = "hidden";
+            hideInput4.name = "client_secret";
+            hideInput4.value = client_secret;
+
+            var hideInput5 = document.createElement("input");
+            hideInput5.type = "hidden";
+            hideInput5.name = "user";
+            hideInput5.value = user;
+
+            var hideInput6 = document.createElement("input");
+            hideInput6.type = "hidden";
+            hideInput6.name = "condition";
+            hideInput6.value = condition;
+
+            tempForm.appendChild(hideInput1);
+            tempForm.appendChild(hideInput2);
+            tempForm.appendChild(hideInput3);
+            tempForm.appendChild(hideInput4);
+            tempForm.appendChild(hideInput5);
+            tempForm.appendChild(hideInput6);
+
+            if(document.all){
+                tempForm.attachEvent("onsubmit",function(){});        //IE
+            }else{
+                var subObj = tempForm.addEventListener("submit",function(){},false);    //firefox
+            }
+            document.body.appendChild(tempForm);
+            if(document.all){
+                tempForm.fireEvent("onsubmit");
+            }else{
+                tempForm.dispatchEvent(new Event("submit"));
+            }
+            //console.log(tempForm);
+            tempForm.submit();
+
+            document.body.removeChild(tempForm);
+        }
 
         //調整順序-上
         $('.filelistTable').on('click', '.btn-moveUp', function() {
@@ -165,68 +231,6 @@
             $('.filelistTable').append(newrow);
         });
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
-        {
-            var tempForm = document.createElement("form");
-            tempForm.id = "tempForm1";
-            tempForm.method = "post";
-            tempForm.action = url;
-            tempForm.target = name;
-
-            var hideInput1 = document.createElement("input");
-            hideInput1.type = "hidden";
-            hideInput1.name = "token";
-            hideInput1.value = token;
-
-            var hideInput2 = document.createElement("input");
-            hideInput2.type = "hidden";
-            hideInput2.name = "username";
-            hideInput2.value = username;
-
-            var hideInput3 = document.createElement("input");
-            hideInput3.type = "hidden";
-            hideInput3.name = "clientid";
-            hideInput3.value = clientid;
-
-            var hideInput4 = document.createElement("input");
-            hideInput4.type = "hidden";
-            hideInput4.name = "client_secret";
-            hideInput4.value = client_secret;
-
-            var hideInput5 = document.createElement("input");
-            hideInput5.type = "hidden";
-            hideInput5.name = "user";
-            hideInput5.value = user;
-
-            var hideInput6 = document.createElement("input");
-            hideInput6.type = "hidden";
-            hideInput6.name = "condition";
-            hideInput6.value = condition;
-
-            tempForm.appendChild(hideInput1);
-            tempForm.appendChild(hideInput2);
-            tempForm.appendChild(hideInput3);
-            tempForm.appendChild(hideInput4);
-            tempForm.appendChild(hideInput5);
-            tempForm.appendChild(hideInput6);
-
-            if(document.all){
-                tempForm.attachEvent("onsubmit",function(){});        //IE
-            }else{
-                var subObj = tempForm.addEventListener("submit",function(){},false);    //firefox
-            }
-            document.body.appendChild(tempForm);
-            if(document.all){
-                tempForm.fireEvent("onsubmit");
-            }else{
-                tempForm.dispatchEvent(new Event("submit"));
-            }
-            //console.log(tempForm);
-            tempForm.submit();
-
-            document.body.removeChild(tempForm);
-        }
-
         //更新
         $('.btn-update').on('click',function(e){
             var filelistTableLength = $('.filelistTable tr').length;
@@ -278,14 +282,8 @@
                     }
                     else{
                         alert("更新成功");
-                        username = "{{ app('request')->input('username') }}";
-                        clientid = "{{ app('request')->input('clientid') }}";
-                        client_secret = "{{ app('request')->input('client_secret') }}";
-                        user = "{{ app('request')->input('user') }}";
                         condition = "";
-                        //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
                         loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
-                        //console.log(loginURL);
                         $.ajax({
                             method:'post',
                             url:loginURL,
@@ -301,14 +299,8 @@
 
         //返回上一頁
         $('.btn-back').on('click',function(e){
-            username = "{{ app('request')->input('username') }}";
-            clientid = "{{ app('request')->input('clientid') }}";
-            client_secret = "{{ app('request')->input('client_secret') }}";
-            user = "{{ app('request')->input('user') }}";
             condition = "";
-            //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
-            //console.log(loginURL);
             $.ajax({
                 method:'post',
                 url:loginURL,

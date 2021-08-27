@@ -29,6 +29,14 @@
         <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
         <!---->
 
+        <!--table需要-->
+        <!--<script src="https://cdn.jsdelivr.net/npm/tablednd@1.0.5/dist/jquery.tablednd.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">-->
+        <link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+        <!---->
+
         <div class="container">
             <div class="col-form-label">
                 <p class="titleText">管理倫理委員會議</p>
@@ -75,18 +83,25 @@
 
                 </div>
                 <div>
-                    <table class="table table-hover committeeTable">
+                    <table  class="committeeTable"
+                            id="committeeTable"
+                            data-toggle="table"
+                            data-pagination="true"
+                            data-toolbar="#toolbar"
+                            data-use-row-attr-func="true"
+                            data-reorderable-rows="true">
+
                         <thead>
                             <tr>
-                                <th scope="col">id</th>
+                                <th>id</th>
                                 <!--style="display:none"-->
-                                <th scope="col">會議名稱</th>
-                                <th scope="col">會議日期</th>
-                                <th scope="col">委員會</th>
-                                <th scope="col">會議內容</th>
-                                <th scope="col">討論案件清單</th>
-                                <th scope="col">刪除會議</th>
-                                <th scope="col">會議記錄</th>
+                                <th data-field="committeeName" data-sortable="true">會議名稱</th>
+                                <th data-field="committeeDate" data-sortable="true">會議日期</th>
+                                <th data-field="selectCommittee" data-sortable="true">委員會</th>
+                                <th>會議內容</th>
+                                <th>討論案件清單</th>
+                                <th>刪除會議</th>
+                                <th>會議記錄</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -96,10 +111,10 @@
                                     <th>{{ $committee['committeeName'] }}</th>
                                     <th>{{ $committee['committeeDate'] }}</th>
                                     <th>{{ $committee['selectCommittee'] }}</th>
-                                    <th class="committee-edit"><button type="button" class="btn btn-outline-primary btn-editContent">編輯</th>
+                                    <th class="committee-editContent"><button type="button" class="btn btn-outline-primary btn-editContent">編輯</th>
                                     <th>清單</th>
                                     <th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>
-                                    <th class="committee-edit"><button type="button" class="btn btn-outline-primary btn-editRecord">編輯</th>
+                                    <th class="committee-editRecord"><button type="button" class="btn btn-outline-primary btn-editRecord">編輯</th>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -109,6 +124,12 @@
         </div>
     </body>
     <script>
+
+        var username = "{{ app('request')->input('username') }}";
+        var clientid = "{{ app('request')->input('clientid') }}";
+        var client_secret = "{{ app('request')->input('client_secret') }}";
+        var user = "{{ app('request')->input('user') }}";
+
         function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, committeeType)
         {
             var tempForm = document.createElement("form");
@@ -183,18 +204,15 @@
 
         //新增倫理委員會
         $('.btn-addNewMeeting').on('click',function(e){
-            username = "{{ app('request')->input('username') }}";
-            clientid = "{{ app('request')->input('clientid') }}";
-            client_secret = "{{ app('request')->input('client_secret') }}";
-            user = "{{ app('request')->input('user') }}";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeNew/" + username;
             condition = "where Id=0";
+            var committeeType = "content";
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType);
                 }
             });
         });
@@ -214,15 +232,16 @@
             else if(selectCommittee == "humanities"){
                 selectCommittee = "人文社會科學研究倫理委員會";
             }
-            console.log(selectCommittee);
 
-            var username = "{{ app('request')->input('username') }}";
-            var clientid = "{{ app('request')->input('clientid') }}";
-            var client_secret = "{{ app('request')->input('client_secret') }}";
-            var user = "{{ app('request')->input('user') }}";
-            var condition = "where selectCommittee='" + selectCommittee + "' and committeeDate between '" + fromDate + "' and '" + toDate + "'";
+            if(fromDate == ""){
+                fromDate = "01/01/1990";
+            }
+            if(toDate == ""){
+                toDate = "12/31/2121";
+            }
+
+            var condition = "where selectCommittee like '%" + selectCommittee + "%' and committeeDate between '" + fromDate + "' and '" + toDate + "'";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
-            console.log(condition);
 
             $.ajax({
                 method:'post',
@@ -230,7 +249,6 @@
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
                     openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
-                    location.reload();
                 }
             });
 
@@ -245,17 +263,15 @@
         });
 
         //會議內容-編輯
-        $('.btn-editContent').on('click',function(e){
+        $('.committeeTable').on('click', '.btn-editContent',function(e){
             var row = $(this).parents('tr:first');
-            var id = row.children('th.row-id').text();
-            
-            var username = "{{ app('request')->input('username') }}";
-            var clientid = "{{ app('request')->input('clientid') }}";
-            var client_secret = "{{ app('request')->input('client_secret') }}";
-            var user = "{{ app('request')->input('user') }}";
+            var id = row.children('.row-id').text();
+            console.log(id);
+
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeContent/" + username;
             var condition = "where Id=" + id;
             var committeeType = "content";
+            console.log(id);
 
             $.ajax({
                 method:'post',
@@ -272,21 +288,29 @@
             var result = confirm('是否刪除會議?');
             if(result == true){
                 var row = $(this).parents('tr:first');
-                var id = row.children('th.row-id').text();
+                var id = row.children('.row-id').text();
                 row.remove();
+
+                var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeMinutes/" + username;
+                var condition = "where Id=" + id;
+
+                $.ajax({
+                    method:'post',
+                    url:loginURL,
+                    data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                    success:function(data){
+                        openPostWindow("{{ route('committee.delete') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    }
+                });
             }
-            
+
         });
 
         //會議記錄-編輯
-        $('.btn-editRecord').on('click',function(e){
+        $('.committeeTable').on('click', '.btn-editRecord',function(e){
             var row = $(this).parents('tr:first');
-            var id = row.children('th.row-id').text();
-            
-            var username = "{{ app('request')->input('username') }}";
-            var clientid = "{{ app('request')->input('clientid') }}";
-            var client_secret = "{{ app('request')->input('client_secret') }}";
-            var user = "{{ app('request')->input('user') }}";
+            var id = row.children('.row-id').html();
+
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeMinutes/" + username;
             var condition = "where Id=" + id;
             var committeeType = "minutes";

@@ -10,6 +10,9 @@ use App\Login_log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 
+use App\Product;
+
+
 class ShowController extends Controller
 {
     public function __construct()
@@ -119,7 +122,7 @@ class ShowController extends Controller
 
     }
 
-    /*public function searchCommittee(Request $request)
+    public function searchCommittee(Request $request)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
@@ -128,17 +131,13 @@ class ShowController extends Controller
         $condition = $request->condition;
         $obj = "";
 
-        //新案審查
         $caseType = "IRB_committee";
         $response = $this->DBData($caseType, $condition, $state, $obj);
 
         return view('committeeHome')
                         ->with('committeeList', json_decode($response->Body(), true));
 
-
-        //return view('committeeHome');
-
-    }*/
+    }
 
     public function showCommitteeContent(Request $request)
     {
@@ -158,6 +157,6 @@ class ShowController extends Controller
         else if($committeeType == "minutes"){
             return view('committeeMinutes')->with('committeeContent', json_decode($response->Body(), true));
         }
-        
+
     }
 }

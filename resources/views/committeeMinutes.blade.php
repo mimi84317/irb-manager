@@ -73,7 +73,7 @@
                                     @elseif (count($committeeContent) == 0)
                                         <input type="text" class="form-control" id="committeeMinutesTaker" value="">
                                     @endif
-                                    
+
                                 </td>
                             </tr>
                             <tr>
@@ -84,7 +84,7 @@
                                     @elseif (count($committeeContent) == 0)
                                         <textarea class="form-control desc-value" rows="5" id="committeeAttendance"></textarea>
                                     @endif
-                                    
+
                                 </td>
                             </tr>
                             <tr>
@@ -177,6 +177,11 @@
         </div>
     </body>
     <script>
+        var username = "{{ app('request')->input('username') }}";
+        var clientid = "{{ app('request')->input('clientid') }}";
+        var client_secret = "{{ app('request')->input('client_secret') }}";
+        var user = "{{ app('request')->input('user') }}";
+
         function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
         {
             var tempForm = document.createElement("form");
@@ -242,7 +247,7 @@
             $('.input-daterange').datepicker({
                 autoclose: true
             });
-        }); 
+        });
 
         //更新
         $('.btn-update').on('click',function(e){
@@ -292,10 +297,6 @@
                     }
                     else{
                         alert("更新成功");
-                        username = "{{ app('request')->input('username') }}";
-                        clientid = "{{ app('request')->input('clientid') }}";
-                        client_secret = "{{ app('request')->input('client_secret') }}";
-                        user = "{{ app('request')->input('user') }}";
                         condition = "";
                         //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
                         loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
@@ -311,15 +312,11 @@
                     }
                 }
             });
-        });     
+        });
 
 
         //返回上一頁
         $('.btn-back').on('click',function(e){
-            username = "{{ app('request')->input('username') }}";
-            clientid = "{{ app('request')->input('clientid') }}";
-            client_secret = "{{ app('request')->input('client_secret') }}";
-            user = "{{ app('request')->input('user') }}";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
             //console.log(loginURL);
             $.ajax({
@@ -330,7 +327,7 @@
                     openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user);
                 }
             });
-        });     
+        });
 
     </script>
 </html>

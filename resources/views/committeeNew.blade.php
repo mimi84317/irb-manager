@@ -32,7 +32,7 @@
         <div class="container">
             <div class="col-form-label">
                 @if (count($committeeContent) > 0)
-                    <p class="titleText">修改倫理委員會議</p>    
+                    <p class="titleText">修改倫理委員會議</p>
                 @elseif (count($committeeContent) == 0)
                     <p class="titleText">新增倫理委員會議</p>
                 @endif
@@ -106,9 +106,9 @@
                                 </th>
                                 <td>
                                     @if (count($committeeContent) > 0)
-                                        <input type="text" class="input form-control" id="committeeDate" value="{{ $committeeContent[0]['committeeDate'] }}" readonly>
+                                        <input type="text" class="input form-control" id="committeeDate" value="{{ $committeeContent[0]['committeeDate'] }}">
                                     @elseif (count($committeeContent) == 0)
-                                        <input type="text" class="input form-control" id="committeeDate" readonly>
+                                        <input type="text" class="input form-control" id="committeeDate">
                                     @endif
                                 </td>
                             </tr>
@@ -147,6 +147,11 @@
         </div>
     </body>
     <script>
+        var username = "{{ app('request')->input('username') }}";
+        var clientid = "{{ app('request')->input('clientid') }}";
+        var client_secret = "{{ app('request')->input('client_secret') }}";
+        var user = "{{ app('request')->input('user') }}";
+
         function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
         {
             var tempForm = document.createElement("form");
@@ -233,8 +238,9 @@
                 selectCommittee = "人文社會科學研究倫理委員會";
             }
 
-            var dateFormat = /^([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})$/;
-            if(committeeDate.match(dateFormat)){
+            //var dateFormat = /^([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})$/;
+            var dateFormat = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+            if(!committeeDate.match(dateFormat)){
                 alert("日期格式不正確");
             }
             else{
@@ -276,10 +282,6 @@
                             }
                             else{
                                 alert("更新成功");
-                                username = "{{ app('request')->input('username') }}";
-                                clientid = "{{ app('request')->input('clientid') }}";
-                                client_secret = "{{ app('request')->input('client_secret') }}";
-                                user = "{{ app('request')->input('user') }}";
                                 condition = "";
                                 //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
                                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
@@ -301,14 +303,10 @@
 
         });
 
-        
+
 
         //返回上一頁
         $('.btn-back').on('click',function(e){
-            username = "{{ app('request')->input('username') }}";
-            clientid = "{{ app('request')->input('clientid') }}";
-            client_secret = "{{ app('request')->input('client_secret') }}";
-            user = "{{ app('request')->input('user') }}";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
             //console.log(loginURL);
             $.ajax({
