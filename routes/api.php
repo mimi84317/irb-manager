@@ -40,11 +40,11 @@ Route::group([
     // Route::post('fileupload', 'AuthController@me');
 
     Route::post('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist.post');
-    /*Route::resource('fileuploadlist', 'FileuploadlistController',[
+    Route::resource('fileuploadlist', 'FileuploadlistController',[
         'names' => [ 'showFileuploadlist' => 'fileuploadlist.post'
 
         ]
-    ]);*/
+    ]);
     Route::post('committee', 'ShowController@showCommittee')->name('committee.post');
     //Route::post('committee', 'ShowController@showCommittee')->name('committee.search');
 
