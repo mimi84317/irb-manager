@@ -40,7 +40,6 @@ trait showData
                 'conArr' => '{}',
                 'updateObj' => $obj
             ]);
-            return $response;
         }
         else if($state == "delete"){
             $response  = Http::asForm()->withHeaders([
@@ -51,7 +50,6 @@ trait showData
                 'conArr' => '{}',
                 'column' => ''
             ]);
-            return $update;
         }
 
         return $response;

@@ -241,17 +241,17 @@
 
             for(var i = 1; i < filelistTableLength; i++){
                 filelistUpdate[i-1] = {};
-                var name = $('.filelistTable tr:eq('+i+')').children('th.row-name').children('.name-value').val();
+                var name = $('.filelistTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
                 if(name == ""){
                     alert("文件名稱不可空白!!!");
                     break;
                 }
                 else{
-                    filelistUpdate[i-1]['sort'] = $('.filelistTable tr:eq('+i+')').children('th.row-sort').text();
-                    filelistUpdate[i-1]['chname'] = $('.filelistTable tr:eq('+i+')').children('th.row-name').children('.name-value').val();
-                    filelistUpdate[i-1]['example_desc'] = $('.filelistTable tr:eq('+i+')').children('th.row-desc').children('.desc-value').val();
+                    filelistUpdate[i-1]['sort'] = $('.filelistTable tr:eq('+i+')').children('.row-sort').text();
+                    filelistUpdate[i-1]['chname'] = $('.filelistTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
+                    filelistUpdate[i-1]['example_desc'] = $('.filelistTable tr:eq('+i+')').children('.row-desc').children('.desc-value').val();
 
-                    if($('.filelistTable tr:eq('+i+')').children('th.row-require').children('.require-checked').is(":checked"))
+                    if($('.filelistTable tr:eq('+i+')').children('.row-require').children('.require-checked').is(":checked"))
                         filelistUpdate[i-1]['required'] = "Y";
                     else
                         filelistUpdate[i-1]['required'] = "N";
@@ -261,8 +261,8 @@
 
             }
 
-            contentUpdate = {'review_subj': $('.contentTable tr:eq(0)').children('th.case-title').children('.case-title-value').val(),
-                             'review_desc':$('.contentTable tr:eq(1)').children('th.case-desc').children(".case-desc-value").val(),
+            contentUpdate = {'review_subj': $('.contentTable tr:eq(0)').children('.case-title').children('.case-title-value').val(),
+                             'review_desc':$('.contentTable tr:eq(1)').children('.case-desc').children(".case-desc-value").val(),
                              'modified_date':''};
 
             $.ajaxSetup({

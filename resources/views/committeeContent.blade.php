@@ -31,9 +31,9 @@
 
         <div class="container">
             <div class="col-form-label">
-                @if (count($committeeContent) > 0)
+                @if (count($committeeContentList) > 0)
                     <p class="titleText">修改倫理委員會議</p>
-                @elseif (count($committeeContent) == 0)
+                @elseif (count($committeeContentList) == 0)
                     <p class="titleText">新增倫理委員會議</p>
                 @endif
             </div>
@@ -63,9 +63,9 @@
                                     </form>
                                 </th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <div>{{ $committeeContent[0]['selectCommittee'] }}</div>
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <div>{{ $committeeContentList[0]['selectCommittee'] }}</div>
+                                    @elseif (count($committeeContentList) == 0)
                                         <select class="form-select" aria-label="Default select example" id="selectCommittee">
                                             <option value="none" selected>請選擇</option>
                                             <option value="biomedical">醫學研究倫理委員會</option>
@@ -86,9 +86,9 @@
                                     </form>
                                 </th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                    <input type="text" class="form-control" id="committeeName" value="{{ $committeeContent[0]['committeeName'] }}">
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                    <input type="text" class="form-control" id="committeeName" value="{{ $committeeContentList[0]['committeeName'] }}">
+                                    @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="form-control" value="" id="committeeName">
                                     @endif
                                 </td>
@@ -105,9 +105,9 @@
                                     </form>
                                 </th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <input type="text" class="input form-control" id="committeeDate" value="{{ $committeeContent[0]['committeeDate'] }}">
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <input type="text" class="input form-control" id="committeeDate" value="{{ $committeeContentList[0]['committeeDate'] }}">
+                                    @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="input form-control" id="committeeDate">
                                     @endif
                                 </td>
@@ -115,9 +115,9 @@
                             <tr>
                                 <th>會議地點</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <input type="text" class="input form-control" id="committeePlace" value="{{ $committeeContent[0]['committeePlace'] }}">
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <input type="text" class="input form-control" id="committeePlace" value="{{ $committeeContentList[0]['committeePlace'] }}">
+                                    @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="input form-control" id="committeePlace">
                                     @endif
                                 </td>
@@ -125,9 +125,9 @@
                             <tr>
                                 <th>會議說明</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <textarea class="form-control desc-value" rows="10" id="committeeContent">{{ $committeeContent[0]['committeeContent'] }}</textarea>
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <textarea class="form-control desc-value" rows="10" id="committeeContent">{{ $committeeContentList[0]['committeeContent'] }}</textarea>
+                                    @elseif (count($committeeContentList) == 0)
                                         <textarea class="form-control desc-value" rows="10" id="committeeContent"></textarea>
                                     @endif
                                 </td>
@@ -136,9 +136,9 @@
                     </table>
                 </div>
                 <div>
-                    @if (count($committeeContent) > 0)
+                    @if (count($committeeContentList) > 0)
                         <button type="button" class="btn btn-outline-primary btn-update">修改</button>
-                    @elseif (count($committeeContent) == 0)
+                    @elseif (count($committeeContentList) == 0)
                         <button type="button" class="btn btn-outline-primary btn-update">新增</button>
                     @endif
                     <button type="button" class="btn btn-outline-primary btn-back">返回上一頁</button>
@@ -240,7 +240,8 @@
 
             //var dateFormat = /^([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})$/;
             var dateFormat = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
-            if(!committeeDate.match(dateFormat)){
+            var dateFormatDB = /^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/;
+            if(!committeeDate.match(dateFormat) && !committeeDate.match(dateFormatDB)){
                 alert("日期格式不正確");
             }
             else{
@@ -263,10 +264,10 @@
                     });
                     token = "{{ app('request')->input('token') }}";
 
-                    @if (count($committeeContent) > 0)
+                    @if (count($committeeContentList) > 0)
                         var updateType = "update";
-                        var condition = "where Id={{ $committeeContent[0]['Id'] }}";
-                    @elseif (count($committeeContent) == 0)
+                        var condition = "where Id={{ $committeeContentList[0]['Id'] }}";
+                    @elseif (count($committeeContentList) == 0)
                         var updateType = "insert";
                         var condition = "";
                     @endif
@@ -283,7 +284,6 @@
                             else{
                                 alert("更新成功");
                                 condition = "";
-                                //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
                                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
                                 //console.log(loginURL);
                                 $.ajax({

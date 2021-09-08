@@ -110,7 +110,6 @@ class FileuploadlistController extends Controller
 
     public function updateFileuploadlistSetting(Request $request)
     {
-
         $caseType = $request->caseType;
 
         //更新上傳清單

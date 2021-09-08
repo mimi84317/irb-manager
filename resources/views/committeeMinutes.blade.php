@@ -41,26 +41,26 @@
                         <tbody>
                             <tr>
                                 <th>委員會</th>
-                                <td><div>{{ $committeeContent[0]['selectCommittee'] }}</div></td>
+                                <td><div>{{ $committeeContentList[0]['selectCommittee'] }}</div></td>
                             </tr>
                             <tr>
                                 <th>會議名稱</th>
-                                <td><div>{{ $committeeContent[0]['committeeName'] }}</div></td>
+                                <td><div>{{ $committeeContentList[0]['committeeName'] }}</div></td>
                             </tr>
                             <tr>
                                 <th>會議日期</th>
-                                <td>{{ $committeeContent[0]['committeeDate'] }}</td>
+                                <td>{{ $committeeContentList[0]['committeeDate'] }}</td>
                             </tr>
                             <tr>
                                 <th>會議地點</th>
-                                <td>{{ $committeeContent[0]['committeePlace'] }}</td>
+                                <td>{{ $committeeContentList[0]['committeePlace'] }}</td>
                             </tr>
                             <tr>
                                 <th>主席</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <input type="text" class="form-control" id="committeeChairPerson" value="{{ $committeeContent[0]['committeeChairPerson'] }}">
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <input type="text" class="form-control" id="committeeChairPerson" value="{{ $committeeContentList[0]['committeeChairPerson'] }}">
+                                    @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="form-control" id="committeeChairPerson">
                                     @endif
                                 </td>
@@ -68,9 +68,9 @@
                             <tr>
                                 <th>記錄</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <input type="text" class="form-control" id="committeeMinutesTaker" value="{{ $committeeContent[0]['committeeChairPerson'] }}">
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <input type="text" class="form-control" id="committeeMinutesTaker" value="{{ $committeeContentList[0]['committeeMinutesTaker'] }}">
+                                    @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="form-control" id="committeeMinutesTaker" value="">
                                     @endif
 
@@ -79,9 +79,9 @@
                             <tr>
                                 <th>出席</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <textarea class="form-control desc-value" rows="5" id="committeeAttendance">{{ $committeeContent[0]['committeeAttendance'] }}</textarea>
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeAttendance">{{ $committeeContentList[0]['committeeAttendance'] }}</textarea>
+                                    @elseif (count($committeeContentList) == 0)
                                         <textarea class="form-control desc-value" rows="5" id="committeeAttendance"></textarea>
                                     @endif
 
@@ -90,9 +90,9 @@
                             <tr>
                                 <th>請假</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <textarea class="form-control desc-value" rows="5" id="committeeAbsentee">{{ $committeeContent[0]['committeeAbsentee'] }}</textarea>
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeAbsentee">{{ $committeeContentList[0]['committeeAbsentee'] }}</textarea>
+                                    @elseif (count($committeeContentList) == 0)
                                         <textarea class="form-control desc-value" rows="5" id="committeeAbsentee"></textarea>
                                     @endif
                                 </td>
@@ -100,9 +100,9 @@
                             <tr>
                                 <th>列席</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <textarea class="form-control desc-value" rows="5" id="committeeVisitor">{{ $committeeContent[0]['committeeVisitor'] }}</textarea>
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <textarea class="form-control desc-value" rows="5" id="committeeVisitor">{{ $committeeContentList[0]['committeeVisitor'] }}</textarea>
+                                    @elseif (count($committeeContentList) == 0)
                                         <textarea class="form-control desc-value" rows="5" id="committeeVisitor"></textarea>
                                     @endif
                                 </td>
@@ -110,9 +110,9 @@
                             <tr>
                                 <th>報告事項</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <textarea class="form-control desc-value" rows="10" id="committeeReport">{{ $committeeContent[0]['committeeReport'] }}</textarea>
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <textarea class="form-control desc-value" rows="10" id="committeeReport">{{ $committeeContentList[0]['committeeReport'] }}</textarea>
+                                    @elseif (count($committeeContentList) == 0)
                                         <textarea class="form-control desc-value" rows="10" id="committeeReport"></textarea>
                                     @endif
                                 </td>
@@ -120,9 +120,9 @@
                             <tr>
                                 <th>討論事項</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <input type="text" class="form-control" id="committeeDiscussion" value="{{ $committeeContent[0]['committeeDiscussion'] }}">
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <input type="text" class="form-control" id="committeeDiscussion" value="{{ $committeeContentList[0]['committeeDiscussion'] }}">
+                                    @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="form-control" value="" id="committeeDiscussion">
                                     @endif
                                 </td>
@@ -130,9 +130,9 @@
                             <tr>
                                 <th>臨時動議</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <input type="text" class="form-control" id="committeeMotion" value="{{ $committeeContent[0]['committeeMotion'] }}">
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <input type="text" class="form-control" id="committeeMotion" value="{{ $committeeContentList[0]['committeeMotion'] }}">
+                                    @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="form-control" value="" id="committeeMotion">
                                     @endif
                                 </td>
@@ -140,9 +140,9 @@
                             <tr>
                                 <th>散會時間</th>
                                 <td>
-                                    @if (count($committeeContent) > 0)
-                                        <input type="text" class="form-control" id="committeeEndDateTime" value="{{ $committeeContent[0]['committeeEndDateTime'] }}">
-                                    @elseif (count($committeeContent) == 0)
+                                    @if (count($committeeContentList) > 0)
+                                        <input type="text" class="form-control" id="committeeEndDateTime" value="{{ $committeeContentList[0]['committeeEndDateTime'] }}">
+                                    @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="form-control" value="" id="committeeEndDateTime">
                                     @endif
                                 </td>
@@ -154,9 +154,9 @@
                                             本次會議出席人數
                                         </div>
                                         <div class="d-inline-block">
-                                            @if (count($committeeContent) > 0)
-                                                <input type="text" class="form-control" id="committeePresentNumber" value="{{ $committeeContent[0]['committeePresentNumber'] }}">
-                                            @elseif (count($committeeContent) == 0)
+                                            @if (count($committeeContentList) > 0)
+                                                <input type="text" class="form-control" id="committeePresentNumber" value="{{ $committeeContentList[0]['committeePresentNumber'] }}">
+                                            @elseif (count($committeeContentList) == 0)
                                                 <input type="text" class="form-control" value="" id="committeePresentNumber">
                                             @endif
                                         </div>
@@ -284,7 +284,7 @@
             token = "{{ app('request')->input('token') }}";
 
             var updateType = "update";
-            var condition = "where Id={{ $committeeContent[0]['Id'] }}";
+            var condition = "where Id={{ $committeeContentList[0]['Id'] }}";
 
             $.ajax({
                 method:'post',

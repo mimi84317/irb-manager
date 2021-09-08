@@ -93,8 +93,7 @@
 
                         <thead>
                             <tr>
-                                <th>id</th>
-                                <!--style="display:none"-->
+                                <!--<th data-field="committeeID" style="display:none">id</th>-->
                                 <th data-field="committeeName" data-sortable="true">會議名稱</th>
                                 <th data-field="committeeDate" data-sortable="true">會議日期</th>
                                 <th data-field="selectCommittee" data-sortable="true">委員會</th>
@@ -107,12 +106,12 @@
                         <tbody>
                             @foreach($committeeList as $committee)
                                 <tr>
-                                    <th class="row-id">{{ $committee['Id'] }}</th>
+                                    <th class="row-id" style="display:none">{{ $committee['Id'] }}</th>
                                     <th>{{ $committee['committeeName'] }}</th>
                                     <th>{{ $committee['committeeDate'] }}</th>
                                     <th>{{ $committee['selectCommittee'] }}</th>
                                     <th class="committee-editContent"><button type="button" class="btn btn-outline-primary btn-editContent">編輯</th>
-                                    <th>清單</th>
+                                        <th class="committee-list"><button type="button" class="btn btn-outline-primary btn-list">清單</th>
                                     <th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>
                                     <th class="committee-editRecord"><button type="button" class="btn btn-outline-primary btn-editRecord">編輯</th>
                                 </tr>
@@ -266,12 +265,11 @@
         $('.committeeTable').on('click', '.btn-editContent',function(e){
             var row = $(this).parents('tr:first');
             var id = row.children('.row-id').text();
-            console.log(id);
+            console.log(id)
 
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeContent/" + username;
             var condition = "where Id=" + id;
             var committeeType = "content";
-            console.log(id);
 
             $.ajax({
                 method:'post',
@@ -283,23 +281,52 @@
             });
         });
 
+        //討論案件清單
+        $('.committeeTable').on('click', '.btn-list',function(e){
+            var row = $(this).parents('tr:first');
+            var id = row.children('.row-id').text();
+            console.log(id)
+
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeList/" + username;
+            var condition = "where Id=" + id;
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('committeeList.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
+        });
+
         //刪除會議
         $('.committeeTable').on('click', '.btn-delete', function(){
             var result = confirm('是否刪除會議?');
             if(result == true){
                 var row = $(this).parents('tr:first');
                 var id = row.children('.row-id').text();
-                row.remove();
+                //row.remove();
 
                 var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeMinutes/" + username;
-                var condition = "where Id=" + id;
+                var condition = id;
+
+                var deleteURL = "{{ env('SERVER_URL') }}" + "/BPMAPI/index.php";
 
                 $.ajax({
                     method:'post',
                     url:loginURL,
                     data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                     success:function(data){
-                        openPostWindow("{{ route('committee.delete') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                        $.ajax({
+                            method:'post',
+                            url:"{{ route('committee.delete') }}",
+                            data: {condition:condition, token:data["access_token"], username:username, clientid:clientid, client_secret:client_secret, user:user},
+                            success:function(data){
+                                alert("刪除成功");
+                                document.location.reload(true);
+                            }
+                        });
                     }
                 });
             }

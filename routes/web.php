@@ -44,28 +44,25 @@ Route::group([
 
 ], function ($router) {
     //設定案件上傳清單
-    /*Route::get('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist');
-    Route::post('fileuploadlist', 'ShowController@showFileuploadlist')->name('fileuploadlist.post');*/
-    Route::resource('fileuploadlist', 'FileuploadlistController',[
-                    'names' => [ 'showFileuploadlist' => 'fileuploadlist.post'
+    Route::get('fileuploadlist', 'FileuploadlistController@showFileuploadlist')->name('fileuploadlist');
+    Route::post('fileuploadlist', 'FileuploadlistController@showFileuploadlist')->name('fileuploadlist.post');
 
-                    ]
-    ]);
+    Route::get('fileuploadlist/setting/{caseType}', 'FileuploadlistController@showFileuploadlistSetting')->name('fileuploadlist.setting');
+    Route::post('fileuploadlist/setting/{caseType}', 'FileuploadlistController@showFileuploadlistSetting')->name('fileuploadlist.setting.post');
 
-    Route::get('fileuploadlist/setting/{caseType}', 'ShowController@showFileuploadlistSetting')->name('fileuploadlist.setting');
-    Route::post('fileuploadlist/setting/{caseType}', 'ShowController@showFileuploadlistSetting')->name('fileuploadlist.setting.post');
-
-    Route::post('fileuploadlist', 'UpdateController@updateFileuploadlistSetting')->name('fileuploadlist.update');
+    Route::post('fileuploadlist', 'FileuploadlistController@updateFileuploadlistSetting')->name('fileuploadlist.update');
 
     //設定委員會議程
-    Route::get('committee', 'ShowController@showCommittee')->name('committee');
-    Route::post('committee', 'ShowController@showCommittee')->name('committee.post');
-    Route::post('committee', 'UpdateController@deleteCommittee')->name('committee.delete');
+    Route::get('committee', 'CommitteeController@showCommittee')->name('committee');
+    Route::post('committee', 'CommitteeController@showCommittee')->name('committee.post');
 
-    Route::get('committee/committeeContent', 'ShowController@showCommitteeContent')->name('committeeContent');
-    Route::post('committee/committeeContent', 'ShowController@showCommitteeContent')->name('committeeContent.post');
+    Route::get('committee/committeeList', 'CommitteeController@showCommitteeList')->name('committeeList');
+    Route::post('committee/committeeList', 'CommitteeController@showCommitteeList')->name('committeeList.post');
 
-    Route::post('committee', 'UpdateController@updateCommittee')->name('committee.update');
+    Route::get('committee/committeeContent', 'CommitteeController@showCommitteeContent')->name('committeeContent');
+    Route::post('committee/committeeContent', 'CommitteeController@showCommitteeContent')->name('committeeContent.post');
+
+    Route::post('committee', 'CommitteeController@updateCommittee')->name('committee.update');
 
 });
 
