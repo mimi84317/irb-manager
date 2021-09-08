@@ -25,3 +25,16 @@
     * IRB_abnormal_upload_filelist - 異常審查(院內)
     * IRB_upload_filelist_content - 儲存送審須知標題及說明
 
+## committeeHome 設定委員會議程
+1. 相關資料庫
+    * IRB_committee
+## committeeContent 新增倫理委員會+會議內容
+1. 相關資料庫
+    * IRB_committee
+## committeeList 討論案件清單
+1. 相關資料庫
+    * IRB_committee
+## committeeMinutes 會議記錄
+1. 相關資料庫
+    * IRB_committee
+
