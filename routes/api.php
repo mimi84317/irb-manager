@@ -39,6 +39,7 @@ Route::group([
     Route::post('fileuploadlist/post', 'FileuploadlistController@showFileuploadlist')->name('fileuploadlist.post');
     Route::post('committee', 'CommitteeController@showCommittee')->name('committee.post');
     Route::post('delete', 'CommitteeController@deleteCommittee')->name('committee.delete');
+    Route::post('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow.post');
 
 
     // Route::get('fileupload', 'AuthController@me');

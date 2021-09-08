@@ -23,6 +23,8 @@
             <button type="button" class="btn btn-outline-primary btn-login" id="uploadFilelist">設定案件上傳清單</button>
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="committee">設定委員會議程</button>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-login" id="manageFlow">瀏覽全部審查案</button>
         </div>
 
     </body>
@@ -103,6 +105,9 @@
             else if(caseType == "committee"){
                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
             }
+            else if(caseType == "manageFlow"){
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            }
 
             //console.log(loginURL);
             $.ajax({
@@ -114,8 +119,10 @@
                         openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
                     else if(caseType == "committee"){
-
                         openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    }
+                    else if(caseType == "manageFlow"){
+                        openPostWindow("{{ route('manageFlow.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
 
                 }

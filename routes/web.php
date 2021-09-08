@@ -64,5 +64,8 @@ Route::group([
 
     Route::post('committee', 'CommitteeController@updateCommittee')->name('committee.update');
 
+    //瀏覽全部審查案
+    Route::get('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow');
+    Route::post('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow.post');
 });
 
