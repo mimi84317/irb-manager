@@ -93,7 +93,7 @@
 
                         <thead>
                             <tr>
-                                <!--<th data-field="committeeID" style="display:none">id</th>-->
+                                <th data-field="committeeID" class="d-none">id</th>
                                 <th data-field="committeeName" data-sortable="true">會議名稱</th>
                                 <th data-field="committeeDate" data-sortable="true">會議日期</th>
                                 <th data-field="selectCommittee" data-sortable="true">委員會</th>
