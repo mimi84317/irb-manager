@@ -49,8 +49,8 @@ class CommitteeController extends Controller
         $condition = $request->condition;
         $obj = "";
 
-        $caseType = "IRB_committee";
-        $response = $this->DBData($caseType, $condition, $state, $obj);
+        $tableName = "IRB_committee";
+        $response = $this->DBData($tableName, $condition, $state, $obj);
 
         return view('committeeHome')
                         ->with('committeeList', json_decode($response->Body(), true));
@@ -141,7 +141,6 @@ class CommitteeController extends Controller
         }
         else{
             return 0;
-            //return Redirect::back()->with('message','Operation Successful !');
         }
 
 

@@ -218,10 +218,21 @@ public function invalid()
 ```php
 public function showFileuploadlist(Request $request)
 ```
+呼叫BPM API將回傳值傳至uploadFilelist.blade.php
 ### 顯示案件上傳清單-設定
 ```php
 public function showFileuploadlistSetting($caseType, Request $request)
 ```
+呼叫BPM API將回傳值傳至uploadFileListSetting.blade.php
+
+**$caseType : 案件類型**
+| 參數| 名稱 |
+|-|-|
+| newCase | 新案審查 |
+| midCase | 期中審查 |
+| closedCase | 結案審查 |
+| fixCase | 修正審查 |
+| abnormalCase | 異常審查(院內) |
 ### 更新案件上傳清單-設定
 ```php
 public function updateFileuploadlistSetting(Request $request)
@@ -229,4 +240,28 @@ public function updateFileuploadlistSetting(Request $request)
 
 ## CommitteeController
 設定委員會議程相關controller
+### 設定委員會議程-主頁顯示
+```php
+public function showCommittee(Request $request)
+```
+### 設定委員會議程-主頁查詢
+```php
+public function searchCommittee(Request $request)
+```
+### 設定委員會議程-會議紀錄、會議內容顯示
+```php
+public function showCommitteeContent(Request $request)
+```
+### 設定委員會議程-更新會議紀錄、會議內容顯示
+```php
+public function updateCommittee(Request $request)
+```
+### 設定委員會議程-討論案件清單
+```php
+public function showCommitteeList(Request $request)
+```
+### 設定委員會議程-刪除會議
+```php
+public function deleteCommittee(Request $request)
+```
 

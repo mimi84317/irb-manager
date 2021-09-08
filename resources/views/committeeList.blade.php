@@ -875,7 +875,6 @@
             }else{
                 tempForm.dispatchEvent(new Event("submit"));
             }
-            //console.log(tempForm);
             tempForm.submit();
 
             document.body.removeChild(tempForm);
