@@ -54,21 +54,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th>案件類型</th>
-                                <td>
-                                    <select class="form-select" id="selectCasetype">
-                                        <option value="none" selected>請選擇</option>
-                                        <option value="newcase">新案審查</option>
-                                        <option value="midcase">期中審查</option>
-                                        <option value="closedcase">結案審查</option>
-                                        <option value="fixcase">修正審查</option>
-                                        <option value="abnormalcase">異常審查(院內)</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>案件編號或案件流水編號</th>
-                                <td><input type="text" class="form-control projectNum" value=""></td>
+                                <th>計畫名稱</th>
+                                <td><input type="text" class="form-control projectName" value=""></td>
                             </tr>
                             <tr>
                                 <th>所別</th>
@@ -88,34 +75,8 @@
                                 <td><input type="text" class="form-control projectHost" value=""></td>
                             </tr>
                             <tr>
-                                <th>計畫名稱</th>
-                                <td><input type="text" class="form-control projectName" value=""></td>
-                            </tr>
-                            <tr>
-                                <th>審查狀態</th>
-                                <td>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="reviewStatus" value="allStatus"><label>全部</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="reviewStatus" value="review"><label>審查中</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="reviewStatus" value="reviewPass"><label>審查通過</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="reviewStatus" value="reviewFailed"><label>審查不通過</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="reviewStatus" value="overdueCancellation"><label>逾期撤銷</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="reviewStatus" value="reviewCancel"><label>審查取消(撤案)</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="reviewStatus" value="disagree"><label>所長不同意</label>
-                                    </div>
-                                </td>
+                                <th>iIRB No.或流水編號</th>
+                                <td><input type="text" class="form-control projectNum" value=""></td>
                             </tr>
                             <tr>
                                 <th>計畫起訖日期</th>
@@ -125,6 +86,18 @@
                                         <span class="input-group-addon">~</span>
                                         <input type="text" class="input-sm form-control" name="to" placeholder="To date" id="toDate">
                                     </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>狀態</th>
+                                <td>
+                                    <select class="form-select" id="selectResearch">
+                                        <option value="none" selected>請選擇</option>
+                                        <option value="newcase">新案申請中</option>
+                                        <option value="planning">計畫執行中</option>
+                                        <option value="planclosed">計畫已結束</option>
+                                        <option value="planfailed">計劃不成立</option>
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
@@ -139,8 +112,8 @@
 
                 </div>
                 <div>
-                    <table  class="manageFlowTable"
-                            id="manageFlowTable"
+                    <table  class="manageProtocolTable"
+                            id="manageProtocolTable"
                             data-toggle="table"
                             data-pagination="true"
                             data-toolbar="#toolbar"
@@ -149,35 +122,31 @@
 
                         <thead>
                             <tr>
-                                <th data-field="txtAppNo" data-sortable="true">案件流水編號</th>
-                                <th data-field="apply_time" data-sortable="true">送審日期</th>
-                                <th data-field="txtReviewNo" data-sortable="true">案件編號</th>
+                                <th data-field="txtAppNo" data-sortable="true">流水編號</th>
+                                <th data-field="txtReviewNo" data-sortable="true">iIRB No.</th>
+                                <th data-field="proj_name" data-sortable="true">計劃名稱</th>
                                 <th data-field="txtSchool" data-sortable="true">所別</th>
-                                <th data-field="txtAppName" data-sortable="true">計畫主持人</th>
-                                <th data-field="auditType" data-sortable="true">案件類型</th>
-                                <th data-field="formType" data-sortable="true">審查類型</th>
-                                <th data-field="" data-sortable="true">委員會</th>
-                                <th data-field="" data-sortable="true">追蹤案(新案)編號</th>
-                                <th data-field="stage" data-sortable="true">審核階段</th>
+                                <th data-field="txtAppName" data-sortable="true">主持人</th>
+                                <th data-field="" data-sortable="true">研究起迄期間</th>
+                                <th data-field="" data-sortable="true">	設定追蹤審查預定日*(IRB行政人員設定)</th>
                                 <th data-field="" data-sortable="true">狀態</th>
-                                <th data-field="irbReviewer">主審列表</th>
-                                <th data-field="project">案件內容</th>
-                                <th data-field=""></th>
+                                <th data-field="" data-sortable="true">其他計畫編號(衛署計畫編號、JIRB編號、科技部編號...)</th>
+                                <th data-field="" data-sortable="true">是否為匯入案件</th>
+                                <th data-field="" data-sortable="true">刪除 匯入案件</th>
+                                <th data-field="">申請追蹤審查</th>
                             </tr>
                         </thead>
                         <tbody>
                             @for($i = 0; $i < count($projectList); $i++)
                                 <tr>
                                     <th>{{ $projectList[$i]['txtAppNo'] }}</th>
-                                    <th>{{ $projectList[$i]['apply_time'] }}</th>
                                     <th>{{ $projectList[$i]['txtReviewNo'] }}</th>
+                                    <th>{{ $projectList[$i]['proj_name'] }}</th>
                                     <th>{{ $projectList[$i]['txtSchool'] }}</th>
                                     <th>{{ $projectList[$i]['txtAppName'] }}</th>
-                                    <th>{{ $projectList[$i]['auditType'] }}</th>
-                                    <th>{{ $projectList[$i]['formType'] }}</th>
                                     <th></th>
                                     <th></th>
-                                    <th>{{ $recordResultList[$i]['stage'] }}</th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>

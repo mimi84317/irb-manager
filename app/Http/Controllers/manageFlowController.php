@@ -26,11 +26,32 @@ class manageFlowController extends Controller
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
-        $condition = $request->condition;
+        $projectCondition = $request->condition;
         $obj = "";
 
-        return view('manageFlow');
+        $projectTableName = "irbProject";
+        $projectResponse = $this->DBData($projectTableName, $projectCondition, $state, $obj);
 
+        $projectResponse = json_decode($projectResponse, true);
+
+        $recordResult = [];
+
+        for($i = 0; $i < sizeof($projectResponse); $i++){
+            $recordCondition = "where number = '".$projectResponse[$i]['txtAppNo']."'";
+            $recordTableName = "irbRecord";
+            $recordResponse = $this->DBData($recordTableName, $recordCondition, $state, $obj);
+            $recordResponse = json_decode($recordResponse, true);
+
+            if(sizeof($recordResponse) > 0){
+                array_push($recordResult, $recordResponse[sizeof($recordResponse)-1]);
+            }
+            else{
+                array_push($recordResult, $recordResponse);
+            }
+        }
+
+        return view('manageFlow')->with('projectList', $projectResponse)
+                                ->with('recordResultList', $recordResult);
     }
 
 }

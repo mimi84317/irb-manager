@@ -25,6 +25,8 @@
             <button type="button" class="btn btn-outline-primary btn-login" id="committee">設定委員會議程</button>
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="manageFlow">瀏覽全部審查案</button>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-login" id="manageProtocol">管理全部計畫與追蹤審查預定日</button>
         </div>
 
     </body>
@@ -108,6 +110,9 @@
             else if(caseType == "manageFlow"){
                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
             }
+            else if(caseType == "manageProtocol"){
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
+            }
 
             //console.log(loginURL);
             $.ajax({
@@ -123,6 +128,9 @@
                     }
                     else if(caseType == "manageFlow"){
                         openPostWindow("{{ route('manageFlow.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    }
+                    else if(caseType == "manageProtocol"){
+                        openPostWindow("{{ route('manageProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
 
                 }

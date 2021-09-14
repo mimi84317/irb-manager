@@ -30,24 +30,24 @@ class FileuploadlistController extends Controller
         $obj = "";
 
         //新案審查
-        $newCase = "IRB_new_case_upload_filelist";
-        $newcaseResponse = $this->DBData($newCase,$condition, $state, $obj);
+        $newcase = "IRB_new_case_upload_filelist";
+        $newcaseResponse = $this->DBData($newcase,$condition, $state, $obj);
 
         //期中審查
-        $midCase = "IRB_midterm_upload_filelist";
-        $midcaseResponse = $this->DBData($midCase,$condition, $state, $obj);
+        $midcase = "IRB_midterm_upload_filelist";
+        $midcaseResponse = $this->DBData($midcase,$condition, $state, $obj);
 
         //結案審查
-        $closedCase = "IRB_closed_case_upload_filelist";
-        $closedcaseResponse = $this->DBData($closedCase,$condition, $state, $obj);
+        $closedcase = "IRB_closed_case_upload_filelist";
+        $closedcaseResponse = $this->DBData($closedcase,$condition, $state, $obj);
 
         //修正審查
-        $fixCase = "IRB_fix_upload_filelist";
-        $fixcaseResponse = $this->DBData($fixCase,$condition, $state, $obj);
+        $fixcase = "IRB_fix_upload_filelist";
+        $fixcaseResponse = $this->DBData($fixcase,$condition, $state, $obj);
 
         //異常審查(院內)
-        $abnormalCase = "IRB_abnormal_upload_filelist";
-        $abnormalcaseResponse = $this->DBData($abnormalCase,$condition, $state, $obj);
+        $abnormalcase = "IRB_abnormal_upload_filelist";
+        $abnormalcaseResponse = $this->DBData($abnormalcase,$condition, $state, $obj);
 
         //建立/修改日期
         $modifiedDateTable = "IRB_upload_filelist_content";

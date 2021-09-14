@@ -60,7 +60,7 @@
                             <tr>
                                 <th>委員會</th>
                                 <td>
-                                    <select class="form-select" aria-label="Default select example" id="selectCommittee">
+                                    <select class="form-select" id="selectCommittee">
                                         <option value="none" selected>請選擇</option>
                                         <option value="biomedical">醫學研究倫理委員會</option>
                                         <option value="humanities">人文社會科學研究倫理委員會</option>

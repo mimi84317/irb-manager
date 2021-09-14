@@ -40,7 +40,7 @@ Route::group([
     Route::post('committee', 'CommitteeController@showCommittee')->name('committee.post');
     Route::post('delete', 'CommitteeController@deleteCommittee')->name('committee.delete');
     Route::post('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow.post');
-
+    Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
 
     // Route::get('fileupload', 'AuthController@me');
 });

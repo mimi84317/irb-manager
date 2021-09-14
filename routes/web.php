@@ -67,5 +67,9 @@ Route::group([
     //瀏覽全部審查案
     Route::get('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow');
     Route::post('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow.post');
+
+    //管理全部計畫與追蹤審查預定日
+    Route::get('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol');
+    Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
 });
 

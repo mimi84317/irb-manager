@@ -37,7 +37,7 @@
                                     {{ $newFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="newCase">編輯</button></td>
+                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="newcase">編輯</button></td>
                         </tr>
                         <tr>
                             <th>期中審查</th>
@@ -47,7 +47,7 @@
                                     {{ $midFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="midCase">編輯</button></td>
+                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="midcase">編輯</button></td>
                         </tr>
                         <tr>
                             <th>結案審查</th>
@@ -57,7 +57,7 @@
                                     {{ $closedFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="closedCase">編輯</button></td>
+                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="closedcase">編輯</button></td>
                         </tr>
                         <tr>
                             <th>修正審查</th>
@@ -67,7 +67,7 @@
                                     {{ $fixFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="fixCase">編輯</button></td>
+                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="fixcase">編輯</button></td>
                         </tr>
                         <tr>
                             <th>異常審查(院內)</th>
@@ -77,7 +77,7 @@
                                     {{ $abnormalFile['chname'] }}<br>
                                 @endforeach
                             </td>
-                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="abnormalCase">編輯</button></td>
+                            <td><button type="button" class="btn btn-outline-primary btn-setting" id="abnormalcase">編輯</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -165,19 +165,19 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    if(caseType == "newCase"){
+                    if(caseType == "newcase"){
                         openPostWindow("{{ route('fileuploadlist.setting.post', ['caseType' => 'newcase']) }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
-                    else if(caseType == "midCase"){
+                    else if(caseType == "midcase"){
                         openPostWindow("{{ route('fileuploadlist.setting.post', ['caseType' => 'midcase']) }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
-                    else if(caseType == "closedCase"){
+                    else if(caseType == "closedcase"){
                         openPostWindow("{{ route('fileuploadlist.setting.post', ['caseType' => 'closedcase']) }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
-                    else if(caseType == "fixCase"){
+                    else if(caseType == "fixcase"){
                         openPostWindow("{{ route('fileuploadlist.setting.post', ['caseType' => 'fixcase']) }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
-                    else if(caseType == "abnormalCase"){
+                    else if(caseType == "abnormalcase"){
                         openPostWindow("{{ route('fileuploadlist.setting.post', ['caseType' => 'abnormalcase']) }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                     }
                 }

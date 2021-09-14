@@ -228,11 +228,11 @@ public function showFileuploadlistSetting($caseType, Request $request)
 **$caseType : 案件類型**
 | 參數| 名稱 |
 |-|-|
-| newCase | 新案審查 |
-| midCase | 期中審查 |
-| closedCase | 結案審查 |
-| fixCase | 修正審查 |
-| abnormalCase | 異常審查(院內) |
+| newcase | 新案審查 |
+| midcase | 期中審查 |
+| closedcase | 結案審查 |
+| fixcase | 修正審查 |
+| abnormalcase | 異常審查(院內) |
 ### 更新案件上傳清單-設定
 ```php
 public function updateFileuploadlistSetting(Request $request)
