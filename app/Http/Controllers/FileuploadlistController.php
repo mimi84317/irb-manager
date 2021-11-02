@@ -224,7 +224,7 @@ class FileuploadlistController extends Controller
         return 0;
     }
 
-    public function fileDownloadPage($path)
+    /*public function fileDownloadPage($path)
     {
         // $path is file name
         $ansid = auth()->payload()->get('ansid');
@@ -245,7 +245,7 @@ class FileuploadlistController extends Controller
         //     "success" => false
         // ]);
         return view('notFound', ['var' => basename($path)]);
-    }
+    }*/
 
     public function fileDownloadExample($case, $filename)
     {
@@ -263,5 +263,28 @@ class FileuploadlistController extends Controller
         // ]);
         return view('notFound', ['var' => $path]);
     }
+
+    public function download()
+    {
+        $clientid = request()->get('clientid');
+        $caseType = request()->get('caseType');
+
+        $path = $clientid.'/example/'.$caseType;
+        $filename = basename(request()->get('file')); // basename
+
+        $fileID = $path.'/'.$filename;
+
+        // download file
+        if(Storage::disk('filepool')->exists($fileID))
+        {
+            return Storage::disk('filepool')->download($fileID);
+        }
+
+        // return Response()->json([
+        //     "success" => false
+        // ]);
+        return view('notFound', ['var' => $filename]);
+    }
+
 
 }

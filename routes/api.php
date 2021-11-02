@@ -45,7 +45,7 @@ Route::group([
     // Route::get('fileupload', 'AuthController@me');
 });
 
-Route::post('example/upload', 'ExampleFileManageController@upload');//->middleware('auth:api');
-Route::post('example/delete', 'ExampleFileManageController@delete');//->middleware('auth:api');
-Route::get('example/download', 'ExampleFileManageController@download');//->middleware('auth:api');
+/*Route::post('example/upload', 'ExampleFileManageController@upload');//->middleware('auth:api');
+Route::post('example/delete', 'ExampleFileManageController@delete');//->middleware('auth:api');*/
+Route::get('example/download', 'FileuploadlistController@download');//->middleware('auth:api');
 
