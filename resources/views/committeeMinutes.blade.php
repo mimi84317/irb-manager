@@ -302,9 +302,7 @@
                     else{
                         alert("更新成功");
                         condition = "";
-                        //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFilelist/" + username;
                         loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
-                        //console.log(loginURL);
                         $.ajax({
                             method:'post',
                             url:loginURL,

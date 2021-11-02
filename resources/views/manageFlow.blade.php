@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="{{ asset('js/datepicker/bootstrap-datepicker3.min.css') }}">
         <!---->
 
-        <title>管理倫理委員會議</title>
+        <title>瀏覽全部審查案</title>
         <style>
             .titleText {
                 color: #000093;
@@ -68,7 +68,7 @@
                             </tr>
                             <tr>
                                 <th>案件編號或案件流水編號</th>
-                                <td><input type="text" class="form-control projectNum" value=""></td>
+                                <td><input type="text" class="form-control" id="projectNum" value=""></td>
                             </tr>
                             <tr>
                                 <th>所別</th>
@@ -85,11 +85,11 @@
                             </tr>
                             <tr>
                                 <th>計畫主持人</th>
-                                <td><input type="text" class="form-control projectHost" value=""></td>
+                                <td><input type="text" class="form-control" id="projectHost" value=""></td>
                             </tr>
                             <tr>
                                 <th>計畫名稱</th>
-                                <td><input type="text" class="form-control projectName" value=""></td>
+                                <td><input type="text" class="form-control" id="projectName" value=""></td>
                             </tr>
                             <tr>
                                 <th>審查狀態</th>
@@ -271,12 +271,110 @@
 
         //查詢
         $('.btn-search').on('click',function(e){
+            var selectCasetype = $('#selectCasetype').val();//案件類型
+            var projectNum = $('#projectNum').val();//案件編號或案件流水編號
+            var selectResearch = $('#selectResearch').val();//所別
+            var projectHost = $('#projectHost').val();//計畫主持人
+            var projectName = $('#projectName').val();//計畫名稱
+            var reviewStatus = $('#reviewStatus').val();//審查狀態
+            var fromDate = $('#fromDate').val();//計畫起訖日期-起
+            var toDate = $('#toDate').val();//計畫起訖日期-訖
+
+            //案件類型
+            if(selectCasetype == "none"){
+                selectCasetype = "";
+            }
+            else if(selectCasetype == "newcase"){
+                selectCasetype = "新案審查";
+            }
+            else if(selectCasetype == "midcase"){
+                selectCasetype = "期中審查";
+            }
+            else if(selectCasetype == "closedcase"){
+                selectCasetype = "結案審查";
+            }
+            else if(selectCasetype == "fixcase"){
+                selectCasetype = "修正審查";
+            }
+            else if(selectCasetype == "abnormalcase"){
+                selectCasetype = "異常審查(院內)";
+            }
+
+            //所別
+            if(selectResearch == "none"){
+                selectResearch = "";
+            }
+            else if(selectResearch == "abrc"){
+                selectResearch = "農業生物科技研究中心";
+            }
+            else if(selectResearch == "ipmb"){
+                selectResearch = "植物暨微生物學研究所";
+            }
+            else if(selectResearch == "icob"){
+                selectResearch = "細胞與個體生物學研究所";
+            }
+            else if(selectResearch == "il"){
+                selectResearch = "語言學研究所";
+            }
+            else if(selectResearch == "ibs"){
+                selectResearch = "生物醫學科學研究所";
+            }
+
+            //審查狀態
+            if(reviewStatus == "allStatus"){
+                reviewStatus = "";
+            }
+            else if(reviewStatus == "review"){
+                reviewStatus = "審查中";
+            }
+            else if(reviewStatus == "reviewPass"){
+                reviewStatus = "審查通過";
+            }
+            else if(reviewStatus == "reviewFailed"){
+                reviewStatus = "審查不通過";
+            }
+            else if(reviewStatus == "overdueCancellation"){
+                reviewStatus = "逾期撤銷";
+            }
+            else if(reviewStatus == "reviewCancel"){
+                reviewStatus = "審查取消(撤案)";
+            }
+            else if(reviewStatus == "disagree"){
+                reviewStatus = "所長不同意";
+            }
+
+            var condition = "";
+            //condition += "where ??? like '%" + selectCasetype + "%' ";//案件類型
+            condition += "where txtReviewNo like '%" + projectNum + "%' ";//案件編號或案件流水編號
+            condition += "and txtSchool like '%" + selectResearch + "%' ";//所別
+            condition += "and txtAppName like '%" + projectHost + "%' ";//計畫主持人
+            condition += "and proj_name like '%" + projectName + "%' ";//計畫名稱
+            //condition += "and ??? like '%" + reviewStatus + "%' ";//審查狀態
+            //condition += "and ??? between '" + fromDate + "' and '" + toDate + "'";//計畫起訖日期
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            console.log(condition);
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('manageFlow.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
 
         });
 
         //重設
         $('.btn-clear').on('click',function(e){
-
+            $('#selectCasetype').val("none");//案件類型
+            $('#projectNum').val("");//案件編號或案件流水編號
+            $('#selectResearch').val("none");//所別
+            $('#projectHost').val("");//計畫主持人
+            $('#projectName').val("");//計畫名稱
+            $('input[name=reviewStatus]').attr('checked',false);//審查狀態
+            $('#fromDate').val("");//計畫起訖日期-起
+            $('#toDate').val("");//計畫起訖日期-訖
         });
 
     </script>

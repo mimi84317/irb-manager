@@ -11,6 +11,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Storage;
+
 use App\Product;
 
 
@@ -220,6 +222,46 @@ class FileuploadlistController extends Controller
         }
 
         return 0;
+    }
+
+    public function fileDownloadPage($path)
+    {
+        // $path is file name
+        $ansid = auth()->payload()->get('ansid');
+        $owner = auth()->payload()->get('owner');
+        $clientid = auth()->payload()->get('clientid');
+        $filePath = $this->checkDir($clientid, $owner, $ansid);
+
+        // append file path to filename
+        $path = $filePath.'/'.$path;
+
+        // download file
+        if(Storage::disk('filepool')->exists($path))
+        {
+            return Storage::disk('filepool')->download($path);
+        }
+
+        // return Response()->json([
+        //     "success" => false
+        // ]);
+        return view('notFound', ['var' => basename($path)]);
+    }
+
+    public function fileDownloadExample($case, $filename)
+    {
+        // append file path to filename
+        $path = auth()->payload()->get('clientid').'/'.'example/'.$case.'/'.$filename;
+
+        // download file
+        if(Storage::disk('filepool')->exists($path))
+        {
+            return Storage::disk('filepool')->download($path);
+        }
+
+        // return Response()->json([
+        //     "success" => false
+        // ]);
+        return view('notFound', ['var' => $path]);
     }
 
 }

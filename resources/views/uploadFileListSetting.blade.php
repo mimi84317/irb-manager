@@ -47,8 +47,8 @@
                                                 <input class="form-check-input require-checked" type="checkbox">
                                             @endif
                                         </td>
-                                        <td><input class="form-control" type="file" id="formFile"></td>
-                                        <td class="row-file"><a href="http://10.109.233.21/api/example/download?clientid=test&caseType={{ $caseType }}&file={{ $case['example_name'] }}">{{ $case['example_name'] }}</a></td>
+                                        <td><input class="form-control" type="file" class="formFile"></td>
+                                        <td class="row-file"><a href="http://10.109.233.22/api/example/download?clientid=test&caseType={{ $caseType }}&file={{ $case['example_name'] }}">{{ $case['example_name'] }}</a></td>
                                         <td><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></td>
                                         <td class="row-move">
                                             @if (!($loop->first))
@@ -161,6 +161,19 @@
 
             document.body.removeChild(tempForm);
         }
+
+        //上傳檔案
+        /*$('.filelistTable').on('fileinput', '.formFile', function() {
+            alert("a");
+        });*/
+        $(document).ready(function() {
+            $(".formFile").fileinput({
+                showUpload: false,
+                dropZoneEnabled: false,
+                maxFileCount: 10,
+                inputGroupClass: "input-group-lg"
+            });
+        });
 
         //調整順序-上
         $('.filelistTable').on('click', '.btn-moveUp', function() {

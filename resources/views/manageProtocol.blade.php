@@ -10,13 +10,20 @@
         <link rel="stylesheet" href="{{ asset('js/datepicker/bootstrap-datepicker3.min.css') }}">
         <!---->
 
-        <title>管理倫理委員會議</title>
+        <title>管理計畫</title>
         <style>
             .titleText {
                 color: #000093;
                 text-align: left;
                 font-weight: bold;
                 font-size: 30px;
+            }
+            /*.table-bordered{
+                table-layout: fixed;
+                min-width: 1440px;
+            }*/
+            .txtReviewNo{
+                min-width: 250px;
             }
         </style>
     </head>
@@ -45,7 +52,7 @@
 
         <div class="container">
             <div class="col-form-label">
-                <p class="titleText">審核案件查詢</p>
+                <p class="titleText">管理計畫</p>
             </div>
             <div class="col-12">
                 <div>
@@ -55,7 +62,7 @@
                         <tbody>
                             <tr>
                                 <th>計畫名稱</th>
-                                <td><input type="text" class="form-control projectName" value=""></td>
+                                <td><input type="text" class="form-control" id="projectName" value=""></td>
                             </tr>
                             <tr>
                                 <th>所別</th>
@@ -72,11 +79,11 @@
                             </tr>
                             <tr>
                                 <th>計畫主持人</th>
-                                <td><input type="text" class="form-control projectHost" value=""></td>
+                                <td><input type="text" class="form-control" id="projectHost" value=""></td>
                             </tr>
                             <tr>
                                 <th>iIRB No.或流水編號</th>
-                                <td><input type="text" class="form-control projectNum" value=""></td>
+                                <td><input type="text" class="form-control" id="projectNum" value=""></td>
                             </tr>
                             <tr>
                                 <th>計畫起訖日期</th>
@@ -91,7 +98,7 @@
                             <tr>
                                 <th>狀態</th>
                                 <td>
-                                    <select class="form-select" id="selectResearch">
+                                    <select class="form-select" id="selectStatus">
                                         <option value="none" selected>請選擇</option>
                                         <option value="newcase">新案申請中</option>
                                         <option value="planning">計畫執行中</option>
@@ -123,7 +130,7 @@
                         <thead>
                             <tr>
                                 <th data-field="txtAppNo" data-sortable="true">流水編號</th>
-                                <th data-field="txtReviewNo" data-sortable="true">iIRB No.</th>
+                                <th data-field="txtReviewNo" data-sortable="true" class="txtReviewNo">iIRB No.</th>
                                 <th data-field="proj_name" data-sortable="true">計劃名稱</th>
                                 <th data-field="txtSchool" data-sortable="true">所別</th>
                                 <th data-field="txtAppName" data-sortable="true">主持人</th>
@@ -140,7 +147,14 @@
                             @for($i = 0; $i < count($projectList); $i++)
                                 <tr>
                                     <th>{{ $projectList[$i]['txtAppNo'] }}</th>
-                                    <th>{{ $projectList[$i]['txtReviewNo'] }}</th>
+                                    <th>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control txtReviewNo" value="{{ $projectList[$i]['txtReviewNo'] }}" readonly>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"><i class="fas fa-pen"></i></button>
+                                            </div>
+                                        </div>
+                                    </th>
                                     <th>{{ $projectList[$i]['proj_name'] }}</th>
                                     <th>{{ $projectList[$i]['txtSchool'] }}</th>
                                     <th>{{ $projectList[$i]['txtAppName'] }}</th>
@@ -238,14 +252,93 @@
             });
         });
 
+        $('.manageProtocolTable').on('click', '.btn-setting', function(){
+            var row = $(this).parents('tr:first').children('th.row-irbNo');
+            alert(row);
+            //$('.txtReviewNo').attr('readonly', false);
+            //row.children('div.txtReviewNo').attr('readonly', false);
+            var a = row.children('.txtReviewNo').val();
+            alert(a);
+            //<i class="fas fa-check"></i>
+        });
+
         //查詢
         $('.btn-search').on('click',function(e){
+            var projectName = $('#projectName').val();//計畫名稱
+            var selectResearch = $('#selectResearch').val();//所別
+            var projectHost = $('#projectHost').val();//計畫主持人
+            var projectNum = $('#projectNum').val();//iIRB No.或流水編號
+            var fromDate = $('#fromDate').val();//計畫起訖日期-起
+            var toDate = $('#toDate').val();//計畫起訖日期-訖
+            var selectStatus = $('#selectStatus').val();//狀態
+
+            //所別
+            if(selectResearch == "none"){
+                selectResearch = "";
+            }
+            else if(selectResearch == "abrc"){
+                selectResearch = "農業生物科技研究中心";
+            }
+            else if(selectResearch == "ipmb"){
+                selectResearch = "植物暨微生物學研究所";
+            }
+            else if(selectResearch == "icob"){
+                selectResearch = "細胞與個體生物學研究所";
+            }
+            else if(selectResearch == "il"){
+                selectResearch = "語言學研究所";
+            }
+            else if(selectResearch == "ibs"){
+                selectResearch = "生物醫學科學研究所";
+            }
+
+            //狀態
+            if(selectStatus == "none"){
+                selectStatus = "";
+            }
+            else if(selectStatus == "newcase"){
+                selectStatus = "新案申請中";
+            }
+            else if(selectStatus == "planning"){
+                selectStatus = "計畫執行中";
+            }
+            else if(selectStatus == "planclosed"){
+                selectStatus = "計畫已結束";
+            }
+            else if(selectStatus == "planfailed"){
+                selectStatus = "計劃不成立";
+            }
+
+            var condition = "";
+            condition += "where proj_name like '%" + projectName + "%' ";
+            condition += "and txtSchool like '%" + selectResearch + "%' ";
+            condition += "and txtAppName like '%" + projectHost + "%' ";
+            condition += "and txtReviewNo like '%" + projectNum + "%' ";
+            //condition += "and ??? between '" + fromDate + "' and '" + toDate + "'";//計畫起訖日期
+            //condition += "and ??? = '" + selectStatus + "'";//狀態
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
+            console.log(condition);
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('manageProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
 
         });
 
         //重設
         $('.btn-clear').on('click',function(e){
-
+            $('#projectName').val("");//計畫名稱
+            $('#selectResearch').val("none");//所別
+            $('#projectHost').val("");//計畫主持人
+            $('#projectNum').val("");//iIRB No.或流水編號
+            $('#fromDate').val("");//計畫起訖日期-起
+            $('#toDate').val("");//計畫起訖日期-訖
+            $('#selectStatus').val("none");//狀態
         });
 
     </script>
