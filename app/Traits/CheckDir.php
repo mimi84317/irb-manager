@@ -11,8 +11,9 @@ trait CheckDir
         $path = ''.$clientid;
 
 
-        /*if(!file_exists($root.$path)){
-            mkdir($root.$path);
+        if(!file_exists($root.$path)){
+            //mkdir($root.$path);
+            return $root.$path;
         }
 
         if(!file_exists($root.$path.'/'.substr($memid, 0, 6))){
@@ -35,7 +36,7 @@ trait CheckDir
         }
         $path .= '/'.$ans;
 
-        return $path;*/
+        //return $path;
         return $root.$path;
     }
 
