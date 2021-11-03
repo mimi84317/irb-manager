@@ -48,7 +48,12 @@
                                             @endif
                                         </td>
                                         <td><input class="form-control" type="file" class="formFile"></td>
-                                        <td class="row-file"><a href="http://10.109.233.22/api/example/download?clientid=test&caseType={{ $caseType }}&file={{ $case['example_name'] }}">{{ $case['example_name'] }}</a></td>
+                                        <td class="row-file">
+                                            <div class="file-name">{{ $case['example_name'] }}</div>
+                                            @if ($case['example_name'] != "")
+                                                <div><button type="button" class="btn btn-outline-primary btn-download"><i class="fas fa-download">下載</i></button></div>
+                                            @endif
+                                        </td>
                                         <td><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></td>
                                         <td class="row-move">
                                             @if (!($loop->first))
@@ -165,7 +170,7 @@
         //上傳檔案
         /*$('.filelistTable').on('fileinput', '.formFile', function() {
             alert("a");
-        });*/
+        });
         $(document).ready(function() {
             $(".formFile").fileinput({
                 showUpload: false,
@@ -173,6 +178,25 @@
                 maxFileCount: 10,
                 inputGroupClass: "input-group-lg"
             });
+        });*/
+
+        //下載檔案
+        $('.filelistTable').on('click', '.btn-download', function() {
+            var row = $(this).parents('tr:first');
+            var file = row.children('td.row-file').children('.file-name').text();
+
+            condition = "";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    var url = "{{route('file.download',['fileid'=>''])}}"+"/" + file + "?token=" + data["access_token"];
+                    window.open(url, "_blank");
+                }
+            });
+
         });
 
         //調整順序-上

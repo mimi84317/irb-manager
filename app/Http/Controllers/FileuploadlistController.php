@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 
 use App\Traits\showData;
+use App\Traits\CheckDir;
 use SebastianBergmann\Environment\Console;
 use App\Login_log;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -24,6 +25,8 @@ class FileuploadlistController extends Controller
     }
 
     use showData;
+    use CheckDir;
+
     public function showFileuploadlist(Request $request)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
@@ -224,7 +227,7 @@ class FileuploadlistController extends Controller
         return 0;
     }
 
-    /*public function fileDownloadPage($path)
+    public function fileDownloadPage($path)
     {
         // $path is file name
         $ansid = auth()->payload()->get('ansid');
@@ -245,7 +248,7 @@ class FileuploadlistController extends Controller
         //     "success" => false
         // ]);
         return view('notFound', ['var' => basename($path)]);
-    }*/
+    }
 
     public function fileDownloadExample($case, $filename)
     {
