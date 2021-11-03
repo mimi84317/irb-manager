@@ -10,7 +10,7 @@ trait CheckDir
         $root = env('CHECK_DIR_ROOT').'/' ;
         $path = ''.$clientid;
 
-        return $root.$path;
+
         /*if(!file_exists($root.$path)){
             mkdir($root.$path);
         }
@@ -36,6 +36,7 @@ trait CheckDir
         $path .= '/'.$ans;
 
         return $path;*/
+        return $root.$path;
     }
 
     public function getDirAbsolutePath($clientid, $memid, $ans)
