@@ -235,8 +235,10 @@ class FileuploadlistController extends Controller
         $clientid = auth()->payload()->get('clientid');
         $filePath = $this->checkDir($clientid, $owner, $ansid);
 
+        return $filePath;
+
         // append file path to filename
-        $path = $filePath.'/'.$path;
+        /*$path = $filePath.'/'.$path;
 
         // download file
         if(Storage::disk('filepool')->exists($path))
@@ -247,7 +249,7 @@ class FileuploadlistController extends Controller
         // return Response()->json([
         //     "success" => false
         // ]);
-        return view('notFound', ['var' => basename($path)]);
+        return view('notFound', ['var' => basename($path)]);*/
     }
 
     public function fileDownloadExample($case, $filename)
