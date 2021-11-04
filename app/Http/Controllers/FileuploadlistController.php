@@ -108,6 +108,7 @@ class FileuploadlistController extends Controller
         $contentResponse = $this->DBData($contentRableName, $contentCondition, $state, $obj);
 
         return view('uploadFileListSetting', compact('caseType') )
+                    ->with('caseType', $caseType)
                     ->with('showCase', $showCase)
                     ->with('caseList', json_decode($caseResponse->Body(), true))
                     ->with('caseContent', json_decode($contentResponse->Body(), true));
@@ -235,10 +236,10 @@ class FileuploadlistController extends Controller
         $clientid = auth()->payload()->get('clientid');
         $filePath = $this->checkDir($clientid, $owner, $ansid);
 
-        return $filePath;
+        //return $filePath;
 
         // append file path to filename
-        /*$path = $filePath.'/'.$path;
+        $path = $filePath.'/'.$path;
 
         // download file
         if(Storage::disk('filepool')->exists($path))
@@ -249,7 +250,8 @@ class FileuploadlistController extends Controller
         // return Response()->json([
         //     "success" => false
         // ]);
-        return view('notFound', ['var' => basename($path)]);*/
+        return view('notFound', ['var' => basename($path)]);
+        //return $path;
     }
 
     public function fileDownloadExample($case, $filename)

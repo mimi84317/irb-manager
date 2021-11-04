@@ -192,7 +192,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    var url = "{{route('file.download',['fileid'=>''])}}"+"/" + file + "?token=" + data["access_token"];
+                    var url = "{{route('example.download',['case'=>$caseType,'fileid'=>''])}}"+"/"+file+"?token="+data["access_token"];
                     window.open(url, "_blank");
                 }
             });
