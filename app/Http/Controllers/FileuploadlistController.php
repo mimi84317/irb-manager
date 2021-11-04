@@ -228,7 +228,7 @@ class FileuploadlistController extends Controller
         return 0;
     }
 
-    public function fileDownloadPage($path)
+    /*public function fileDownloadPage($path)
     {
         // $path is file name
         $ansid = auth()->payload()->get('ansid');
@@ -252,7 +252,7 @@ class FileuploadlistController extends Controller
         // ]);
         return view('notFound', ['var' => basename($path)]);
         //return $path;
-    }
+    }*/
 
     public function fileDownloadExample($case, $filename)
     {
