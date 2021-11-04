@@ -67,7 +67,7 @@ return [
 
         'filepool' => [
             'driver' => 'local',
-            'root' => dirname(__DIR__).'/../filepool',
+            'root' => env('CHECK_DIR_ROOT'),
         ],
 
     ],
