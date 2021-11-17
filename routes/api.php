@@ -36,6 +36,8 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh')->name('jwt.refresh');
     // Route::post('fileupload', 'AuthController@me');
 
+    Route::post('fileUpload/{caseType}', 'FileuploadlistController@fileUploadPost')->name('file.upload.post');
+
     Route::post('fileuploadlist/post', 'FileuploadlistController@showFileuploadlist')->name('fileuploadlist.post');
     Route::post('committee', 'CommitteeController@showCommittee')->name('committee.post');
     Route::post('delete', 'CommitteeController@deleteCommittee')->name('committee.delete');
@@ -45,7 +47,7 @@ Route::group([
     // Route::get('fileupload', 'AuthController@me');
 });
 
-/*Route::post('example/upload', 'ExampleFileManageController@upload');//->middleware('auth:api');
-Route::post('example/delete', 'ExampleFileManageController@delete');//->middleware('auth:api');*/
-Route::get('example/download', 'FileuploadlistController@download');//->middleware('auth:api');
+/*Route::post('example/upload', 'ExampleFileManageController@upload')->name('exampleFile.upload');//->middleware('auth:api');
+Route::post('example/delete', 'ExampleFileManageController@delete');//->middleware('auth:api');
+Route::get('example/download', 'ExampleFileManageController@download');//->middleware('auth:api');*/
 

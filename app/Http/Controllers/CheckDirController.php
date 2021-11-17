@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 class CheckDirController extends Controller{
 
     public function checkDir($memid, $ans){
-        $root = env('CHECK_DIR_ROOT') ;
+        $root = env('CHECK_DIR_ROOT');
 
         if(!file_exists($root)){
             mkdir($root);

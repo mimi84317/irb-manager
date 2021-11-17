@@ -228,32 +228,6 @@ class FileuploadlistController extends Controller
         return 0;
     }
 
-    /*public function fileDownloadPage($path)
-    {
-        // $path is file name
-        $ansid = auth()->payload()->get('ansid');
-        $owner = auth()->payload()->get('owner');
-        $clientid = auth()->payload()->get('clientid');
-        $filePath = $this->checkDir($clientid, $owner, $ansid);
-
-        //return $filePath;
-
-        // append file path to filename
-        $path = $filePath.'/'.$path;
-
-        // download file
-        if(Storage::disk('filepool')->exists($path))
-        {
-            return Storage::disk('filepool')->download($path);
-        }
-
-        // return Response()->json([
-        //     "success" => false
-        // ]);
-        return view('notFound', ['var' => basename($path)]);
-        //return $path;
-    }*/
-
     public function fileDownloadExample($case, $filename)
     {
         // append file path to filename
@@ -271,26 +245,69 @@ class FileuploadlistController extends Controller
         return view('notFound', ['var' => $path]);
     }
 
-    public function download()
+    public function fileUploadPost($caseType, Request $request)
     {
-        $clientid = request()->get('clientid');
-        $caseType = request()->get('caseType');
+        // $count = $request->get('fileAndDescriptionCount');
+        $description = $request->get('description'); // assign array of descriptions
+        $fieldNames = $request->get('fieldName');
+        $files = $request->file('files');
+        //$files = json_decode($request->get('fileList'));
 
-        $path = $clientid.'/example/'.$caseType;
-        $filename = basename(request()->get('file')); // basename
+        $clientid = auth()->payload()->get('clientid');
+        $owner = auth()->payload()->get('owner');
+        $ansid = auth()->payload()->get('ansid');
+        $data['caseType'] = $caseType;
 
-        $fileID = $path.'/'.$filename;
+        $memid = $request->get('memid');
 
-        // download file
-        if(Storage::disk('filepool')->exists($fileID))
+        foreach($files as $key => $val)
         {
-            return Storage::disk('filepool')->download($fileID);
-        }
+            $file = $files[$key];
+            if ($file->isValid()) {
+                $fileName = $file->getClientOriginalName();
+                $path = "\\test\\example\\".$caseType;
+                //$path = "/test/example/".$caseType;
 
-        // return Response()->json([
-        //     "success" => false
-        // ]);
-        return view('notFound', ['var' => $filename]);
+                $fileID = Storage::disk('filepool')->putFileAs($path, $file, $fileName);
+
+                // write data to BPM API DB
+                $table = "IRB_filepool";
+                $condition = "";
+                $state = "insert";
+                $obj = '{"file_id":"'.$fileID.'",'.
+                        '"ansid":"'.$ansid.'",'.
+                        '"irb_number":"",'.
+                        '"file_name":"'.$fileName.'",'.
+                        '"path":"'.$path.'",'.
+                        '"updated_time":"'.time().'",'.
+                        '"uploader":"'.$memid.'",'.
+                        '"description":"'.$description[$key].'",'.
+                        '"field_name":"'.$fieldNames[$key].'"'.
+                        '}';
+                $response = $this->DBData($table, $condition, $state, $obj);
+
+                if($response=='Insert Failed')
+                {
+                    return Response()->json([
+                        'success' => false
+                    ]);
+                }
+            }
+            else {
+                // handle error here
+                // return back()
+                //     ->with('fail','There were some problems.');
+                return Response()->json([
+                    'success' => false
+                ]);
+            }
+        }
+        // return back()
+        //             ->with('success','You have successfully upload file.')
+        //             ->with('file',$fileName)
+        return Response()->json([
+            "success" => true
+        ]);
     }
 
 

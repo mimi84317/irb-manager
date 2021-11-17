@@ -32,9 +32,8 @@ Route::get('/', function () {
 });*/
 
 Route::get('expired', 'ViewController@invalid')->name('login'); // except跳轉位置
-Route::get('fileDownload/{fileid?}', 'FileuploadlistController@fileDownloadPage')->name('file.download')->where('fileid', '(.*)');
+//Route::get('fileDownload/{fileid?}', 'FileuploadlistController@fileDownloadPage')->name('file.download')->where('fileid', '(.*)');
 Route::get('example/{case}/{fileid?}', 'FileuploadlistController@fileDownloadExample')->name('example.download')->where('fileid', '(.*)');
-
 
 Route::group([
 
@@ -50,6 +49,9 @@ Route::group([
     Route::post('fileuploadlist/setting/{caseType}', 'FileuploadlistController@showFileuploadlistSetting')->name('fileuploadlist.setting.post');
 
     Route::post('fileuploadlist', 'FileuploadlistController@updateFileuploadlistSetting')->name('fileuploadlist.update');
+
+    Route::post('fileupload', 'AuthController@me')->name('fileupload');
+    Route::get('fileupload', 'AuthController@me');
 
     //設定委員會議程
     Route::get('committee', 'CommitteeController@showCommittee')->name('committee');
