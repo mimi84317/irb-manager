@@ -343,10 +343,13 @@
 
             var fileName = $("input[name='files[]']").map(function(){return $(this).val();}).get();
             for(var i = 0; i < fileName.length; i++){
-                var cut = fileName[i].split("\\");
-                console.log(cut);
-                //var cut = fileName[i].split("/");
-                fileName[i] = cut[cut.length-1];
+                if(fileName[i] != ""){
+                    var cut = fileName[i].split("\\");//windows
+                    if(cut.length == 1)
+                        cut = fileName[i].split("/");//linux
+                    fileName[i] = cut[cut.length-1];
+                }
+
             }
             var formData = new FormData(this);
 
