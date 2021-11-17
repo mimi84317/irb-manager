@@ -265,8 +265,8 @@ class FileuploadlistController extends Controller
             $file = $files[$key];
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
-                $path = "\\test\\example\\".$caseType;
-                //$path = "/test/example/".$caseType;
+                //$path = "\\test\\example\\".$caseType;
+                $path = "/test/example/".$caseType;
 
                 $fileID = Storage::disk('filepool')->putFileAs($path, $file, $fileName);
 

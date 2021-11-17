@@ -343,9 +343,9 @@
 
             var fileName = $("input[name='files[]']").map(function(){return $(this).val();}).get();
             for(var i = 0; i < fileName.length; i++){
-                var cut = fileName[i].split("\\");
+                //var cut = fileName[i].split("\\");
                 console.log(cut);
-                //var cut = fileName[i].split("/");
+                var cut = fileName[i].split("/");
                 fileName[i] = cut[cut.length-1];
             }
             var formData = new FormData(this);
@@ -353,8 +353,8 @@
             var token = "{{ app('request')->input('token') }}";
 
             var caseType = "{{ $caseType }}";
-            var path = "{{ env('CHECK_DIR_ROOT') }}" + "\\test\\example\\" + caseType;
-            //var path = "{{ env('CHECK_DIR_ROOT') }}" + "/test/example/" + caseType;
+            //var path = "{{ env('CHECK_DIR_ROOT') }}" + "\\test\\example\\" + caseType;
+            var path = "{{ env('CHECK_DIR_ROOT') }}" + "/test/example/" + caseType;
             var url;
             if(caseType == "newcase"){
                 url = "{{ route('file.upload.post', ['caseType' => 'newcase']) }}";
