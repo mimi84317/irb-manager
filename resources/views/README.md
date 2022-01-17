@@ -24,6 +24,7 @@
     * IRB_fix_upload_filelist - 修正審查
     * IRB_abnormal_upload_filelist - 異常審查(院內)
     * IRB_upload_filelist_content - 儲存送審須知標題及說明
+    * IRB_filepool - 紀錄上傳檔案資料詳細
 
 ## committeeHome 設定委員會議程
 1. 相關資料庫
@@ -37,4 +38,11 @@
 ## committeeMinutes 會議記錄
 1. 相關資料庫
     * IRB_committee
+## manageFlow 瀏覽全部審查案
+1. 相關資料庫
+    * irbProject
+## manageProtocol 管理全部計畫與追蹤審查預定日
+1. 相關資料庫
+    * irbProject
+
 

@@ -72,5 +72,10 @@ Route::group([
     //管理全部計畫與追蹤審查預定日
     Route::get('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol');
     Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
+    Route::post('manageProtocol', 'manageProtocolController@updatetxtReviewNo')->name('manageProtocol.update');
+
+    //案件列表
+    Route::get('projectContent', 'projectContentController@showprojectContent')->name('projectContent');
+    Route::post('projectContent', 'projectContentController@showprojectContent')->name('projectContent.post');
 });
 

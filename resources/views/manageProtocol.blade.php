@@ -129,12 +129,12 @@
 
                         <thead>
                             <tr>
-                                <th data-field="txtAppNo" data-sortable="true">流水編號</th>
-                                <th data-field="txtReviewNo" data-sortable="true" class="txtReviewNo">iIRB No.</th>
-                                <th data-field="proj_name" data-sortable="true">計劃名稱</th>
-                                <th data-field="txtSchool" data-sortable="true">所別</th>
-                                <th data-field="txtAppName" data-sortable="true">主持人</th>
-                                <th data-field="" data-sortable="true">研究起迄期間</th>
+                                <th data-field="field-txtAppNo" data-sortable="true">流水編號</th>
+                                <th data-field="field-txtReviewNo" data-sortable="true" class="txtReviewNo">iIRB No.</th>
+                                <th data-field="field-proj_name" data-sortable="true">計劃名稱</th>
+                                <th data-field="field-txtSchool" data-sortable="true">所別</th>
+                                <th data-field="field-txtAppName" data-sortable="true">主持人</th>
+                                <th data-field="Duration" data-sortable="true">研究起迄期間</th>
                                 <th data-field="" data-sortable="true">	設定追蹤審查預定日*(IRB行政人員設定)</th>
                                 <th data-field="" data-sortable="true">狀態</th>
                                 <th data-field="" data-sortable="true">其他計畫編號(衛署計畫編號、JIRB編號、科技部編號...)</th>
@@ -146,19 +146,19 @@
                         <tbody>
                             @for($i = 0; $i < count($projectList); $i++)
                                 <tr>
-                                    <th>{{ $projectList[$i]['txtAppNo'] }}</th>
-                                    <th>
+                                    <th class="row-txtAppNo">{{ $projectList[$i]['txtAppNo'] }}</th>
+                                    <th class="row-txtReviewNo">
                                         <div class="input-group">
                                             <input type="text" class="form-control txtReviewNo" value="{{ $projectList[$i]['txtReviewNo'] }}" readonly>
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" type="button"><i class="fas fa-pen"></i></button>
+                                                <button class="btn btn-outline-secondary btn-setting" type="button"><i class="button-icon fas fa-pen"></i></button>
                                             </div>
                                         </div>
                                     </th>
                                     <th>{{ $projectList[$i]['proj_name'] }}</th>
                                     <th>{{ $projectList[$i]['txtSchool'] }}</th>
                                     <th>{{ $projectList[$i]['txtAppName'] }}</th>
-                                    <th></th>
+                                    <th>{{ $projectList[$i]['Duration_start'] }} ~ {{ $projectList[$i]['Duraton_end'] }}</th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -253,13 +253,60 @@
         });
 
         $('.manageProtocolTable').on('click', '.btn-setting', function(){
-            var row = $(this).parents('tr:first').children('th.row-irbNo');
-            alert(row);
-            //$('.txtReviewNo').attr('readonly', false);
-            //row.children('div.txtReviewNo').attr('readonly', false);
-            var a = row.children('.txtReviewNo').val();
-            alert(a);
-            //<i class="fas fa-check"></i>
+            var row = $(this).parents('tr:first').children('.row-txtReviewNo');
+            var div = row.children('.input-group');
+
+            //欄位相關
+            var input = div.children('.txtReviewNo');
+            var txtReviewNo = input.val();
+
+            //button相關
+            var buttonDiv = div.children('.input-group-append');
+            var button = buttonDiv.children('.btn-setting');
+
+            //流水編號
+            var txtAppNo = $(this).parents('tr:first').children('.row-txtAppNo').text();
+
+            if(input.is('[readonly]')){
+                input.prop("readonly", false);
+
+                //修改圖示
+                button.children('.fas').removeClass('fa-pen');
+                button.children('.fas').addClass('fa-check');
+            }
+            else{
+                input.prop("readonly", true);
+
+                var txtReviewNoUpdate = {'txtReviewNo': txtReviewNo};
+                var updateType = "update";
+                var condition = "where txtAppNo='" + txtAppNo + "'";
+                var token = "{{ app('request')->input('token') }}";
+                console.log(condition);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    method:'post',
+                    url:"{{ route('manageProtocol.update') }}",
+                    data: {txtReviewNoUpdate:txtReviewNoUpdate, updateType:updateType, condition:condition, token:token},
+                    success:function(data){
+                        console.log(data);
+                        if(data != 0){
+                            alert("更新失敗，請洽系統管理員");
+                        }
+                        else{
+                            alert("更新成功");
+                            //修改圖示
+                            button.children('.fas').removeClass('fa-check');
+                            button.children('.fas').addClass('fa-pen');
+                            setTimeout(function () { document.location.reload(true); }, 5);
+                        }
+                    }
+                });
+            }
+
         });
 
         //查詢

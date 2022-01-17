@@ -237,6 +237,15 @@ public function showFileuploadlistSetting($caseType, Request $request)
 ```php
 public function updateFileuploadlistSetting(Request $request)
 ```
+### 下載已上傳之範例檔
+```php
+public function fileDownloadExample($case, $filename)
+```
+  $filename : 檔案名稱
+### 上傳範例檔
+```php
+public function fileUploadPost($caseType, Request $request)
+```
 
 ## CommitteeController
 設定委員會議程相關controller
@@ -265,3 +274,16 @@ public function showCommitteeList(Request $request)
 public function deleteCommittee(Request $request)
 ```
 
+## manageFlowController
+瀏覽全部審查案相關controller
+### showmanageFlow
+```php
+public function showmanageProtocol(Request $request)
+```
+
+## manageProtocolController
+管理全部計畫與追蹤審查預定日相關controller
+### showmanageProtocol
+```php
+public function showmanageFlow(Request $request)
+```

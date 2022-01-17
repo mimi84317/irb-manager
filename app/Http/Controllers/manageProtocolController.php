@@ -38,4 +38,22 @@ class manageProtocolController extends Controller
 
     }
 
+    //更新iIRB No.
+    public function updatetxtReviewNo(Request $request)
+    {
+        $txtReviewNoeUpdate = $request->txtReviewNoUpdate;
+        $updateType = $request->updateType;
+        $tableName = "irbProject";
+        $condition = $request->condition;
+
+        $txtReviewNoeUpdate = json_encode($txtReviewNoeUpdate, JSON_UNESCAPED_UNICODE);
+        $txtReviewNoeesponse = $this->DBData($tableName, $condition, $updateType, $txtReviewNoeUpdate);
+        if(strpos($txtReviewNoeesponse ,'Success') == false){
+            return $txtReviewNoeesponse;
+        }
+        else{
+            return 0;
+        }
+    }
+
 }

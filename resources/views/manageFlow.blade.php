@@ -161,7 +161,7 @@
                                 <th data-field="stage" data-sortable="true">審核階段</th>
                                 <th data-field="" data-sortable="true">狀態</th>
                                 <th data-field="irbReviewer">主審列表</th>
-                                <th data-field="project">案件內容</th>
+                                <th data-field="projectContent">案件內容</th>
                                 <th data-field=""></th>
                             </tr>
                         </thead>
@@ -170,7 +170,7 @@
                                 <tr>
                                     <th>{{ $projectList[$i]['txtAppNo'] }}</th>
                                     <th>{{ $projectList[$i]['apply_time'] }}</th>
-                                    <th>{{ $projectList[$i]['txtReviewNo'] }}</th>
+                                    <th><a href="javascript:void(0)" onclick="changePage({{ $projectList[$i]['txtAppNo'] }})">{{ $projectList[$i]['txtReviewNo'] }}</a></th>
                                     <th>{{ $projectList[$i]['txtSchool'] }}</th>
                                     <th>{{ $projectList[$i]['txtAppName'] }}</th>
                                     <th>{{ $projectList[$i]['auditType'] }}</th>
@@ -179,8 +179,8 @@
                                     <th></th>
                                     <th>{{ $recordResultList[$i]['stage'] }}</th>
                                     <th></th>
-                                    <th></th>
-                                    <th></th>
+                                    <th><button type="button" class="btn btn-outline-primary btn-setting">主審列表</button></th>
+                                    <th><button type="button" class="btn btn-outline-primary btn-setting">案件內容</button></th>
                                     <th></th>
                                 </tr>
                             @endfor
@@ -197,7 +197,7 @@
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, committeeType)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -235,18 +235,12 @@
             hideInput6.name = "condition";
             hideInput6.value = condition;
 
-            var hideInput7 = document.createElement("input");
-            hideInput7.type = "hidden";
-            hideInput7.name = "committeeType";
-            hideInput7.value = committeeType;
-
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
             tempForm.appendChild(hideInput4);
             tempForm.appendChild(hideInput5);
             tempForm.appendChild(hideInput6);
-            tempForm.appendChild(hideInput7);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -376,6 +370,20 @@
             $('#fromDate').val("");//計畫起訖日期-起
             $('#toDate').val("");//計畫起訖日期-訖
         });
+
+        function changePage(txtAppNo){
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            var condition = "where txtAppNo=" + txtAppNo;
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('projectContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
+        }
 
     </script>
 
