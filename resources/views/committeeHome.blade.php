@@ -21,7 +21,8 @@
         </style>
     </head>
     <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
 
         <!--datepicker需要-->
         <!--<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>-->
@@ -291,7 +292,7 @@
         $('.committeeTable').on('click', '.btn-list',function(e){
             var row = $(this).parents('tr:first');
             var id = row.children('.row-id').text();
-            console.log(id)
+            console.log(id);
 
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeList/" + username;
             var condition = "where Id=" + id;

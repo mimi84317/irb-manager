@@ -28,7 +28,8 @@
         </style>
     </head>
     <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
 
         <!--datepicker需要-->
         <!--<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>-->
@@ -135,12 +136,12 @@
                                 <th data-field="field-txtSchool" data-sortable="true">所別</th>
                                 <th data-field="field-txtAppName" data-sortable="true">主持人</th>
                                 <th data-field="Duration" data-sortable="true">研究起迄期間</th>
-                                <th data-field="" data-sortable="true">	設定追蹤審查預定日*(IRB行政人員設定)</th>
-                                <th data-field="" data-sortable="true">狀態</th>
-                                <th data-field="" data-sortable="true">其他計畫編號(衛署計畫編號、JIRB編號、科技部編號...)</th>
-                                <th data-field="" data-sortable="true">是否為匯入案件</th>
-                                <th data-field="" data-sortable="true">刪除 匯入案件</th>
-                                <th data-field="">申請追蹤審查</th>
+                                <th data-sortable="true">設定追蹤審查預定日*(IRB行政人員設定)</th>
+                                <th data-sortable="true">狀態</th>
+                                <th data-sortable="true">其他計畫編號(衛署計畫編號、JIRB編號、科技部編號...)</th>
+                                <th data-sortable="true">是否為匯入案件</th>
+                                <th data-sortable="true">刪除匯入案件</th>
+                                <th>申請追蹤審查</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -151,17 +152,26 @@
                                         <div class="input-group">
                                             <input type="text" class="form-control txtReviewNo" value="{{ $projectList[$i]['txtReviewNo'] }}" readonly>
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-setting" type="button"><i class="button-icon fas fa-pen"></i></button>
+                                                <!--<button class="btn btn-outline-secondary btn-settxtReviewNo" type="button"><i class="button-icon fas fa-pen"></i></button>-->
+                                                <button class="btn btn-outline-secondary btn-setting" type="button" value="btn-txtReviewNo"><i class="button-icon fas fa-pen"></i></button>
                                             </div>
                                         </div>
                                     </th>
-                                    <th>{{ $projectList[$i]['proj_name'] }}</th>
+                                    <th class="row-txtReviewNo"><a href="javascript:void(0)" onclick="changePage('{{ $projectList[$i]['caseAppNo'] }}')">{{ $projectList[$i]['proj_name'] }}</a></th>
                                     <th>{{ $projectList[$i]['txtSchool'] }}</th>
                                     <th>{{ $projectList[$i]['txtAppName'] }}</th>
                                     <th>{{ $projectList[$i]['Duration_start'] }} ~ {{ $projectList[$i]['Duraton_end'] }}</th>
                                     <th></th>
                                     <th></th>
-                                    <th></th>
+                                    <th class="row-txtOtherNo">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control txtOtherNo" value="{{ $projectList[$i]['txtOtherNo'] }}" readonly>
+                                            <div class="input-group-append">
+                                                <!--<button class="btn btn-outline-secondary btn-settxtOtherNo" type="button"><i class="button-icon fas fa-pen"></i></button>-->
+                                                <button class="btn btn-outline-secondary btn-setting" type="button" value="btn-txtOtherNo"><i class="button-icon fas fa-pen"></i></button>
+                                            </div>
+                                        </div>
+                                    </th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -253,17 +263,32 @@
         });
 
         $('.manageProtocolTable').on('click', '.btn-setting', function(){
-            var row = $(this).parents('tr:first').children('.row-txtReviewNo');
-            var div = row.children('.input-group');
+            var btnValue = $(this).val();
 
-            //欄位相關
-            var input = div.children('.txtReviewNo');
-            var txtReviewNo = input.val();
+            if(btnValue == "btn-txtReviewNo"){
+                var row = $(this).parents('tr:first').children('.row-txtReviewNo');
+                var div = row.children('.input-group');
+
+                //欄位相關
+                var input = div.children('.txtReviewNo');
+                var txtReviewNo = input.val();
+
+                var updateValue = {'txtReviewNo': txtReviewNo};
+            }
+            else if(btnValue == "btn-txtOtherNo"){
+                var row = $(this).parents('tr:first').children('.row-txtOtherNo');
+                var div = row.children('.input-group');
+
+                //欄位相關
+                var input = div.children('.txtOtherNo');
+                var txtOtherNo = input.val();
+
+                var updateValue = {'txtOtherNo': txtOtherNo};
+            }
 
             //button相關
             var buttonDiv = div.children('.input-group-append');
             var button = buttonDiv.children('.btn-setting');
-
             //流水編號
             var txtAppNo = $(this).parents('tr:first').children('.row-txtAppNo').text();
 
@@ -277,11 +302,8 @@
             else{
                 input.prop("readonly", true);
 
-                var txtReviewNoUpdate = {'txtReviewNo': txtReviewNo};
-                var updateType = "update";
                 var condition = "where txtAppNo='" + txtAppNo + "'";
                 var token = "{{ app('request')->input('token') }}";
-                console.log(condition);
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -290,7 +312,7 @@
                 $.ajax({
                     method:'post',
                     url:"{{ route('manageProtocol.update') }}",
-                    data: {txtReviewNoUpdate:txtReviewNoUpdate, updateType:updateType, condition:condition, token:token},
+                    data: {updateValue:updateValue, condition:condition, token:token},
                     success:function(data){
                         console.log(data);
                         if(data != 0){
@@ -387,6 +409,22 @@
             $('#toDate').val("");//計畫起訖日期-訖
             $('#selectStatus').val("none");//狀態
         });
+
+        //計劃名稱-內容
+        function changePage(caseAppNo){
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            var condition = "where caseAppNo='" + caseAppNo+"'";
+            console.log(condition)
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('projectContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
+        }
 
     </script>
 

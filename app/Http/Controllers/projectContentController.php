@@ -29,14 +29,14 @@ class projectContentController extends Controller
         $obj = "";
         $tableName = "irbProject";
 
-        //依流水號搜尋唯一案件
+        //依案件流水號搜尋唯一案件
         $projectCondition = $request->condition;
         $projectResponse = $this->DBData($tableName, $projectCondition, $state, $obj);
 
-        //依iIRB No搜尋同系列案件
+        //依計畫流水號搜尋同系列案件
         $projectResponse = json_decode($projectResponse, true);
-        $txtReviewNo = $projectResponse[0]['txtReviewNo'];
-        $listCondition = "where txtReviewNo='".$txtReviewNo."'";
+        $txtAppNo = $projectResponse[0]['txtAppNo'];
+        $listCondition = "where txtAppNo='".$txtAppNo."'";
         $listResponse = $this->DBData($tableName, $listCondition, $state, $obj);
 
         return view('projectContent')->with('project', $projectResponse)

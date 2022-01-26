@@ -69,10 +69,14 @@ Route::group([
     Route::get('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow');
     Route::post('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow.post');
 
+    Route::get('manageFlow/manageFlowContent', 'manageFlowController@showmanageFlowContent')->name('manageFlowContent');
+    Route::post('manageFlow/manageFlowContent', 'manageFlowController@showmanageFlowContent')->name('manageFlowContent.post');
+
     //管理全部計畫與追蹤審查預定日
     Route::get('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol');
     Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
-    Route::post('manageProtocol', 'manageProtocolController@updatetxtReviewNo')->name('manageProtocol.update');
+    Route::post('manageProtocol', 'manageProtocolController@updatetxtField')->name('manageProtocol.update');
+    //Route::post('manageProtocol', 'manageProtocolController@updatetxtOtherNo')->name('manageProtocol.txtOtherNo.update');
 
     //案件列表
     Route::get('projectContent', 'projectContentController@showprojectContent')->name('projectContent');

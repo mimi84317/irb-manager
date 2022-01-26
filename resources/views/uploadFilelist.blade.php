@@ -3,6 +3,7 @@
     <head>
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css'>
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'>
+
         <title>設定案件上傳清單</title>
         <style>
             .titleText {
@@ -14,6 +15,9 @@
         </style>
     </head>
     <body>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+
         <div class="container">
             <div class="col-form-label">
                 <p class="titleText">設定案件上傳清單</p>

@@ -21,7 +21,8 @@
         </style>
     </head>
     <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
 
         <!--datepicker需要-->
         <!--<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>-->
@@ -149,7 +150,7 @@
 
                         <thead>
                             <tr>
-                                <th data-field="txtAppNo" data-sortable="true">案件流水編號</th>
+                                <th data-field="caseAppNo" data-sortable="true">案件流水編號</th>
                                 <th data-field="apply_time" data-sortable="true">送審日期</th>
                                 <th data-field="txtReviewNo" data-sortable="true">案件編號</th>
                                 <th data-field="txtSchool" data-sortable="true">所別</th>
@@ -168,20 +169,20 @@
                         <tbody>
                             @for($i = 0; $i < count($projectList); $i++)
                                 <tr>
-                                    <th>{{ $projectList[$i]['txtAppNo'] }}</th>
+                                    <th class="row-caseAppNo">{{ $projectList[$i]['caseAppNo'] }}</th>
                                     <th>{{ $projectList[$i]['apply_time'] }}</th>
-                                    <th><a href="javascript:void(0)" onclick="changePage({{ $projectList[$i]['txtAppNo'] }})">{{ $projectList[$i]['txtReviewNo'] }}</a></th>
+                                    <th class="row-txtReviewNo"><a href="javascript:void(0)" onclick="changePage('{{ $projectList[$i]['caseAppNo'] }}')">{{ $projectList[$i]['txtReviewNo'] }}</a></th>
                                     <th>{{ $projectList[$i]['txtSchool'] }}</th>
                                     <th>{{ $projectList[$i]['txtAppName'] }}</th>
                                     <th>{{ $projectList[$i]['auditType'] }}</th>
                                     <th>{{ $projectList[$i]['formType'] }}</th>
-                                    <th></th>
+                                    <th>{{ $projectList[$i]['committee'] }}</th>
                                     <th></th>
                                     <th>{{ $recordResultList[$i]['stage'] }}</th>
                                     <th></th>
-                                    <th><button type="button" class="btn btn-outline-primary btn-setting">主審列表</button></th>
-                                    <th><button type="button" class="btn btn-outline-primary btn-setting">案件內容</button></th>
-                                    <th></th>
+                                    <th><button type="button" class="btn btn-outline-primary btn-referee">主審列表</button></th>
+                                    <th><button type="button" class="btn btn-outline-primary btn-content">案件內容</button></th>
+                                    <th>更新狀態</th>
                                 </tr>
                             @endfor
                         </tbody>
@@ -371,9 +372,10 @@
             $('#toDate').val("");//計畫起訖日期-訖
         });
 
-        function changePage(txtAppNo){
+        //案件編號-內容
+        function changePage(caseAppNo){
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
-            var condition = "where txtAppNo=" + txtAppNo;
+            var condition = "where caseAppNo='" + caseAppNo + "'";
 
             $.ajax({
                 method:'post',
@@ -384,6 +386,24 @@
                 }
             });
         }
+
+        //案件內容
+        $('.manageFlowTable').on('click', '.btn-content',function(e){
+            var row = $(this).parents('tr:first');
+            var caseAppNo = row.children('.row-caseAppNo').text();
+
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlowContent/" + username;
+            var condition = "where caseAppNo='" + caseAppNo+"'";
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('manageFlowContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
+        });
 
     </script>
 

@@ -21,7 +21,8 @@
         </style>
     </head>
     <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
 
         <!--datepicker需要-->
         <!--<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>-->
@@ -91,7 +92,7 @@
                                 </th>
                                 <td>
                                     @if (count($committeeContentList) > 0)
-                                    <input type="text" class="form-control" id="committeeName" value="{{ $committeeContentList[0]['committeeName'] }}">
+                                        <input type="text" class="form-control" id="committeeName" value="{{ $committeeContentList[0]['committeeName'] }}">
                                     @elseif (count($committeeContentList) == 0)
                                         <input type="text" class="form-control" value="" id="committeeName">
                                     @endif
@@ -304,10 +305,7 @@
                 }
             }
 
-
         });
-
-
 
         //返回上一頁
         $('.btn-back').on('click',function(e){

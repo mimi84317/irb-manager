@@ -38,22 +38,21 @@ class manageProtocolController extends Controller
 
     }
 
-    //更新iIRB No.
-    public function updatetxtReviewNo(Request $request)
+    //更新iIRB No.、其他計畫編號(衛署計畫編號、JIRB編號、科技部編號...)
+    public function updatetxtField(Request $request)
     {
-        $txtReviewNoeUpdate = $request->txtReviewNoUpdate;
-        $updateType = $request->updateType;
+        $updateValue = $request->updateValue;
+        $updateType = "update";
         $tableName = "irbProject";
         $condition = $request->condition;
 
-        $txtReviewNoeUpdate = json_encode($txtReviewNoeUpdate, JSON_UNESCAPED_UNICODE);
-        $txtReviewNoeesponse = $this->DBData($tableName, $condition, $updateType, $txtReviewNoeUpdate);
-        if(strpos($txtReviewNoeesponse ,'Success') == false){
-            return $txtReviewNoeesponse;
+        $updateValue = json_encode($updateValue, JSON_UNESCAPED_UNICODE);
+        $response = $this->DBData($tableName, $condition, $updateType, $updateValue);
+        if(strpos($response ,'Success') == false){
+            return $response;
         }
         else{
             return 0;
         }
     }
-
 }

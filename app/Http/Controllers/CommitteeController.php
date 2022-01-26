@@ -121,8 +121,8 @@ class CommitteeController extends Controller
         $tableName = "IRB_committee";
         $response = $this->DBData($tableName, $condition, $state, $obj);
 
-        //return view('committeeList')->with('committeeList', json_decode($response->Body(), true));
-        return view('committeeListNew')->with('committeeList', json_decode($response->Body(), true));
+        return view('committeeList')->with('committeeList', json_decode($response->Body(), true));
+        //return view('committeeListNew')->with('committeeList', json_decode($response->Body(), true));
 
     }
 

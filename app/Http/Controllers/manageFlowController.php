@@ -54,4 +54,27 @@ class manageFlowController extends Controller
                                 ->with('recordResultList', $recordResult);
     }
 
+    public function showmanageFlowContent(Request $request)
+    {
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        $state = "select";
+        $obj = "";
+        $projectTableName = "irbProject";
+
+        //依流水號搜尋唯一案件
+        $projectCondition = $request->condition;
+        $projectResponse = $this->DBData($projectTableName, $projectCondition, $state, $obj);
+
+         //依案件流水號搜尋審查流程
+         $projectResponse = json_decode($projectResponse, true);
+         $caseAppNo = $projectResponse[0]['caseAppNo'];
+         $recordCondition = "where caseAppNo='".$caseAppNo."'";
+         $recordTableName = "irbRecord";
+         $recordResponse = $this->DBData($recordTableName, $recordCondition, $state, $obj);
+
+        return view('manageFlowContent')->with('content', $projectResponse)
+                                        ->with('record', json_decode($recordResponse->Body(), true));
+        //return $condition;
+    }
+
 }

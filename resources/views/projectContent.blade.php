@@ -3,6 +3,7 @@
     <head>
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css'>
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'>
+
         <title>計劃內容</title>
         <style>
             .titleText {
@@ -14,7 +15,8 @@
         </style>
     </head>
     <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
 
         <!--table需要-->
         <!--<script src="https://cdn.jsdelivr.net/npm/tablednd@1.0.5/dist/jquery.tablednd.min.js"></script>
@@ -139,7 +141,7 @@
                             <tbody>
                                 @for($i = 0; $i < count($projectList); $i++)
                                     <tr>
-                                        <th>{{ $projectList[$i]['txtAppNo'] }}</th>
+                                        <th>{{ $projectList[$i]['caseAppNo'] }}</th>
                                         <th>{{ $projectList[$i]['apply_time'] }}</th>
                                         <th>{{ $projectList[$i]['auditType'] }}</th>
                                         <th>{{ $projectList[$i]['txtReviewNo'] }}</th>

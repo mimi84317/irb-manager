@@ -15,7 +15,9 @@
         </style>
     </head>
     <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+
         <script src="\js\countdown.js"></script>
 
         <form method="POST" enctype="multipart/form-data" id="ajax-data-update" action="javascript:void(0)">
