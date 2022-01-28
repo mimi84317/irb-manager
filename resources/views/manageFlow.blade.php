@@ -157,13 +157,13 @@
                                 <th data-field="txtAppName" data-sortable="true">計畫主持人</th>
                                 <th data-field="auditType" data-sortable="true">案件類型</th>
                                 <th data-field="formType" data-sortable="true">審查類型</th>
-                                <th data-field="" data-sortable="true">委員會</th>
-                                <th data-field="" data-sortable="true">追蹤案(新案)編號</th>
+                                <th data-field="committee" data-sortable="true">委員會</th>
+                                <th data-sortable="true">追蹤案(新案)編號</th>
                                 <th data-field="stage" data-sortable="true">審核階段</th>
-                                <th data-field="" data-sortable="true">狀態</th>
+                                <th data-sortable="true">狀態</th>
                                 <th data-field="irbReviewer">主審列表</th>
                                 <th data-field="projectContent">案件內容</th>
-                                <th data-field=""></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>

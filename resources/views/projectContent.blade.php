@@ -28,6 +28,15 @@
         <script src="{{ asset('js/bootstrap-table/bootstrap-table.min.js') }}"></script>
         <!---->
 
+        <!--modal需要-->
+        <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>-->
+        <script src="{{ asset('js/modal/jquery.slim.min.js') }}"></script>
+        <!--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>-->
+        <script src="{{ asset('js/modal/popper.min.js') }}"></script>
+        <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>-->
+        <script src="{{ asset('js/modal/bootstrap.bundle.min.js') }}"></script>
+        <!---->
+
         <div class="container">
             <div class="col-form-label">
                 <p class="titleText">計劃內容</p>
@@ -74,7 +83,7 @@
                                 </tr>
                                 <tr>
                                     <th>計畫資訊</th>
-                                    <td>修改</td>
+                                    <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#projectInfo">查看</button></td>
                                 </tr>
                                 <tr>
                                     <th>相關文件和備註</th>
@@ -162,6 +171,66 @@
                 </div>
             </div>
         </div>
+        <!--------Modal------->
+        <!--計畫資訊-->
+        <div class="modal fade" id="projectInfo">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <p class="subjectText">計畫資訊</p>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <th>計畫中文名稱</th>
+                                    <td>{{ $project[0]['proj_name'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>計畫英文名稱</th>
+                                    <td>{{ $project[0]['proj_Ename'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>總主持人中文姓名</th>
+                                    <td>{{ $project[0]['txtAppName'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>總主持人英文姓名</th>
+                                    <td>{{ $project[0]['txtAppEName'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>總主持人單位</th>
+                                    <td>{{ $project[0]['txtSchool'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>總主持人職稱</th>
+                                    <td>{{ $project[0]['JobTitle'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>總主持人電話</th>
+                                    <td>{{ $project[0]['txtAppTel'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>總主持人Email</th>
+                                    <td>{{ $project[0]['txtAppEmail'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>預計研究起始日</th>
+                                    <td>{{ $project[0]['Duration_start'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>預計研究結束日</th>
+                                    <td>{{ $project[0]['Duraton_end'] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>

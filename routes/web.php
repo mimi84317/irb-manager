@@ -79,7 +79,12 @@ Route::group([
     //Route::post('manageProtocol', 'manageProtocolController@updatetxtOtherNo')->name('manageProtocol.txtOtherNo.update');
 
     //案件列表
-    Route::get('projectContent', 'projectContentController@showprojectContent')->name('projectContent');
-    Route::post('projectContent', 'projectContentController@showprojectContent')->name('projectContent.post');
+    Route::get('projectContent', 'projectController@showprojectContent')->name('projectContent');
+    Route::post('projectContent', 'projectController@showprojectContent')->name('projectContent.post');
+
+    //案件之相關文件與備註
+    Route::get('projectRemark', 'projectController@showprojectRemark')->name('projectRemark');
+    Route::post('projectRemark', 'projectController@showprojectRemark')->name('projectRemark.post');
+    Route::post('projectRemark', 'projectController@updateprojectRemark')->name('projectRemark.update');
 });
 

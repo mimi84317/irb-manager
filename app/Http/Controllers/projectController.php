@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use App\Product;
 
 
-class projectContentController extends Controller
+class projectController extends Controller
 {
     public function __construct()
     {
@@ -45,5 +45,42 @@ class projectContentController extends Controller
 
 
     }
+
+    public function showprojectRemark(Request $request)
+    {
+        $txtAppNo = $request->txtAppNo;
+        $state = "select";
+        $obj = "";
+        $tableName = "irbProjectRemark";
+
+        $condition = "where txtAppNo='".$txtAppNo."'";
+        $response = $this->DBData($tableName, $condition, $state, $obj);
+
+        //return $response;
+        return view('projectRemark')->with('remark', json_decode($response->Body(), true));
+    }
+
+    public function updateprojectRemark(Request $request)
+    {
+        $projectRemarkUpdate = $request->projectRemarkUpdate;
+        $type = $request->type;
+        $tableName = "irbProjectRemark";
+        if($type == "update"){
+            $condition = $request->condition;
+        }
+        else if($type == "insert"){
+            $condition = "";
+        }
+
+        $projectRemarkUpdate = json_encode($projectRemarkUpdate, JSON_UNESCAPED_UNICODE);
+        $projectRemarkResponse = $this->DBData($tableName, $condition, $type, $projectRemarkUpdate);
+        if(strpos($projectRemarkResponse ,'Success') == false){
+            return $projectRemarkResponse;
+        }
+        else{
+            return 0;
+        }
+    }
+
 
 }

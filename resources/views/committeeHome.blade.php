@@ -50,7 +50,7 @@
             </div>
             <div class="col-12">
                 <div>
-                    <button type="button" class="btn btn-outline-secondary btn-addNewMeeting">新增倫理委員會議</button>
+                    <button type="button" class="btn btn-outline-success btn-addNewMeeting">新增倫理委員會議</button>
                 </div>
                 <br>
                 <div>
@@ -117,10 +117,10 @@
                                     <th>{{ $committee['committeeName'] }}</th>
                                     <th>{{ $committee['committeeDate'] }}</th>
                                     <th>{{ $committee['selectCommittee'] }}</th>
-                                    <th class="committee-editContent"><button type="button" class="btn btn-outline-primary btn-editContent">編輯</th>
+                                    <th class="committee-editContent"><button type="button" class="btn btn-outline-success btn-editContent">編輯 <i class="fas fa-edit"></i></th>
                                         <th class="committee-list"><button type="button" class="btn btn-outline-primary btn-list">清單</th>
-                                    <th><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></th>
-                                    <th class="committee-editRecord"><button type="button" class="btn btn-outline-primary btn-editRecord">編輯</th>
+                                    <th><button type="button" class="btn btn-outline-secondary btn-delete"><i class="fas fa-trash-alt"></i></button></th>
+                                    <th class="committee-editRecord"><button type="button" class="btn btn-outline-info btn-editRecord">編輯 <i class="fas fa-edit"></i></th>
                                 </tr>
                             @endforeach
                         </tbody>

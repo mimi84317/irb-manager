@@ -43,7 +43,8 @@ Route::group([
     Route::post('delete', 'CommitteeController@deleteCommittee')->name('committee.delete');
     Route::post('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow.post');
     Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
-    Route::post('projectContent', 'projectContentController@showprojectContent')->name('projectContent.post');
+    Route::post('projectContent', 'projectController@showprojectContent')->name('projectContent.post');
+    Route::post('projectRemark', 'projectController@showprojectRemark')->name('projectRemark.post');
 
     // Route::get('fileupload', 'AuthController@me');
 });

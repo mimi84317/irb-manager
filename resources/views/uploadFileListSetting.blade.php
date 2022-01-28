@@ -62,7 +62,7 @@
                                                     <div><button type="button" class="btn btn-outline-primary btn-download"><i class="fas fa-download">下載</i></button></div>
                                                 @endif
                                             </td>
-                                            <td><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></td>
+                                            <td><button type="button" class="btn btn-outline-secondary btn-delete"><i class="fas fa-trash-alt"></i></button></td>
                                             <td class="row-move">
                                                 @if (!($loop->first))
                                                     <button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>

@@ -262,6 +262,7 @@
             });
         });
 
+        //更新iIRB No.、其他計畫編號(衛署計畫編號、JIRB編號、科技部編號...)
         $('.manageProtocolTable').on('click', '.btn-setting', function(){
             var btnValue = $(this).val();
 
@@ -320,9 +321,11 @@
                         }
                         else{
                             alert("更新成功");
+
                             //修改圖示
                             button.children('.fas').removeClass('fa-check');
                             button.children('.fas').addClass('fa-pen');
+
                             setTimeout(function () { document.location.reload(true); }, 5);
                         }
                     }
