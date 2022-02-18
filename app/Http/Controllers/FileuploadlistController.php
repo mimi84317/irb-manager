@@ -166,52 +166,81 @@ class FileuploadlistController extends Controller
         $searchOldDataObj = "";
         $searchOldData = $this->DBData($caseTableName, $searchOldDataCondition, $searchOldDataState, $searchOldDataObj);
 
-        $oldDatacount = count(json_decode($searchOldData, JSON_UNESCAPED_UNICODE));
-        $newDataCount = count($filelistUpdate);
-
         $caseResponse = "";
         $contentResponse = "";
 
-        //舊資料數>新資料數 => 刪除多於舊資料，其餘更新
-        if($oldDatacount > $newDataCount){
-            for($i = 0; $i < $oldDatacount; $i++){
-                //更新
-                if($i < $newDataCount){
-                    $caseCondition = "where sort='".$filelistUpdate[$i]['sort']."'";
-                    $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
-                    $caseState = "update";
-                    $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
-                }
-                //刪除
-                else{
-                    $caseCondition = "where sort='".$searchOldData[$i]['sort']."'";
-                    $caseState = "delete";
-                    $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, null);
-                }
-                /*if(strpos($caseResponse ,' ') == false){
-                    return $caseResponse;
-                }*/
-            }
+        //資料為空 => 全刪
+        if($filelistUpdate == ""){
+            $caseCondition = "";
+            $caseState = "delete";
+            $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, null);
+
+            /*if(strpos($caseResponse ,' ') == false){
+                return $caseResponse;
+            }*/
         }
-        //舊資料數<新資料數 => 新增新資料，其餘更新
         else{
-            for($i = 0; $i < $newDataCount; $i++){
-                //更新
-                if($i < $oldDatacount){
-                    $caseCondition = "where sort='".$filelistUpdate[$i]['sort']."'";
-                    $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
-                    $caseState = "update";
-                    $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
-                }
-                //新增
-                else{
+            $newDataCount = count($filelistUpdate);
+
+            //舊資料為空 => 新增
+            if($searchOldData == ""){
+                for($i = 0; $i < $newDataCount; $i++){
+                    //新增
                     $caseCondition = "";
                     $caseState = "insert";
                     $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
                     $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
+                    /*if(strpos($caseResponse ,'Success') == false){
+                        return $caseResponse;
+                    }*/
                 }
-                if(strpos($caseResponse ,'Success') == false){
-                    return $caseResponse;
+
+            }
+            else{
+                $oldDatacount = count(json_decode($searchOldData, JSON_UNESCAPED_UNICODE));
+
+                //舊資料數>新資料數 => 刪除多於舊資料，其餘更新
+                if($oldDatacount > $newDataCount){
+                    for($i = 0; $i < $oldDatacount; $i++){
+                        //更新
+                        if($i < $newDataCount){
+                            $caseCondition = "where sort='".$filelistUpdate[$i]['sort']."'";
+                            $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
+                            $caseState = "update";
+                            $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
+                        }
+                        //刪除
+                        else{
+                            $caseCondition = "where sort='".$searchOldData[$i]['sort']."'";
+                            $caseState = "delete";
+                            $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, null);
+                        }
+                        /*if(strpos($caseResponse ,' ') == false){
+                            return $caseResponse;
+                        }*/
+                    }
+                }
+                //舊資料數<新資料數 => 新增新資料，其餘更新
+                else{
+                    for($i = 0; $i < $newDataCount; $i++){
+                        //更新
+                        if($i < $oldDatacount){
+                            $caseCondition = "where sort='".$filelistUpdate[$i]['sort']."'";
+                            $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
+                            $caseState = "update";
+                            $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
+                        }
+                        //新增
+                        else{
+                            $caseCondition = "";
+                            $caseState = "insert";
+                            $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
+                            $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
+                        }
+                        /*if(strpos($caseResponse ,'Success') == false){
+                            return $caseResponse;
+                        }*/
+                    }
                 }
             }
         }

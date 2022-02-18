@@ -87,7 +87,7 @@
                                 </tr>
                                 <tr>
                                     <th>相關文件和備註</th>
-                                    <td>相關文件和備註</td>
+                                    <td><button type="button" class="btn btn-outline-primary btn-projectRemark">相關文件和備註</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -239,7 +239,7 @@
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -274,8 +274,18 @@
 
             var hideInput6 = document.createElement("input");
             hideInput6.type = "hidden";
-            hideInput6.name = "condition";
-            hideInput6.value = condition;
+            hideInput6.name = "proj_name";
+            hideInput6.value = proj_name;
+
+            var hideInput7 = document.createElement("input");
+            hideInput7.type = "hidden";
+            hideInput7.name = "txtAppName";
+            hideInput7.value = txtAppName;
+
+            var hideInput8 = document.createElement("input");
+            hideInput8.type = "hidden";
+            hideInput8.name = "txtAppNo";
+            hideInput8.value = txtAppNo;
 
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
@@ -283,6 +293,8 @@
             tempForm.appendChild(hideInput4);
             tempForm.appendChild(hideInput5);
             tempForm.appendChild(hideInput6);
+            tempForm.appendChild(hideInput7);
+            tempForm.appendChild(hideInput8);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -301,6 +313,24 @@
             document.body.removeChild(tempForm);
         }
 
+
+        //相關文件和備註
+        $('.btn-projectRemark').on('click',function(e){
+            var proj_name = "{{ $project[0]['proj_name'] }}";
+            var txtAppName = "{{ $project[0]['txtAppName'] }}";
+            var txtAppNo = "{{ $project[0]['txtAppNo'] }}";
+
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectRemark/" + username;
+            //console.log(loginURL);
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo);
+                }
+            });
+        });
 
     </script>
 </html>

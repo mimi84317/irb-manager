@@ -36,7 +36,8 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh')->name('jwt.refresh');
     // Route::post('fileupload', 'AuthController@me');
 
-    Route::post('fileUpload/{caseType}', 'FileuploadlistController@fileUploadPost')->name('file.upload.post');
+    Route::post('fileuploadlist/{caseType}/upload', 'FileuploadlistController@fileUploadPost')->name('fileuploadlist.upload.post');
+    Route::post('projectRemark/upload', 'projectController@fileUploadPost')->name('projectRemark.upload.post');
 
     Route::post('fileuploadlist/post', 'FileuploadlistController@showFileuploadlist')->name('fileuploadlist.post');
     Route::post('committee', 'CommitteeController@showCommittee')->name('committee.post');

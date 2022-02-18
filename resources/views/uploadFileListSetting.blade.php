@@ -76,8 +76,8 @@
                                 </tbody>
                             </table>
                         </div>
-                            <button type="button" class="btn btn-outline-success btn-addlist">新增清單</button>
                         <div>
+                            <button type="button" class="btn btn-outline-success btn-addlist">新增清單</button>
                         </div>
                     </div>
                 </div>
@@ -252,7 +252,13 @@
             var lastorder = $('.filelistTable tr:last').children('th.row-sort').text();
             $('.filelistTable tr:last').children('th.row-move').append('<button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>');
 
-            var newlastorder = parseInt(lastorder) + 1;
+            var newlastorder;
+            if(lastorder == ""){
+                newlastorder = 1;
+            }
+            else{
+                newlastorder = parseInt(lastorder) + 1;
+            }
             var newrow = '';
             newrow += '<tr>';
             newrow += '<th class="row-sort">' + newlastorder + '</th>';
@@ -344,12 +350,15 @@
             var contentUpdate = {};
 
             var fileName = $("input[name='files[]']").map(function(){return $(this).val();}).get();
+            //console.log(fileName);
+            var uploadFileLength = 0;
             for(var i = 0; i < fileName.length; i++){
                 if(fileName[i] != ""){
                     var cut = fileName[i].split("\\");//windows
                     if(cut.length == 1)
                         cut = fileName[i].split("/");//linux
                     fileName[i] = cut[cut.length-1];
+                    uploadFileLength++;//上傳檔案數
                 }
 
             }
@@ -362,19 +371,19 @@
             var path = "{{ env('CHECK_DIR_ROOT') }}" + "/test/example/" + caseType;
             var url;
             if(caseType == "newcase"){
-                url = "{{ route('file.upload.post', ['caseType' => 'newcase']) }}";
+                url = "{{ route('fileuploadlist.upload.post', ['caseType' => 'newcase']) }}";
             }
             else if(caseType == "midcase"){
-                url = "{{ route('file.upload.post', ['caseType' => 'midcase']) }}";
+                url = "{{ route('fileuploadlist.upload.post', ['caseType' => 'midcase']) }}";
             }
             else if(caseType == "closedcase"){
-                url = "{{ route('file.upload.post', ['caseType' => 'closedcase']) }}";
+                url = "{{ route('fileuploadlist.upload.post', ['caseType' => 'closedcase']) }}";
             }
             else if(caseType == "fixcase"){
-                url = "{{ route('file.upload.post', ['caseType' => 'fixcase']) }}";
+                url = "{{ route('fileuploadlist.upload.post', ['caseType' => 'fixcase']) }}";
             }
             else if(caseType == "abnormalcase"){
-                url = "{{ route('file.upload.post', ['caseType' => 'abnormalcase']) }}";
+                url = "{{ route('fileuploadlist.upload.post', ['caseType' => 'abnormalcase']) }}";
             }
 
             for(var i = 1; i < filelistTableLength; i++){
@@ -404,62 +413,62 @@
                              'review_desc':$('.contentTable tr:eq(1)').children('.case-desc').children(".case-desc-value").val(),
                              'modified_date':''};
 
-            $.ajax({
-                type:'POST',
-                url: url,
-                headers: {Authorization: 'Bearer '+ token},
-                data: formData,
-                cache:false,
-                contentType: false,
-                processData: false,
-                success: (data) => {
-                    /*this.reset();
-                    alert('檔案已成功上傳');
-                    console.log(data);*/
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            if(uploadFileLength > 0){
+                $.ajax({
+                    type:'POST',
+                    url: url,
+                    headers: {Authorization: 'Bearer '+ token},
+                    data: formData,
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+                    /*success: (data) => {
+
+                    },*/
+                    error: (data) => {
+                        console.log(data);
+                        /*if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
+                            alert('沒有選擇檔案');
+                        }*/
+                        if(data['status'] == 401){
+                            alert('請重新登入');
                         }
-                    });
-                    $.ajax({
-                        method:'post',
-                        url:"{{ route('fileuploadlist.update') }}",
-                        data: {caseType:caseType, filelistUpdate:filelistUpdate, contentUpdate:contentUpdate, token:token},
-                        success:function(data){
-                            console.log(data);
-                            if(data != 0){
-                                alert("更新失敗，請洽系統管理員");
-                            }
-                            else{
-                                alert("更新成功");
-                                condition = "";
-                                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
-                                $.ajax({
-                                    method:'post',
-                                    url:loginURL,
-                                    data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
-                                    success:function(data){
-                                        openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
-                                    }
-                                });
-                            }
+                        else{
+                            alert('ERROR: '+ data['statusText']);
                         }
-                    });
-                },
-                error: (data) => {
-                    console.log(data);
-                    if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
-                        alert('沒有選擇檔案');
+
                     }
-                    else if(data['status'] == 401){
-                        alert('請重新登入');
+                });
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                method:'post',
+                url:"{{ route('fileuploadlist.update') }}",
+                data: {caseType:caseType, filelistUpdate:filelistUpdate, contentUpdate:contentUpdate, token:token},
+                success:function(data){
+                    console.log(data);
+                    if(data != 0){
+                        alert("更新失敗，請洽系統管理員");
                     }
                     else{
-                        alert('ERROR: '+ data['statusText']);
+                        alert("更新成功");
+                        condition = "";
+                        loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFilelist/" + username;
+                        $.ajax({
+                            method:'post',
+                            url:loginURL,
+                            data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                            success:function(data){
+                                openPostWindow("{{ route('fileuploadlist.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                            }
+                        });
                     }
-
                 }
-             });
+            });
         });
 
         //返回上一頁

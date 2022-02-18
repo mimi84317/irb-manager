@@ -76,7 +76,6 @@ Route::group([
     Route::get('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol');
     Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
     Route::post('manageProtocol', 'manageProtocolController@updatetxtField')->name('manageProtocol.update');
-    //Route::post('manageProtocol', 'manageProtocolController@updatetxtOtherNo')->name('manageProtocol.txtOtherNo.update');
 
     //案件列表
     Route::get('projectContent', 'projectController@showprojectContent')->name('projectContent');

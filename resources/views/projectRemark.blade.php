@@ -72,27 +72,51 @@
                     <div class="card-header">檔案上傳</div>
                     <div class="card-body">
                         <div>
-                            <p>選擇需要上傳的檔案 (每個上傳檔案大小請限制在 20 MB以內, 且最多上傳 20 個檔案)</p>
+                            <p>選擇需要上傳的檔案 (每個上傳檔案大小請限制在 20 MB以內)</p>
                         </div>
-                        <div>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <th>檔名</th>
-                                    <th>上傳檔案說明(版本資訊)</th>
-                                    <th>上傳PDF檔</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <br>
-                        <div>
-                            <button type="button" class="btn btn-outline-primary btn-upload">上傳檔案</button>
+                        <div class="border">
+                            <form method="POST" enctype="multipart/form-data" id="ajax-data-update" action="javascript:void(0)">
+                                <div>
+                                    <table class="table table-hover remarkFileTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">id</th>
+                                                <th scope="col">檔名</th>
+                                                <th scope="col">上傳檔案說明(版本資訊)</th>
+                                                <th scope="col"></th>
+                                                <th scope="col">已上傳檔案</th>
+                                                <th scope="col" class="col-1">刪除</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($remarkFilelist as $remarkFile)
+                                                <tr>
+                                                    <td class="row-id">{{ $remarkFile['Id'] }}</td>
+                                                    <td class="row-name"><input type="text" class="form-control name-value" value="{{ $remarkFile['field_name'] }}"></td>
+                                                    <td class="row-desc"><textarea class="form-control desc-value" rows="3">{{ $remarkFile['description'] }}</textarea></td>
+                                                    <td class="row-uploadFile">
+                                                        <input class="form-control uploadFile" type="file" name="files[]">
+                                                    </td>
+                                                    <td class="row-downloadFile">
+                                                        <div class="file-name">{{ $remarkFile['file_name'] }}</div>
+                                                        @if ($remarkFile['file_name'] != "")
+                                                            <div><button type="button" class="btn btn-outline-primary btn-download"><i class="fas fa-download">下載</i></button></div>
+                                                        @endif
+                                                    </td>
+                                                    <td><button type="button" class="btn btn-outline-secondary btn-delete"><i class="fas fa-trash-alt"></i></button></td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-outline-success btn-addlist">新增其他檔案</button>
+                                </div>
+                                <br>
+                                <div>
+                                    <button type="sumbit" class="btn btn-outline-primary btn-upload">更新上傳檔案</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -147,6 +171,8 @@
         var clientid = "{{ app('request')->input('clientid') }}";
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
+
+        var deleteID = [];
 
         function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
         {
@@ -217,6 +243,7 @@
             var proj_name = $('#proj_name').text();
             var txtAppName = $('#txtAppName').text();
             var txtAppNo = $('#txtAppNo').text();
+            var table = "irbProjectRemark";
 
             var avoid = $('#avoid').val();
             //var uploadFile = $('#uploadFile').text();
@@ -263,7 +290,7 @@
             $.ajax({
                 method:'post',
                 url:"{{ route('projectRemark.update') }}",
-                data: {projectRemarkUpdate:projectRemarkUpdate, type:type, condition:condition, token:token},
+                data: {update:projectRemarkUpdate, type:type, table:table, condition:condition, token:token},
                 success:function(data){
                     console.log(data);
                     if(data != 0){
@@ -276,6 +303,131 @@
                 }
             });
 
+        });
+
+        //新增清單
+        $('.btn-addlist').on('click', function(){
+            var newrow = '';
+            newrow += '<tr>';
+            newrow += '<td class="row-id"></td>';
+            newrow += '<td class="row-name"><input type="text" class="form-control name-value" value=""></td>';
+            newrow += '<td class="row-desc"><textarea class="form-control desc-value" rows="3"></textarea></td>';
+            newrow += '<td class="row-uploadFile"><input class="form-control uploadFile" type="file" name="files[]"></td>';
+            newrow += '<td class="row-downloadFile"></td>';
+            newrow += '<td><button type="button" class="btn btn-outline-secondary btn-delete"><i class="fas fa-trash-alt"></i></button></td>';
+            newrow += '</td>';
+            newrow += "</tr>";
+            $('.remarkFileTable').append(newrow);
+        });
+
+        //刪除
+        $('.remarkFileTable').on('click', '.btn-delete', function(){
+            var row = $(this).parents('tr:first');
+            var id = row.children('.row-id').text();
+            console.log(id);
+            if(id != ""){
+                deleteID.push(id);
+            }
+            console.log(deleteID);
+            row.remove();
+        });
+
+        //更新上傳檔案
+        $('#ajax-data-update').submit(function(e) {
+            event.preventDefault();
+            var remarkFileTableLength = $('.remarkFileTable tr').length;
+            var txtAppNo = "{{ app('request')->input('txtAppNo') }}";
+            var table = "irbProjectRemarkFile";
+            var remarkFileUpdate = {};
+
+            var fileName = $("input[name='files[]']").map(function(){return $(this).val();}).get();
+            for(var i = 0; i < fileName.length; i++){
+                if(fileName[i] != ""){
+                    var cut = fileName[i].split("\\");//windows
+                    if(cut.length == 1)
+                        cut = fileName[i].split("/");//linux
+                    fileName[i] = cut[cut.length-1];
+                }
+
+            }
+            var formData = new FormData(this);
+
+            var token = "{{ app('request')->input('token') }}";
+
+            //var path = "{{ env('CHECK_DIR_ROOT') }}" + "\\test\\example\\projectRemark\\" + txtAppNo;
+            var path = "{{ env('CHECK_DIR_ROOT') }}" + "/test/example/projectRemark/" + txtAppNo;
+            var url = "{{ route('projectRemark.upload.post') }}";
+
+            for(var i = 1; i < remarkFileTableLength; i++){
+                remarkFileUpdate[i-1] = {};
+                var name = $('.remarkFileTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
+                if(name == ""){
+                    alert("文件名稱不可空白!!!");
+                    break;
+                }
+                else{
+                    remarkFileUpdate[i-1]['Id'] = $('.remarkFileTable tr:eq('+i+')').children('.row-id').text();
+                    remarkFileUpdate[i-1]['txtAppNo'] = txtAppNo;
+                    remarkFileUpdate[i-1]['field_name'] = $('.remarkFileTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
+                    remarkFileUpdate[i-1]['description'] = $('.remarkFileTable tr:eq('+i+')').children('.row-desc').children('.desc-value').val();
+                    remarkFileUpdate[i-1]['file_name'] = fileName[i-1];
+                    remarkFileUpdate[i-1]['path'] = path;
+                    remarkFileUpdate[i-1]['update_time'] = "";
+                }
+
+            }
+
+            formData.append(txtAppNo, txtAppNo);
+            console.log(deleteID);
+
+            $.ajax({
+                type:'POST',
+                url: url,
+                headers: {Authorization: 'Bearer '+ token},
+                data: formData,
+                cache:false,
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    //console.log(data)
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        method:'post',
+                        url:"{{ route('projectRemark.update') }}",
+                        data: {update:remarkFileUpdate, deleteID:deleteID, table:table},
+                        success:function(data){
+                            console.log(data);
+                            if(data != 0){
+                                alert("更新失敗，請洽系統管理員");
+                            }
+                            else{
+                                alert("更新成功");
+                                setTimeout(function () { document.location.reload(true); }, 5);
+                            }
+                        },
+                        error:function(data){
+                            console.log(data);
+                        }
+                    });
+                },
+                error: (data) => {
+                    console.log(data);
+                    if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
+                        alert('沒有選擇檔案');
+                    }
+                    else if(data['status'] == 401){
+                        alert('請重新登入');
+                    }
+                    else{
+                        alert('ERROR: '+ data['statusText']);
+                    }
+
+                }
+             });
         });
 
 
