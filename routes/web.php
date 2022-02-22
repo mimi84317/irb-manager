@@ -34,6 +34,7 @@ Route::get('/', function () {
 Route::get('expired', 'ViewController@invalid')->name('login'); // except跳轉位置
 //Route::get('fileDownload/{fileid?}', 'FileuploadlistController@fileDownloadPage')->name('file.download')->where('fileid', '(.*)');
 Route::get('example/{case}/{fileid?}', 'FileuploadlistController@fileDownloadExample')->name('example.download')->where('fileid', '(.*)');
+Route::get('projectRemark/{txtAppNo}/{fileid?}', 'projectController@fileDownloadRemarkFile')->name('remarkFile.download')->where('fileid', '(.*)');
 
 Route::group([
 

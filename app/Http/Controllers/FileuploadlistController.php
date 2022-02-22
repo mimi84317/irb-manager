@@ -31,28 +31,29 @@ class FileuploadlistController extends Controller
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
+        $caseCondition = "order by sort";
         $condition = $request->condition;
         $obj = "";
 
         //新案審查
         $newcase = "IRB_new_case_upload_filelist";
-        $newcaseResponse = $this->DBData($newcase,$condition, $state, $obj);
+        $newcaseResponse = $this->DBData($newcase,$caseCondition, $state, $obj);
 
         //期中審查
         $midcase = "IRB_midterm_upload_filelist";
-        $midcaseResponse = $this->DBData($midcase,$condition, $state, $obj);
+        $midcaseResponse = $this->DBData($midcase,$caseCondition, $state, $obj);
 
         //結案審查
         $closedcase = "IRB_closed_case_upload_filelist";
-        $closedcaseResponse = $this->DBData($closedcase,$condition, $state, $obj);
+        $closedcaseResponse = $this->DBData($closedcase,$caseCondition, $state, $obj);
 
         //修正審查
         $fixcase = "IRB_fix_upload_filelist";
-        $fixcaseResponse = $this->DBData($fixcase,$condition, $state, $obj);
+        $fixcaseResponse = $this->DBData($fixcase,$caseCondition, $state, $obj);
 
         //異常審查(院內)
         $abnormalcase = "IRB_abnormal_upload_filelist";
-        $abnormalcaseResponse = $this->DBData($abnormalcase,$condition, $state, $obj);
+        $abnormalcaseResponse = $this->DBData($abnormalcase,$caseCondition, $state, $obj);
 
         //建立/修改日期
         $modifiedDateTable = "IRB_upload_filelist_content";
@@ -175,9 +176,9 @@ class FileuploadlistController extends Controller
             $caseState = "delete";
             $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, null);
 
-            /*if(strpos($caseResponse ,' ') == false){
+            if(strpos($caseResponse ,' ') == false){
                 return $caseResponse;
-            }*/
+            }
         }
         else{
             $newDataCount = count($filelistUpdate);
@@ -190,9 +191,9 @@ class FileuploadlistController extends Controller
                     $caseState = "insert";
                     $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
                     $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
-                    /*if(strpos($caseResponse ,'Success') == false){
+                    if(strpos($caseResponse ,'Success') == false){
                         return $caseResponse;
-                    }*/
+                    }
                 }
 
             }
@@ -215,9 +216,9 @@ class FileuploadlistController extends Controller
                             $caseState = "delete";
                             $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, null);
                         }
-                        /*if(strpos($caseResponse ,' ') == false){
+                        if(strpos($caseResponse ,' ') == false){
                             return $caseResponse;
-                        }*/
+                        }
                     }
                 }
                 //舊資料數<新資料數 => 新增新資料，其餘更新
@@ -226,20 +227,19 @@ class FileuploadlistController extends Controller
                         //更新
                         if($i < $oldDatacount){
                             $caseCondition = "where sort='".$filelistUpdate[$i]['sort']."'";
-                            $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
                             $caseState = "update";
-                            $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
                         }
                         //新增
                         else{
                             $caseCondition = "";
                             $caseState = "insert";
-                            $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
-                            $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
+
                         }
-                        /*if(strpos($caseResponse ,'Success') == false){
+                        $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
+                        $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
+                        if(strpos($caseResponse ,'Success') == false){
                             return $caseResponse;
-                        }*/
+                        }
                     }
                 }
             }

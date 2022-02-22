@@ -176,12 +176,6 @@
             document.body.removeChild(tempForm);
         }
 
-        //上傳檔案
-        $('.filelistTable').on('change', '.uploadFile', function() {
-
-
-        });
-
         //下載檔案
         $('.filelistTable').on('click', '.btn-download', function() {
             var row = $(this).parents('tr:first');
@@ -267,7 +261,7 @@
             newrow += '<td class="row-require"><input class="form-check-input require-checked" type="checkbox"></td>';
             newrow += '<td class="row-uploadFile"><input class="form-control uploadFile" type="file" name="files[]"></td>';
             newrow += '<td class="row-downloadFile"></td>';
-            newrow += '<td><button type="button" class="btn btn-outline-primary btn-delete"><i class="fas fa-trash-alt"></i></button></td>';
+            newrow += '<td><button type="button" class="btn btn-outline-secondary btn-delete"><i class="fas fa-trash-alt"></i></button></td>';
             newrow += '<td class="row-move">';
             newrow += '<button type="button" class="btn btn-outline-info btn-moveUp"><i class="fas fa-arrow-up"></i></button>';
             //newrow += '<button type="button" class="btn btn-outline-info btn-moveDown"><i class="fas fa-arrow-down"></i></button>';

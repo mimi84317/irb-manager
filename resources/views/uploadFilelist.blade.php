@@ -159,7 +159,7 @@
 
         //編輯
         $('.btn-setting').on('click',function(e){
-            condition = "";
+            condition = "order by sort";
             caseType = e.target.id;
             //loginURL = "http://127.0.0.1:8000/api/auth/login/uploadFileListSetting"+caseType+"/" + username;
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/uploadFileListSetting_" + caseType + "/" + username;

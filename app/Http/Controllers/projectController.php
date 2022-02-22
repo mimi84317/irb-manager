@@ -64,7 +64,7 @@ class projectController extends Controller
         $filePath = "/test/example/projectRemark/".$txtAppNo;//開發區
         $fileCondition = "where path='".$filePath."'";*/
         $fileTableName = "irbProjectRemarkFile";
-        $fileCondition = "where txtAppNo='".$txtAppNo."'";
+        $fileCondition = "where txtAppNo='".$txtAppNo."' order by Id";
         $fileResponse = $this->DBData($fileTableName, $fileCondition, $state, $obj);
 
         //return $remarkResponse;
@@ -75,19 +75,19 @@ class projectController extends Controller
     public function updateprojectRemark(Request $request)
     {
         $update = $request->update;
-        $type = $request->type;
         $table = $request->table;
+
         if($table == "irbProjectRemark"){
-            $tableName = "irbProjectRemark";
-            if($type == "update"){
-                $condition = $request->condition;
+            $remarkType = $request->type;
+            if($remarkType == "update"){
+                $remarkCondition = $request->condition;
             }
-            else if($type == "insert"){
-                $condition = "";
+            else if($remarkType == "insert"){
+                $remarkCondition = "";
             }
 
             $projectRemarkUpdate = json_encode($update, JSON_UNESCAPED_UNICODE);
-            $projectRemarkResponse = $this->DBData($tableName, $condition, $type, $projectRemarkUpdate);
+            $projectRemarkResponse = $this->DBData($table, $remarkCondition, $remarkType, $projectRemarkUpdate);
             if(strpos($projectRemarkResponse ,'Success') == false){
                 return $projectRemarkResponse;
             }
@@ -96,26 +96,29 @@ class projectController extends Controller
             }
         }
         else if($table == "irbProjectRemarkFile"){
-            return $update;
-            //更新
+            //更新+新增
             if($update != ""){
-                $updateCount = count($update);
-                for($i = 0; $i < $updateCount; $i++){
+                $fileUpdateCount = count($update);
+                for($i = 0; $i < $fileUpdateCount; $i++){
                     $time = Carbon::now();
                     $updateDate = $time->format('Y/m/d');
                     $update[$i]['update_time'] = $updateDate;
+                    $fileCondition = "";
 
                     if($update[$i]['Id'] != ""){
-                        $condition = "where Id = ".$update[$i]['Id'];
-                        $state = "update";
+                        $fileCondition = "where Id=".$update[$i]['Id'];
+                        $filetType = "update";
                     }
                     else if($update[$i]['Id'] == ""){
-                        $condition = "";
-                        $state = "insert";
+                        $fileCondition = "";
+                        $filetType = "insert";
                     }
-                    $update[$i] = json_encode($update[$i], JSON_UNESCAPED_UNICODE);
-                    $fileResponse = $this->DBData($table, $condition, $state, $update[$i]);
-                    return $fileResponse;
+                    unset($update[$i]['Id']);
+                    $fileUpdate = json_encode($update[$i], JSON_UNESCAPED_UNICODE);
+                    $fileResponse = $this->DBData($table, $fileCondition, $filetType, $fileUpdate);
+                    if(strpos($fileResponse ,'Success') == false){
+                        return $fileResponse;
+                    }
                 }
             }
 
@@ -127,6 +130,9 @@ class projectController extends Controller
                     $deleteCondition = "where Id = ".$deleteID[$i];
                     $deleteState = "delete";
                     $deleteResponse = $this->DBData($table, $deleteCondition, $deleteState, null);
+                    if(strpos($deleteResponse ,'Success') == false){
+                        return $deleteResponse;
+                    }
                 }
             }
 
@@ -135,10 +141,10 @@ class projectController extends Controller
         }
     }
 
-    public function fileDownloadExample($txtAppNo, $filename)
+    public function fileDownloadRemarkFile($txtAppNo, $filename)
     {
         // append file path to filename
-        $path = auth()->payload()->get('clientid').'/'.'example/projectRemark/'.$txtAppNo.'/'.$filename;
+        $path = auth()->payload()->get('clientid').'/'.'projectRemark/'.$txtAppNo.'/'.$filename;
 
         // download file
         if(Storage::disk('filepool')->exists($path))
@@ -217,6 +223,4 @@ class projectController extends Controller
             "success" => true
         ]);
     }
-
-
 }

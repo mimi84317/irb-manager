@@ -80,7 +80,7 @@
                                     <table class="table table-hover remarkFileTable">
                                         <thead>
                                             <tr>
-                                                <th scope="col">id</th>
+                                                <th scope="col" class="d-none">id</th>
                                                 <th scope="col">檔名</th>
                                                 <th scope="col">上傳檔案說明(版本資訊)</th>
                                                 <th scope="col"></th>
@@ -91,7 +91,7 @@
                                         <tbody>
                                             @foreach($remarkFilelist as $remarkFile)
                                                 <tr>
-                                                    <td class="row-id">{{ $remarkFile['Id'] }}</td>
+                                                    <td class="row-id" style="display:none">{{ $remarkFile['Id'] }}</td>
                                                     <td class="row-name"><input type="text" class="form-control name-value" value="{{ $remarkFile['field_name'] }}"></td>
                                                     <td class="row-desc"><textarea class="form-control desc-value" rows="3">{{ $remarkFile['description'] }}</textarea></td>
                                                     <td class="row-uploadFile">
@@ -236,7 +236,7 @@
             document.body.removeChild(tempForm);
         }
 
-        //儲存
+        //儲存 須迴避機構+提醒主審之說明事項與備註+行政人員備註
         $('.btn-save').on('click',function(e){
             var field = $(this).val();
 
@@ -250,22 +250,19 @@
             var refreeRemark = $('#refreeRemark').val();
             var staffRemark = $('#staffRemark').val();
 
-            if(field == "btn-avoid"){
+            if(field == "btn-avoid"){ //須迴避機構
                 projectRemarkUpdate = { 'proj_name' : proj_name,
                                         'txtAppName' : txtAppName,
                                         'txtAppNo' : txtAppNo,
                                         'avoid' : avoid};
             }
-            /*else if(field == "uploadFile"){
-
-            }*/
-            else if(field == "btn-refreeRemark"){
+            else if(field == "btn-refreeRemark"){ //提醒主審之說明事項與備註
                 projectRemarkUpdate = { 'proj_name' : proj_name,
                                         'txtAppName' : txtAppName,
                                         'txtAppNo' : txtAppNo,
                                         'refreeRemark' : refreeRemark};
             }
-            else if(field == "btn-staffRemark"){
+            else if(field == "btn-staffRemark"){ //行政人員備註
                 projectRemarkUpdate = { 'proj_name' : proj_name,
                                         'txtAppName' : txtAppName,
                                         'txtAppNo' : txtAppNo,
@@ -305,11 +302,11 @@
 
         });
 
-        //新增清單
+        //檔案上傳-新增清單
         $('.btn-addlist').on('click', function(){
             var newrow = '';
             newrow += '<tr>';
-            newrow += '<td class="row-id"></td>';
+            newrow += '<td class="row-id" style="display:none"></td>';
             newrow += '<td class="row-name"><input type="text" class="form-control name-value" value=""></td>';
             newrow += '<td class="row-desc"><textarea class="form-control desc-value" rows="3"></textarea></td>';
             newrow += '<td class="row-uploadFile"><input class="form-control uploadFile" type="file" name="files[]"></td>';
@@ -320,7 +317,7 @@
             $('.remarkFileTable').append(newrow);
         });
 
-        //刪除
+        //檔案上傳-刪除
         $('.remarkFileTable').on('click', '.btn-delete', function(){
             var row = $(this).parents('tr:first');
             var id = row.children('.row-id').text();
@@ -332,7 +329,7 @@
             row.remove();
         });
 
-        //更新上傳檔案
+        //檔案上傳-更新上傳檔案
         $('#ajax-data-update').submit(function(e) {
             event.preventDefault();
             var remarkFileTableLength = $('.remarkFileTable tr').length;
@@ -348,7 +345,6 @@
                         cut = fileName[i].split("/");//linux
                     fileName[i] = cut[cut.length-1];
                 }
-
             }
             var formData = new FormData(this);
 
@@ -373,12 +369,15 @@
                     remarkFileUpdate[i-1]['file_name'] = fileName[i-1];
                     remarkFileUpdate[i-1]['path'] = path;
                     remarkFileUpdate[i-1]['update_time'] = "";
-                }
 
+                    if(remarkFileUpdate[i-1]['Id'] == "" && remarkFileUpdate[i-1]['file_name'] == ""){
+                        alert('請上傳檔案');
+                        return false;
+                    }
+                }
             }
 
             formData.append(txtAppNo, txtAppNo);
-            console.log(deleteID);
 
             $.ajax({
                 type:'POST',
@@ -389,37 +388,13 @@
                 contentType: false,
                 processData: false,
                 success: (data) => {
-                    //console.log(data)
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        method:'post',
-                        url:"{{ route('projectRemark.update') }}",
-                        data: {update:remarkFileUpdate, deleteID:deleteID, table:table},
-                        success:function(data){
-                            console.log(data);
-                            if(data != 0){
-                                alert("更新失敗，請洽系統管理員");
-                            }
-                            else{
-                                alert("更新成功");
-                                setTimeout(function () { document.location.reload(true); }, 5);
-                            }
-                        },
-                        error:function(data){
-                            console.log(data);
-                        }
-                    });
                 },
                 error: (data) => {
                     console.log(data);
-                    if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
+                    /*if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
                         alert('沒有選擇檔案');
-                    }
-                    else if(data['status'] == 401){
+                    }*/
+                    if(data['status'] == 401){
                         alert('請重新登入');
                     }
                     else{
@@ -428,6 +403,48 @@
 
                 }
              });
+             $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                method:'post',
+                url:"{{ route('projectRemark.update') }}",
+                data: {update:remarkFileUpdate, deleteID:deleteID, table:table, token:token},
+                success:function(data){
+                    console.log(data);
+                    if(data != 0){
+                        alert("更新失敗，請洽系統管理員");
+                    }
+                    else{
+                        alert("更新成功");
+                        setTimeout(function () { document.location.reload(true); }, 5);
+                    }
+                },
+                error:function(data){
+                    console.log(data);
+                }
+            });
+        });
+
+        //檔案上傳-下載檔案
+        $('.remarkFileTable').on('click', '.btn-download', function() {
+            var row = $(this).parents('tr:first');
+            var file = row.children('td.row-downloadFile').children('.file-name').text();
+
+            condition = "";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectRemark/" + username;
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    var url = "{{route('remarkFile.download',['txtAppNo'=>app('request')->input('txtAppName'),'fileid'=>''])}}"+"/"+file+"?token="+data["access_token"];
+                    window.open(url, "_blank");
+                }
+            });
+
         });
 
 
