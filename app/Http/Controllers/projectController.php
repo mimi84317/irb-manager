@@ -170,7 +170,6 @@ class projectController extends Controller
         $owner = auth()->payload()->get('owner');
         $ansid = auth()->payload()->get('ansid');
         $txtAppNo = $request->txtAppNo;
-        //$data['txtAppNo'] = $txtAppNo;
 
         $memid = $request->get('memid');
 

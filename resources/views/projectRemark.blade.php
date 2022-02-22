@@ -338,12 +338,14 @@
             var remarkFileUpdate = {};
 
             var fileName = $("input[name='files[]']").map(function(){return $(this).val();}).get();
+            var fileCount = 0;
             for(var i = 0; i < fileName.length; i++){
                 if(fileName[i] != ""){
                     var cut = fileName[i].split("\\");//windows
                     if(cut.length == 1)
                         cut = fileName[i].split("/");//linux
                     fileName[i] = cut[cut.length-1];
+                    fileCount++;
                 }
             }
             var formData = new FormData(this);
@@ -379,31 +381,34 @@
 
             formData.append(txtAppNo, txtAppNo);
 
-            $.ajax({
-                type:'POST',
-                url: url,
-                headers: {Authorization: 'Bearer '+ token},
-                data: formData,
-                cache:false,
-                contentType: false,
-                processData: false,
-                success: (data) => {
-                },
-                error: (data) => {
-                    console.log(data);
-                    /*if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
-                        alert('沒有選擇檔案');
-                    }*/
-                    if(data['status'] == 401){
-                        alert('請重新登入');
-                    }
-                    else{
-                        alert('ERROR: '+ data['statusText']);
-                    }
+            if(fileCount > 0){
+                $.ajax({
+                    type:'POST',
+                    url: url,
+                    headers: {Authorization: 'Bearer '+ token},
+                    data: formData,
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+                    success: (data) => {
+                    },
+                    error: (data) => {
+                        console.log(data);
+                        /*if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
+                            alert('沒有選擇檔案');
+                        }*/
+                        if(data['status'] == 401){
+                            alert('請重新登入');
+                        }
+                        else{
+                            alert('ERROR: '+ data['statusText']);
+                        }
 
-                }
-             });
-             $.ajaxSetup({
+                    }
+                });
+            }
+
+            $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
