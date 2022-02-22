@@ -179,7 +179,7 @@ class projectController extends Controller
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
                 //$path = "\\test\\example\\projectRemark\\".$txtAppNo;
-                $path = "/test/example/projectRemark/".$txtAppNo;
+                $path = "/test/projectRemark/".$txtAppNo;
 
                 $fileID = Storage::disk('filepool')->putFileAs($path, $file, $fileName);
 
