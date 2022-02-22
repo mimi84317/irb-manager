@@ -353,9 +353,10 @@
 
             var token = "{{ app('request')->input('token') }}";
 
-            //var path = "{{ env('CHECK_DIR_ROOT') }}" + "\\test\\example\\projectRemark\\" + txtAppNo;
-            var path = "{{ env('CHECK_DIR_ROOT') }}" + "/test/example/projectRemark/" + txtAppNo;
+            //var path = "{{ env('CHECK_DIR_ROOT') }}" + "\\test\\projectRemark\\" + txtAppNo;
+            var path = "{{ env('CHECK_DIR_ROOT') }}" + "/test/projectRemark/" + txtAppNo;
             var url = "{{ route('projectRemark.upload.post') }}";
+            console.log(path);
 
             for(var i = 1; i < remarkFileTableLength; i++){
                 remarkFileUpdate[i-1] = {};

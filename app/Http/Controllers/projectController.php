@@ -208,7 +208,7 @@ class projectController extends Controller
                 if($response=='Insert Failed')
                 {
                     return Response()->json([
-                        'success' => false
+                        'insert' => false
                     ]);
                 }
             }
@@ -217,7 +217,7 @@ class projectController extends Controller
                 // return back()
                 //     ->with('fail','There were some problems.');
                 return Response()->json([
-                    'success' => false
+                    '123' => false
                 ]);
             }
         }
@@ -225,7 +225,7 @@ class projectController extends Controller
         //             ->with('success','You have successfully upload file.')
         //             ->with('file',$fileName)
         return Response()->json([
-            "success" => true
+            "update" => true
         ]);
     }
 }
