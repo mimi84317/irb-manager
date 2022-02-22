@@ -76,6 +76,7 @@
                         </div>
                         <div class="border">
                             <form method="POST" enctype="multipart/form-data" id="ajax-data-update" action="javascript:void(0)">
+                                <input name="txtAppNo" type="hidden" value="{{ app('request')->input('txtAppNo') }}">
                                 <div>
                                     <table class="table table-hover remarkFileTable">
                                         <thead>
@@ -379,7 +380,7 @@
                 }
             }
 
-            formData.append('txtAppNo', txtAppNo);
+            //formData.append('txtAppNo', txtAppNo);
             //console.log(formData);
 
             if(fileCount > 0){

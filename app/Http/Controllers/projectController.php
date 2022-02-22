@@ -169,7 +169,8 @@ class projectController extends Controller
         $clientid = auth()->payload()->get('clientid');
         $owner = auth()->payload()->get('owner');
         $ansid = auth()->payload()->get('ansid');
-        $txtAppNo = $_POST['txtAppNo'];
+        //$txtAppNo = $_POST['txtAppNo'];
+        //$txtAppNo = $request->get('txtAppNo');
 
         $memid = $request->get('memid');
 
@@ -178,8 +179,12 @@ class projectController extends Controller
             $file = $files[$key];
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
-                //$path = "\\test\\projectRemark\\".$txtAppNo;
-                $path = "/test/projectRemark/".$txtAppNo;
+                //$path = "\\test\\projectRemark\\";
+                //$path = "/test/projectRemark/".$txtAppNo;
+                $path = "/test/projectRemark/";
+                if(!file_exists($path)){
+                    mkdir($path);
+                }
 
                 $fileID = Storage::disk('filepool')->putFileAs($path, $file, $fileName);
 
