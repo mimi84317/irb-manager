@@ -169,7 +169,7 @@ class projectController extends Controller
         $clientid = auth()->payload()->get('clientid');
         $owner = auth()->payload()->get('owner');
         $ansid = auth()->payload()->get('ansid');
-        $txtAppNo = $request->txtAppNo;
+        $txtAppNo = $_POST['txtAppNo'];
 
         $memid = $request->get('memid');
 
@@ -178,7 +178,7 @@ class projectController extends Controller
             $file = $files[$key];
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
-                //$path = "\\test\\example\\projectRemark\\".$txtAppNo;
+                //$path = "\\test\\projectRemark\\".$txtAppNo;
                 $path = "/test/projectRemark/".$txtAppNo;
 
                 $fileID = Storage::disk('filepool')->putFileAs($path, $file, $fileName);
@@ -197,6 +197,7 @@ class projectController extends Controller
                         '"description":"'.$description[$key].'",'.
                         '"field_name":"'.$fieldNames[$key].'"'.
                         '}';
+                //return $obj;
                 $response = $this->DBData($table, $condition, $state, $obj);
 
                 if($response=='Insert Failed')

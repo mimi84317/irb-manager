@@ -379,7 +379,8 @@
                 }
             }
 
-            formData.append(txtAppNo, txtAppNo);
+            formData.append('txtAppNo', txtAppNo);
+            //console.log(formData);
 
             if(fileCount > 0){
                 $.ajax({
@@ -391,13 +392,14 @@
                     contentType: false,
                     processData: false,
                     success: (data) => {
+                        console.log(data);
                     },
                     error: (data) => {
                         console.log(data);
-                        /*if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
+                        if(typeof(data['responseJSON']) != "undefined" && data['responseJSON']['message'] == 'Invalid argument supplied for foreach()'){
                             alert('沒有選擇檔案');
-                        }*/
-                        if(data['status'] == 401){
+                        }
+                        else if(data['status'] == 401){
                             alert('請重新登入');
                         }
                         else{
@@ -408,6 +410,7 @@
                 });
             }
 
+            return false;
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
