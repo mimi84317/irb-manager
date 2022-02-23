@@ -318,7 +318,7 @@ class FileuploadlistController extends Controller
                 if($response=='Insert Failed')
                 {
                     return Response()->json([
-                        'success' => false
+                        'insert' => false
                     ]);
                 }
             }
@@ -327,7 +327,7 @@ class FileuploadlistController extends Controller
                 // return back()
                 //     ->with('fail','There were some problems.');
                 return Response()->json([
-                    'success' => false
+                    'file exist' => false
                 ]);
             }
         }

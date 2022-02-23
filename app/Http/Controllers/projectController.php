@@ -217,7 +217,7 @@ class projectController extends Controller
                 // return back()
                 //     ->with('fail','There were some problems.');
                 return Response()->json([
-                    '123' => false
+                    'file exist' => false
                 ]);
             }
         }
