@@ -294,6 +294,7 @@ class FileuploadlistController extends Controller
             $file = $files[$key];
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
+                //$root = env('CHECK_DIR_ROOT').'/' ;
                 //$path = "\\test\\example\\".$caseType;
                 $path = "/test/example/".$caseType;
 

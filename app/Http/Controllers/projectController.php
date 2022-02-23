@@ -13,8 +13,6 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Storage;
 
-use Illuminate\Filesystem;
-
 use App\Product;
 
 
@@ -181,11 +179,11 @@ class projectController extends Controller
             $file = $files[$key];
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
-                //$path = "\\test\\projectRemark\\";
+                //$root = env('CHECK_DIR_ROOT').'/' ;
+                //$path = "\\test\\projectRemark\\".$txtAppNo;
                 $path = "/test/projectRemark/".$txtAppNo;
                 if(!file_exists($path)){
-                    //($path);
-                    Filesystem::makeDirectory($path, 0775, true);
+                    mkdir($path);
                 }
 
                 $fileID = Storage::disk('filepool')->putFileAs($path, $file, $fileName);
