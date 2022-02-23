@@ -170,7 +170,7 @@ class projectController extends Controller
         $owner = auth()->payload()->get('owner');
         $ansid = auth()->payload()->get('ansid');
         //$txtAppNo = $_POST['txtAppNo'];
-        //$txtAppNo = $request->get('txtAppNo');
+        $txtAppNo = $request->get('txtAppNo');
 
         $memid = $request->get('memid');
 
@@ -180,8 +180,7 @@ class projectController extends Controller
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
                 //$path = "\\test\\projectRemark\\";
-                //$path = "/test/projectRemark/".$txtAppNo;
-                $path = "/test/projectRemark/";
+                $path = "/test/projectRemark/".$txtAppNo;
                 if(!file_exists($path)){
                     mkdir($path);
                 }
