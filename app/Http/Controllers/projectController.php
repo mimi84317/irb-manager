@@ -179,11 +179,11 @@ class projectController extends Controller
             $file = $files[$key];
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
-                //$root = env('CHECK_DIR_ROOT').'/' ;
+                $root = env('CHECK_DIR_ROOT').'/' ;
                 //$path = "\\test\\projectRemark\\".$txtAppNo;
                 $path = "/test/projectRemark/".$txtAppNo;
-                if(!file_exists($path)){
-                    mkdir($path, 0777, true);
+                if(!file_exists($root.$path)){
+                    mkdir($root.$path, 0777, true);
                 }
 
                 $fileID = Storage::disk('filepool')->putFileAs($path, $file, $fileName);
