@@ -183,7 +183,7 @@ class projectController extends Controller
                 //$path = "\\test\\projectRemark\\".$txtAppNo;
                 $path = "/test/projectRemark/".$txtAppNo;
                 if(!file_exists($path)){
-                    mkdir($path);
+                    mkdir($path, 0777, true);
                 }
 
                 $fileID = Storage::disk('filepool')->putFileAs($path, $file, $fileName);
