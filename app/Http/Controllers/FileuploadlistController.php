@@ -190,6 +190,7 @@ class FileuploadlistController extends Controller
                     $caseCondition = "";
                     $caseState = "insert";
                     $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
+
                     $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);
                     if(strpos($caseResponse ,'Success') == false){
                         return $caseResponse;
@@ -206,6 +207,7 @@ class FileuploadlistController extends Controller
                         //更新
                         if($i < $newDataCount){
                             $caseCondition = "where sort='".$filelistUpdate[$i]['sort']."'";
+
                             $filelistUpdate[$i] = json_encode($filelistUpdate[$i], JSON_UNESCAPED_UNICODE);
                             $caseState = "update";
                             $caseResponse = $this->DBData($caseTableName, $caseCondition, $caseState, $filelistUpdate[$i]);

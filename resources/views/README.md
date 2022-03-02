@@ -41,8 +41,18 @@
 ## manageFlow 瀏覽全部審查案
 1. 相關資料庫
     * irbProject
+## manageFlowContent 審核案件內容
+1. 相關資料庫
+    * irbProject
 ## manageProtocol 管理全部計畫與追蹤審查預定日
 1. 相關資料庫
     * irbProject
+## projectContent 計劃內容
+1. 相關資料庫
+    * irbProject
+## projectRemark 案件之相關文件與備註
+1. 相關資料庫
+    * irbProjectRemark
+    * irbProjectRemarkFile
 
 

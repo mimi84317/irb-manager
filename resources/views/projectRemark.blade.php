@@ -356,7 +356,7 @@
             //var path = "{{ env('CHECK_DIR_ROOT') }}" + "\\test\\projectRemark\\" + txtAppNo;
             var path = "{{ env('CHECK_DIR_ROOT') }}" + "/test/projectRemark/" + txtAppNo;
             var url = "{{ route('projectRemark.upload.post') }}";
-            console.log(path);
+            //console.log(path);
 
             for(var i = 1; i < remarkFileTableLength; i++){
                 remarkFileUpdate[i-1] = {};
@@ -455,6 +455,34 @@
                 }
             });
 
+        });
+
+         //返回上一頁
+         $('.btn-back').on('click',function(e){
+            var previousPage = "{{ app('request')->input('previousPage') }}";
+            var txtAppNo = "{{ app('request')->input('txtAppNo') }}";
+            var condition = "where txtAppNo='" + txtAppNo+"'";
+            var loginURL = "";
+            var route = "";
+            console.log(condition);
+
+            if(previousPage == "manageFlowContent"){//審核案件內容
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlowContent/" + username;
+                route = "{{ route('manageFlowContent.post') }}";
+            }
+            else if(previousPage == "projectContent"){//計畫內容
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectContent/" + username;
+                route = "{{ route('projectContent.post') }}";
+            }
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow(route, "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
         });
 
 

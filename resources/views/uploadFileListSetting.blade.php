@@ -380,6 +380,8 @@
                 url = "{{ route('fileuploadlist.upload.post', ['caseType' => 'abnormalcase']) }}";
             }
 
+            var caseList = "{{ json_encode($caseList) }}";
+
             for(var i = 1; i < filelistTableLength; i++){
                 filelistUpdate[i-1] = {};
                 var name = $('.filelistTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
@@ -391,9 +393,15 @@
                     filelistUpdate[i-1]['sort'] = $('.filelistTable tr:eq('+i+')').children('.row-sort').text();
                     filelistUpdate[i-1]['chname'] = $('.filelistTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
                     filelistUpdate[i-1]['example_desc'] = $('.filelistTable tr:eq('+i+')').children('.row-desc').children('.desc-value').val();
-                    filelistUpdate[i-1]['example_name'] = fileName[i-1];
-                    if(fileName[i-1] != "")
+
+                    if(fileName[i-1] != ""){
                         filelistUpdate[i-1]['example_path'] = path;
+                        filelistUpdate[i-1]['example_name'] = fileName[i-1];
+                    }
+                    else{
+                        filelistUpdate[i-1]['example_path'] = caseList[i]['example_path'];
+                        filelistUpdate[i-1]['example_name'] = caseList[i]['example_name'];
+                    }
 
                     if($('.filelistTable tr:eq('+i+')').children('.row-require').children('.require-checked').is(":checked"))
                         filelistUpdate[i-1]['required'] = "Y";

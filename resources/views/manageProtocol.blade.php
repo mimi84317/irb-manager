@@ -415,7 +415,7 @@
 
         //計劃名稱-內容
         function changePage(caseAppNo){
-            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectContent/" + username;
             var condition = "where caseAppNo='" + caseAppNo+"'";
             console.log(condition)
 

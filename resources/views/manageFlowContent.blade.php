@@ -261,7 +261,7 @@
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -309,6 +309,11 @@
             hideInput8.name = "txtAppNo";
             hideInput8.value = txtAppNo;
 
+            var hideInput9 = document.createElement("input");
+            hideInput9.type = "hidden";
+            hideInput9.name = "previousPage";
+            hideInput9.value = previousPage;
+
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
@@ -317,6 +322,7 @@
             tempForm.appendChild(hideInput6);
             tempForm.appendChild(hideInput7);
             tempForm.appendChild(hideInput8);
+            tempForm.appendChild(hideInput9);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -356,6 +362,7 @@
             var proj_name = "{{ $content[0]['proj_name'] }}";
             var txtAppName = "{{ $content[0]['txtAppName'] }}";
             var txtAppNo = "{{ $content[0]['txtAppNo'] }}";
+            var previousPage = "manageFlowContent";
 
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectRemark/" + username;
             //console.log(loginURL);
@@ -364,7 +371,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo);
+                    openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage);
                 }
             });
         });
@@ -374,6 +381,7 @@
             var proj_name = "";
             var txtAppName = "";
             var txtAppNo = "";
+            var previousPage = "";
 
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
             //console.log(loginURL);
