@@ -86,5 +86,13 @@ Route::group([
     Route::get('projectRemark', 'projectController@showprojectRemark')->name('projectRemark');
     Route::post('projectRemark', 'projectController@showprojectRemark')->name('projectRemark.post');
     Route::post('projectRemark', 'projectController@updateprojectRemark')->name('projectRemark.update');
+
+    //管理未正進行的計畫
+    Route::get('manageNotOngoingProtocol', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('manageNotOngoingProtocol');
+    Route::post('manageNotOngoingProtocol', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('manageNotOngoingProtocol.post');
+
+    //管理追蹤審查預定日功能
+    Route::get('manageProtocolTrackingInfoDetail', 'manageProtocolTrackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail');
+    Route::post('manageProtocolTrackingInfoDetail', 'manageProtocolTrackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail.post');
 });
 

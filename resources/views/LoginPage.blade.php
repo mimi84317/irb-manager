@@ -30,6 +30,10 @@
             <button type="button" class="btn btn-outline-primary btn-login" id="manageFlow">瀏覽全部審查案</button>
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="manageProtocol">管理全部計畫與追蹤審查預定日</button>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-login" id="manageNotOngoingProtocol">管理未正進行的計畫</button>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-login" id="manageProtocolTrackingInfoDetail">管理追蹤審查預定日功能</button>
         </div>
 
     </body>
@@ -116,6 +120,12 @@
             else if(caseType == "manageProtocol"){
                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
             }
+            else if(caseType == "manageNotOngoingProtocol"){
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageNotOngoingProtocol/" + username;
+            }
+            else if(caseType == "manageProtocolTrackingInfoDetail"){
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocolTrackingInfoDetail/" + username;
+            }
 
             //console.log(loginURL);
             $.ajax({
@@ -134,6 +144,12 @@
                     }
                     else if(caseType == "manageProtocol"){
                         openPostWindow("{{ route('manageProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                    }
+                    else if(caseType == "manageNotOngoingProtocol"){
+                        openPostWindow("{{ route('manageNotOngoingProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                    }
+                    else if(caseType == "manageProtocolTrackingInfoDetail"){
+                        openPostWindow("{{ route('manageProtocolTrackingInfoDetail.post') }}", "", data["access_token"], username, clientid, client_secret, user);
                     }
 
                 }
