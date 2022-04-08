@@ -25,7 +25,20 @@ class manageNotOngoingProtocolController extends Controller
     public function showmanageNotOngoingProtocol(Request $request)
     {
 
-        return view('manageNotOngoingProtocol');
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+
+        //$time = Carbon::now();
+
+        $state = "select";
+        $condition = $request->condition;
+        //$condition = "where cast(Duraton_end as datetime) < '".$time."'";
+        //return $condition;
+        $obj = "";
+
+        $tableName = "irbProject";
+        $response = $this->DBData($tableName, $condition, $state, $obj);
+
+        return view('manageNotOngoingProtocol')->with('projectList', json_decode($response->Body(), true));
     }
 
 }

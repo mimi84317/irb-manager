@@ -178,7 +178,7 @@
                                     <th>{{ $projectList[$i]['formType'] }}</th>
                                     <th>{{ $projectList[$i]['committee'] }}</th>
                                     <th></th>
-                                    <th>{{ $recordResultList[$i]['stage'] }}</th>
+                                    <th>{{ $projectList[$i]['status'] }}</th>
                                     <th></th>
                                     <th><button type="button" class="btn btn-outline-primary btn-referee">主審列表</button></th>
                                     <th><button type="button" class="btn btn-outline-primary btn-content">案件內容</button></th>
