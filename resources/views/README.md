@@ -1,6 +1,6 @@
 # Views說明
 
-## LoginPage 登入畫面
+## loginPage 登入畫面
 測試用，之後會以Agentflow應用程式開啟其他功能頁面取代
 
 ## notFound

@@ -450,7 +450,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    var url = "{{route('remarkFile.download',['txtAppNo'=>app('request')->input('txtAppNo'),'fileid'=>''])}}"+"/"+file+"?token="+data["access_token"];
+                    var url = "{{route('file.download',['case'=>'projectRemark','passID'=>app('request')->input('txtAppNo'),'fileid'=>''])}}"+"/"+file+"?token="+data["access_token"];
                     window.open(url, "_blank");
                 }
             });

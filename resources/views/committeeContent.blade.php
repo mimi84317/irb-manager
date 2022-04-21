@@ -221,7 +221,8 @@
 
         $(function(){
             $('#committeeDate').datepicker({
-                autoclose: true
+                autoclose: true,
+                format: "yyyy/mm/dd",
             });
         });
 

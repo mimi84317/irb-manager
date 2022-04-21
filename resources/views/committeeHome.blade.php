@@ -204,7 +204,8 @@
 
         $(function(){
             $('.input-daterange').datepicker({
-                autoclose: true
+                autoclose: true,
+                format: "yyyy/mm/dd",
             });
         });
 
@@ -225,9 +226,9 @@
 
         //查詢
         $('.btn-search').on('click',function(e){
-            var selectCommittee = $('#selectCommittee').val();
-            var fromDate = $('#fromDate').val();
-            var toDate = $('#toDate').val();
+            var selectCommittee = $('#selectCommittee').val();//委員會
+            var fromDate = $('#fromDate').val();//會議期間-起
+            var toDate = $('#toDate').val();//會議期間-迄
 
             if(selectCommittee == "none"){
                 selectCommittee = "";

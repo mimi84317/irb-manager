@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     //return view('welcome');
-    return view('LoginPage');
+    return view('loginPage');
 });
 
 /*Route::group([
@@ -32,9 +32,12 @@ Route::get('/', function () {
 });*/
 
 Route::get('expired', 'ViewController@invalid')->name('login'); // except跳轉位置
-//Route::get('fileDownload/{fileid?}', 'FileuploadlistController@fileDownloadPage')->name('file.download')->where('fileid', '(.*)');
-Route::get('example/{case}/{fileid?}', 'FileuploadlistController@fileDownloadExample')->name('example.download')->where('fileid', '(.*)');
-Route::get('projectRemark/{txtAppNo}/{fileid?}', 'projectController@fileDownloadRemarkFile')->name('remarkFile.download')->where('fileid', '(.*)');
+//Route::get('fileDownload/{fileid?}', 'fileuploadlistController@fileDownloadPage')->name('file.download')->where('fileid', '(.*)');
+Route::get('example/{case}/{fileid?}', 'fileuploadlistController@fileDownloadExample')->name('example.download')->where('fileid', '(.*)');
+//Route::get('projectRemark/{txtAppNo}/{fileid?}', 'projectController@fileDownloadRemarkFile')->name('remarkFile.download')->where('fileid', '(.*)');
+Route::get('fileDownload/{case}/{passID?}/{fileid?}', 'fileController@fileDownload')->name('file.download')->where('fileid', '(.*)');
+//Route::get('fileDownload/{case}/{memID}/{insID}/{fileid?}', 'fileController@fileDownload')->name('file.download')->where('fileid', '(.*)');
+//Route::get('fileDownload/{case}/{memid}/{insID}/{fileid?}', 'fileController@mergeFileDownload')->name('mergefile.download')->where('fileid', '(.*)');
 
 Route::group([
 
@@ -43,28 +46,28 @@ Route::group([
 
 ], function ($router) {
     //設定案件上傳清單
-    Route::get('fileuploadlist', 'FileuploadlistController@showFileuploadlist')->name('fileuploadlist');
-    Route::post('fileuploadlist', 'FileuploadlistController@showFileuploadlist')->name('fileuploadlist.post');
+    Route::get('fileuploadlist', 'fileuploadlistController@showFileuploadlist')->name('fileuploadlist');
+    Route::post('fileuploadlist', 'fileuploadlistController@showFileuploadlist')->name('fileuploadlist.post');
 
-    Route::get('fileuploadlist/setting/{caseType}', 'FileuploadlistController@showFileuploadlistSetting')->name('fileuploadlist.setting');
-    Route::post('fileuploadlist/setting/{caseType}', 'FileuploadlistController@showFileuploadlistSetting')->name('fileuploadlist.setting.post');
+    Route::get('fileuploadlist/setting/{caseType}', 'fileuploadlistController@showFileuploadlistSetting')->name('fileuploadlist.setting');
+    Route::post('fileuploadlist/setting/{caseType}', 'fileuploadlistController@showFileuploadlistSetting')->name('fileuploadlist.setting.post');
 
-    Route::post('fileuploadlist', 'FileuploadlistController@updateFileuploadlistSetting')->name('fileuploadlist.update');
+    Route::post('fileuploadlist', 'fileuploadlistController@updateFileuploadlistSetting')->name('fileuploadlist.update');
 
     Route::post('fileupload', 'AuthController@me')->name('fileupload');
     Route::get('fileupload', 'AuthController@me');
 
     //設定委員會議程
-    Route::get('committee', 'CommitteeController@showCommittee')->name('committee');
-    Route::post('committee', 'CommitteeController@showCommittee')->name('committee.post');
+    Route::get('committee', 'committeeController@showCommittee')->name('committee');
+    Route::post('committee', 'committeeController@showCommittee')->name('committee.post');
 
-    Route::get('committee/committeeList', 'CommitteeController@showCommitteeList')->name('committeeList');
-    Route::post('committee/committeeList', 'CommitteeController@showCommitteeList')->name('committeeList.post');
+    Route::get('committee/committeeList', 'committeeController@showCommitteeList')->name('committeeList');
+    Route::post('committee/committeeList', 'committeeController@showCommitteeList')->name('committeeList.post');
 
-    Route::get('committee/committeeContent', 'CommitteeController@showCommitteeContent')->name('committeeContent');
-    Route::post('committee/committeeContent', 'CommitteeController@showCommitteeContent')->name('committeeContent.post');
+    Route::get('committee/committeeContent', 'committeeController@showCommitteeContent')->name('committeeContent');
+    Route::post('committee/committeeContent', 'committeeController@showCommitteeContent')->name('committeeContent.post');
 
-    Route::post('committee', 'CommitteeController@updateCommittee')->name('committee.update');
+    Route::post('committee', 'committeeController@updateCommittee')->name('committee.update');
 
     //瀏覽全部審查案
     Route::get('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow');

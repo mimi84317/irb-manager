@@ -70,11 +70,36 @@
                                 <td>
                                     <select class="form-select" id="selectResearch">
                                         <option value="none" selected>請選擇</option>
-                                        <option value="abrc">Agricultural Biotechnology Research Center 農業生物科技研究中心</option>
-                                        <option value="ipmb">Institute of Plant and Microbial Biology 植物暨微生物學研究所</option>
-                                        <option value="icob">Institute of Cellular and Organismic Biology 細胞與個體生物學研究所</option>
-                                        <option value="il">Institute of Linguistics 語言學研究所</option>
-                                        <option value="ibs">Institute of Biomedical Sciences 生物醫學科學研究所</option>
+                                        <option value="iclp">中國文哲研究所 Institute of Chinese Literature and Philosophy</option>
+                                        <option value="rchss">人文社會科學研究中心 Research Center for Humanities and Social Sciences</option>
+                                        <option value="imb">分子生物研究所 Institute of Molecular Biology</option>
+                                        <option value="ic">化學研究所 Institute of Chemistry</option>
+                                        <option value="iams">原子與分子科學研究所 Institute of Atomic and Molecular Sciences</option>
+                                        <option value="ith">台灣史研究所 Institute of Taiwan History</option>
+                                        <option value="ies">地球科學研究所 Institute of Earth Sciences</option>
+                                        <option value="grc">基因體研究中心 Genomics Research Center</option>
+                                        <option value="iaa">天文及天文物理研究所 Institute of Astronomy and Astrophysics</option>
+                                        <option value="rcas">應用科學研究中心 Research Center for Applied Sciences</option>
+                                        <option value="ips">政治學研究所 Institute of Political Science</option>
+                                        <option value="im">數學研究所 Institute of Mathematics</option>
+                                        <option value="ipmb">植物暨微生物學研究所 Institute of Plant and Microbial Biology</option>
+                                        <option value="ieas">歐美研究所 Institute of European and American Studies</option>
+                                        <option value="iethnology">民族學研究所 Institute of Ethnology</option>
+                                        <option value="ii">法律學研究所 Institutum Iurisprudentiae</option>
+                                        <option value="ip">物理研究所 Institute of Physics</option>
+                                        <option value="rcec">環境變遷研究中心 Research Center for Environmental Changes</option>
+                                        <option value="ibc">生物化學研究所 Institute of Biological Chemistry</option>
+                                        <option value="brc">生物多樣性研究中心 Biodiversity Research Center</option>
+                                        <option value="ibs">生物醫學科學研究所 Institute of Biomedical Sciences</option>
+                                        <option value="is">社會學研究所 Institute of Sociology</option>
+                                        <option value="icob">細胞與個體生物學研究所 Institute of Cellular and Organismic Biology</option>
+                                        <option value="iss">統計科學研究所 Institute of Statistical Science</option>
+                                        <option value="ieconomics">經濟研究所 Institute of Economics</option>
+                                        <option value="il">語言學研究所 Institute of Linguistics</option>
+                                        <option value="iis">資訊科學研究所 Institute of Information Science</option>
+                                        <option value="rciti">資訊科技創新研究中心 Research Center for Information Technology Innovation</option>
+                                        <option value="abrc">農業生物科技研究中心 Agricultural Biotechnology Research Center/option>
+                                        <option value="imh">近代史研究所 Institute of Modern History</option>
                                     </select>
                                 </td>
                             </tr>
@@ -258,7 +283,8 @@
 
         $(function(){
             $('.input-daterange').datepicker({
-                autoclose: true
+                autoclose: true,
+                format: "yyyy/mm/dd",
             });
         });
 
@@ -345,23 +371,100 @@
             var selectStatus = $('#selectStatus').val();//狀態
 
             //所別
-            if(selectResearch == "none"){
-                selectResearch = "";
-            }
-            else if(selectResearch == "abrc"){
-                selectResearch = "農業生物科技研究中心";
-            }
-            else if(selectResearch == "ipmb"){
-                selectResearch = "植物暨微生物學研究所";
-            }
-            else if(selectResearch == "icob"){
-                selectResearch = "細胞與個體生物學研究所";
-            }
-            else if(selectResearch == "il"){
-                selectResearch = "語言學研究所";
-            }
-            else if(selectResearch == "ibs"){
-                selectResearch = "生物醫學科學研究所";
+            switch(selectResearch){
+                case 'none':
+                    selectResearch = "";
+                    break;
+                case 'iclp':
+                    selectResearch = "中國文哲研究所";
+                    break;
+                case 'rchss':
+                    selectResearch = "人文社會科學研究中心";
+                    break;
+                case 'imb':
+                    selectResearch = "分子生物研究所";
+                    break;
+                case 'ic':
+                    selectResearch = "化學研究所";
+                    break;
+                case 'iams':
+                    selectResearch = "原子與分子科學研究所";
+                    break;
+                case 'ith':
+                    selectResearch = "台灣史研究所";
+                    break;
+                case 'ies':
+                    selectResearch = "地球科學研究所";
+                    break;
+                case 'grc':
+                    selectResearch = "基因體研究中心";
+                    break;
+                case 'iaa':
+                    selectResearch = "天文及天文物理研究所";
+                    break;
+                case 'rcas':
+                    selectResearch = "應用科學研究中心";
+                    break;
+                case 'ips':
+                    selectResearch = "政治學研究所";
+                    break;
+                case 'im':
+                    selectResearch = "數學研究所";
+                    break;
+                case 'ipmb':
+                    selectResearch = "植物暨微生物學研究所";
+                    break;
+                case 'ieas':
+                    selectResearch = "歐美研究所";
+                    break;
+                case 'iethnology':
+                    selectResearch = "民族學研究所";
+                    break;
+                case 'ii':
+                    selectResearch = "法律學研究所";
+                    break;
+                case 'ip':
+                    selectResearch = "物理研究所";
+                    break;
+                case 'rcec':
+                    selectResearch = "環境變遷研究中心";
+                    break;
+                case 'ibc':
+                    selectResearch = "生物化學研究所";
+                    break;
+                case 'brc':
+                    selectResearch = "生物多樣性研究中心";
+                    break;
+                case 'ibs':
+                    selectResearch = "生物醫學科學研究所";
+                    break;
+                case 'is':
+                    selectResearch = "社會學研究所";
+                    break;
+                case 'icob':
+                    selectResearch = "細胞與個體生物學研究所";
+                    break;
+                case 'iss':
+                    selectResearch = "統計科學研究所";
+                    break;
+                case 'ieconomics':
+                    selectResearch = "經濟研究所";
+                    break;
+                case 'il':
+                    selectResearch = "語言學研究所";
+                    break;
+                case 'iis':
+                    selectResearch = "資訊科學研究所";
+                    break;
+                case 'rciti':
+                    selectResearch = "資訊科技創新研究中心";
+                    break;
+                case 'abrc':
+                    selectResearch = "農業生物科技研究中心";
+                    break;
+                case 'imh':
+                    selectResearch = "近代史研究所";
+                    break;
             }
 
             //狀態
@@ -387,6 +490,12 @@
             condition += "and txtAppName like '%" + projectHost + "%' ";
             condition += "and txtReviewNo like '%" + projectNum + "%' ";
             //condition += "and ??? between '" + fromDate + "' and '" + toDate + "'";//計畫起訖日期
+            if(fromDate != ""){
+                condition += "and Duration_start > '" + fromDate + "' ";//計畫起訖日期
+            }
+            if(toDate != ""){
+                condition += "and Duraton_end < '" + toDate + "' ";//計畫起訖日期
+            }
             //condition += "and ??? = '" + selectStatus + "'";//狀態
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
             console.log(condition);

@@ -211,7 +211,7 @@ public function invalid()
 ```
 回傳 exception.blade.php，用於發生錯誤時，例如：JWT expired。
 
-## FileuploadlistController
+## fileuploadlistController
 設定案件上傳清單相關controller
 ### 顯示案件上傳清單
 
@@ -247,7 +247,7 @@ public function fileDownloadExample($case, $filename)
 public function fileUploadPost($caseType, Request $request)
 ```
 
-## CommitteeController
+## committeeController
 設定委員會議程相關controller
 ### 設定委員會議程-主頁顯示
 ```php

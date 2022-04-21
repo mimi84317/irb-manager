@@ -93,7 +93,9 @@
                                     <th>計劃流水編號</th>
                                     <th class="row-txtReviewNo"><a href="javascript:void(0)" onclick="changePage('{{ $content[0]['caseAppNo'] }}')">{{ $content[0]['txtAppNo'] }}</a></th>
                                     <th>送審文件</th>
-                                    <td>下載最新版</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-mergeFiledownload"><i class="fas fa-download">下載最新版</i></button>
+                                    </td>
                                     <th></th>
                                 </tr>
                             </tbody>
@@ -374,6 +376,29 @@
                     openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage);
                 }
             });
+        });
+
+        //送審文件下載最新版
+        $('.btn-mergeFiledownload').on('click',function(e){
+            //irb/filepool/{app_name}/MEMC_5/MEMC_500/MEMC_5000000/ans654321/merge/MEMC_5000000_ans654321_merge.pdf
+            var memID = "{{ $content[0]['memID'] }}";
+            var insID = "{{ $content[0]['insID'] }}";
+            var passID = memID + "+" + insID;
+            var file = memID + "_" + insID + "_merge.pdf";
+
+            condition = "";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlowContent/" + username;
+            //return 0;
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    var url = "{{route('file.download',['case'=>'merge','passID'=>'', 'fileid'=>''])}}"+"/"+passID+"/"+file+"?token="+data["access_token"];
+                    window.open(url, "_blank");
+                }
+            });
+
         });
 
         //返回瀏覽全部審查案

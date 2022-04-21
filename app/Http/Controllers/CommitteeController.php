@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use App\Product;
 
 
-class CommitteeController extends Controller
+class committeeController extends Controller
 {
     public function __construct()
     {

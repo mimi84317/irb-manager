@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Product;
 
 
-class FileuploadlistController extends Controller
+class fileuploadlistController extends Controller
 {
     public function __construct()
     {
@@ -273,6 +273,7 @@ class FileuploadlistController extends Controller
         // return Response()->json([
         //     "success" => false
         // ]);
+        //return $path;
         return view('notFound', ['var' => $path]);
     }
 
