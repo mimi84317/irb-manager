@@ -94,7 +94,7 @@
                                     <th class="row-txtReviewNo"><a href="javascript:void(0)" onclick="changePage('{{ $content[0]['caseAppNo'] }}')">{{ $content[0]['txtAppNo'] }}</a></th>
                                     <th>送審文件</th>
                                     <td>
-                                        <button type="button" class="btn btn-outline-primary btn-mergeFiledownload"><i class="fas fa-download">下載最新版</i></button>
+                                        <button type="button" class="btn btn-outline-primary btn-download" value="merge"><i class="fas fa-download">下載最新版</i></button>
                                     </td>
                                     <th></th>
                                 </tr>
@@ -144,7 +144,9 @@
                                 </tr>
                                 <tr>
                                     <td>下載收件證明</td>
-                                    <td>下載收件證明</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-download" value="proof_of_acceptance"><i class="fas fa-download">下載收件證明</i></button>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>下載審查結果證明</td>
@@ -378,13 +380,22 @@
             });
         });
 
-        //送審文件下載最新版
-        $('.btn-mergeFiledownload').on('click',function(e){
-            //irb/filepool/{app_name}/MEMC_5/MEMC_500/MEMC_5000000/ans654321/merge/MEMC_5000000_ans654321_merge.pdf
+        //送審文件下載最新版+收件證明
+        $('.btn-download').on('click',function(e){
+            var btnValue = $(this).val();
+
             var memID = "{{ $content[0]['memID'] }}";
             var insID = "{{ $content[0]['insID'] }}";
             var passID = memID + "+" + insID;
-            var file = memID + "_" + insID + "_merge.pdf";
+            var file = "";
+
+            if(btnValue == "merge"){//送審文件下載最新版
+                file = memID + "_" + insID + "_merge.pdf";
+            }
+            else if(btnValue == "proof_of_acceptance"){//收件證明
+                file = "proof_of_acceptance.pdf";
+            }
+
 
             condition = "";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlowContent/" + username;
@@ -394,7 +405,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    var url = "{{route('file.download',['case'=>'merge','passID'=>'', 'fileid'=>''])}}"+"/"+passID+"/"+file+"?token="+data["access_token"];
+                    var url = "{{route('file.download',['case'=>'','passID'=>'', 'fileid'=>''])}}"+"/"+btnValue+"/"+passID+"/"+file+"?token="+data["access_token"];
                     window.open(url, "_blank");
                 }
             });

@@ -35,9 +35,7 @@ Route::get('expired', 'ViewController@invalid')->name('login'); // except跳轉�
 //Route::get('fileDownload/{fileid?}', 'fileuploadlistController@fileDownloadPage')->name('file.download')->where('fileid', '(.*)');
 Route::get('example/{case}/{fileid?}', 'fileuploadlistController@fileDownloadExample')->name('example.download')->where('fileid', '(.*)');
 //Route::get('projectRemark/{txtAppNo}/{fileid?}', 'projectController@fileDownloadRemarkFile')->name('remarkFile.download')->where('fileid', '(.*)');
-Route::get('fileDownload/{case}/{passID?}/{fileid?}', 'fileController@fileDownload')->name('file.download')->where('fileid', '(.*)');
-//Route::get('fileDownload/{case}/{memID}/{insID}/{fileid?}', 'fileController@fileDownload')->name('file.download')->where('fileid', '(.*)');
-//Route::get('fileDownload/{case}/{memid}/{insID}/{fileid?}', 'fileController@mergeFileDownload')->name('mergefile.download')->where('fileid', '(.*)');
+Route::get('fileDownload/{case?}/{passID?}/{fileid?}', 'fileController@fileDownload')->name('file.download')->where('fileid', '(.*)');
 
 Route::group([
 

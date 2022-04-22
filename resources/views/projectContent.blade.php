@@ -132,6 +132,8 @@
 
                             <thead>
                                 <tr>
+                                    <th data-field="insID" class="d-none">insID</th>
+                                    <th data-field="memID" class="d-none">memID</th>
                                     <th data-field="txtAppNo" data-sortable="true">案件流水編號</th>
                                     <th data-field="apply_time" data-sortable="true">送審日期</th>
                                     <th data-field="auditType" data-sortable="true">案件類型</th>
@@ -139,9 +141,9 @@
                                     <th data-field="">追蹤案(新案)編號</th>
                                     <th data-field="formType" data-sortable="true">審查類型</th>
                                     <th data-field="txtAppName" data-sortable="true">送件人</th>
-                                    <th data-field="" data-sortable="true">案件狀態</th>
-                                    <th data-field="" data-sortable="true">審核階段</th>
-                                    <th data-field="">收件證明</th>
+                                    <th data-sortable="true">案件狀態</th>
+                                    <th data-sortable="true">審核階段</th>
+                                    <th >收件證明</th>
                                     <th>審查結果</th>
                                     <th>送審文件核准版</th>
                                     <th>送審文件下載</th>
@@ -150,6 +152,8 @@
                             <tbody>
                                 @for($i = 0; $i < count($projectList); $i++)
                                     <tr>
+                                        <th class="row-insID" style="display:none">{{ $projectList[$i]['insID'] }}</th>
+                                        <th class="row-memID" style="display:none">{{ $projectList[$i]['memID'] }}</th>
                                         <th>{{ $projectList[$i]['caseAppNo'] }}</th>
                                         <th>{{ $projectList[$i]['apply_time'] }}</th>
                                         <th>{{ $projectList[$i]['auditType'] }}</th>
@@ -159,10 +163,14 @@
                                         <th>{{ $projectList[$i]['txtAppName'] }}</th>
                                         <th></th>
                                         <th></th>
+                                        <th>
+                                            <button type="button" class="btn btn-outline-primary btn-download" value="proof_of_acceptance"><i class="fas fa-download">下載</i></button>
+                                        </th>
                                         <th></th>
-                                        <th>下載結果</th>
-                                        <th>下載文件</th>
-                                        <th>文件下載</th>
+                                        <th></th>
+                                        <th>
+                                            <button type="button" class="btn btn-outline-primary btn-download" value="merge"><i class="fas fa-download">文件下載</i></button>
+                                        </th>
                                     </tr>
                                 @endfor
                             </tbody>
@@ -337,6 +345,38 @@
                     openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage);
                 }
             });
+        });
+
+        //送審文件下載最新版+收件證明
+        $('.auditTable').on('click', '.btn-download', function(){
+            var btnValue = $(this).val();
+
+            var row = $(this).parents('tr:first');
+            var memID = row.children('.row-memID').text();
+            var insID = row.children('.row-insID').text();
+            var passID = memID + "+" + insID;
+            var file = "";
+
+            if(btnValue == "merge"){//送審文件下載最新版
+                file = memID + "_" + insID + "_merge.pdf";
+            }
+            else if(btnValue == "proof_of_acceptance"){//收件證明
+                file = "proof_of_acceptance.pdf";
+            }
+
+            condition = "";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlowContent/" + username;
+            //return 0;
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    var url = "{{route('file.download',['case'=>'','passID'=>'', 'fileid'=>''])}}"+"/"+btnValue+"/"+passID+"/"+file+"?token="+data["access_token"];
+                    window.open(url, "_blank");
+                }
+            });
+
         });
 
     </script>

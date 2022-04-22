@@ -28,7 +28,8 @@ class fileController extends Controller
     public function fileDownload($case, $passID, $file)
     {
         // append file path to filename
-        if($case == "merge"){
+        //最新版文件、收件證明
+        if($case == "merge" || $case == "proof_of_acceptance"){
             //$file = $memID."_".$insID."_merge.pdf";
             $clientid = auth()->payload()->get('clientid');
             $cut = explode("+", $passID);
@@ -39,6 +40,7 @@ class fileController extends Controller
             $path = $path.'/'.$case.'/'.$file;
         }
 
+        //相關文件和備註-檔案上傳
         else{
             $path = auth()->payload()->get('clientid').'/'.$case.'/'.$passID.'/'.$file;
         }

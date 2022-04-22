@@ -141,7 +141,7 @@ class projectController extends Controller
         }
     }
 
-    public function fileDownloadRemarkFile($txtAppNo, $filename)
+    /*public function fileDownloadRemarkFile($txtAppNo, $filename)
     {
         // append file path to filename
         $path = auth()->payload()->get('clientid').'/'.'projectRemark/'.$txtAppNo.'/'.$filename;
@@ -156,7 +156,7 @@ class projectController extends Controller
         //     "success" => false
         // ]);
         return view('notFound', ['var' => $path]);
-    }
+    }*/
 
     public function fileUploadPost(Request $request)
     {
