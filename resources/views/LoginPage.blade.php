@@ -34,6 +34,8 @@
             <button type="button" class="btn btn-outline-primary btn-login" id="manageNotOngoingProtocol">管理未正進行的計畫</button>
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="manageProtocolTrackingInfoDetail">管理追蹤審查預定日功能</button>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-login" id="projectImport">外部案件匯入</button>
         </div>
 
     </body>
@@ -126,6 +128,9 @@
             else if(caseType == "manageProtocolTrackingInfoDetail"){
                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocolTrackingInfoDetail/" + username;
             }
+            else if(caseType == "projectImport"){
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectImport/" + username;
+            }
 
             //console.log(loginURL);
             $.ajax({
@@ -150,6 +155,9 @@
                     }
                     else if(caseType == "manageProtocolTrackingInfoDetail"){
                         openPostWindow("{{ route('manageProtocolTrackingInfoDetail.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                    }
+                    else if(caseType == "projectImport"){
+                        openPostWindow("{{ route('projectImport.post') }}", "", data["access_token"], username, clientid, client_secret, user);
                     }
 
                 }

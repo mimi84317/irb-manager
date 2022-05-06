@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="{{ asset('js/datepicker/bootstrap-datepicker3.min.css') }}">
         <!---->
 
-        <title>管理追蹤審查預定日功能</title>
+        <title>外部案件匯入</title>
         <style>
             .titleText {
                 color: #000093;
@@ -46,76 +46,16 @@
 
         <div class="container">
             <div class="col-form-label">
-                <p class="titleText">管理追蹤審查預定日功能</p>
+                <p class="titleText">外部案件匯入</p>
             </div>
             <div class="col-12">
                 <div>
-                    <table class="table table-bordered">
-                        <thead>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>計畫主持人</th>
-                                <td><input type="text" class="form-control" id="projectHost" value=""></td>
-                            </tr>
-                            <tr>
-                                <th>iIRB No.或流水編號</th>
-                                <td><input type="text" class="form-control" id="projectNum" value=""></td>
-                            </tr>
-                            <tr>
-                                <th>計畫狀態</th>
-                                <td>
-                                    <select class="form-select" id="selectStatus">
-                                        <option value="none" selected>請選擇</option>
-                                        <option value="iclp">計畫執行中</option>
-                                        <option value="rchss">計畫已結束</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>追蹤案類型</th>
-                                <td>
-                                    <select class="form-select" id="selectType">
-                                        <option value="none" selected>請選擇</option>
-                                        <option value="iclp">期中審查</option>
-                                        <option value="rchss">結案審查</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>計畫結束日</th>
-                                <td>
-                                    <div class="input-daterange input-group" id="projEnd">
-                                        <input type="text" class="input-sm form-control" name="from" placeholder="From date" id="projEndFromDate">
-                                        <span class="input-group-addon">~</span>
-                                        <input type="text" class="input-sm form-control" name="to" placeholder="To date" id="projEndToDate">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>預定送審日</th>
-                                <td>
-                                    <div class="input-daterange input-group" id="projSubmit">
-                                        <input type="text" class="input-sm form-control" name="from" placeholder="From date" id="projSubmitFromDate">
-                                        <span class="input-group-addon">~</span>
-                                        <input type="text" class="input-sm form-control" name="to" placeholder="To date" id="projSubmitToDate">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td>
-                                    <button type="button" class="btn btn-outline-primary btn-search">查詢</button>
-                                    <button type="button" class="btn btn-outline-primary btn-clear">重設</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
+                    <button type="button" class="btn btn-outline-primary btn-downloadExample">下載範例檔</button>
+                    <button type="button" class="btn btn-outline-primary btn-csvImport">CSV檔匯入</button>
                 </div>
                 <div>
-                    <table  class="manageProtocolTrackingInfoDetailTable"
-                            id="manageProtocolTrackingInfoDetailTable"
+                    <table  class="projectImportTable"
+                            id="projectImportTable"
                             data-toggle="table"
                             data-pagination="true"
                             data-toolbar="#toolbar"
@@ -124,14 +64,30 @@
 
                         <thead>
                             <tr>
-                                <th data-field="traceDate" data-sortable="true">追蹤審查預定日</th>
-                                <th data-field="traceType" data-sortable="true">追蹤案類型</th>
-                                <th data-field="traceRemark">追蹤審查備註</th>
-                                <th data-field="protocolNum" data-sortable="true">Protocol流水號</th>
-                                <th data-field="txtReviewNo" data-sortable="true">iIRB No.</th>
-                                <th data-field="txtAppName">主持人</th>
-                                <th data-field="Duration_start">計畫起日</th>
-                                <th data-field="Duraton_end">計畫結束日</th>
+                                <th data-field="txtAppNo">計畫流水編號</th>
+                                <th data-field="caseAppNo">案件流水編號</th>
+                                <th data-field="txtReviewNo">iIRB No</th>
+                                <th data-field="proj_name">計劃中文名稱</th>
+                                <th data-field="proj_Ename">計劃英文名稱</th>
+                                <th data-field="Duration_start">計劃起始日期</th>
+                                <th data-field="Duraton_end">計劃結束日期</th>
+                                <th data-field="txtAppName">計劃主持人單位中文名稱</th>
+                                <th data-field="txtAppEName">計劃主持人單位英文名稱</th>
+                                <th data-field="txtAppSSO">計劃主持人SSO</th>
+                                <th data-field="txtSchool">計劃主持人單位</th>
+                                <th data-field="JobTitle">計劃主持人職稱</th>
+                                <th data-field="txtAppTel">計劃主持人電話</th>
+                                <th data-field="txtAppEmail">計劃主持人Email</th>
+                                <th data-field="committee">委員會</th>
+                                <th data-field="">審查通過日期</th>
+                                <th data-field="">審查頻率(每季一次/半年一次/一年一次/其它)</th>
+                                <th data-field="">期中審查預定日(以逗號分隔)</th>
+                                <th data-field="">結案審查預定日</th>
+                                <th data-field="">已完成期中審查次數</th>
+                                <th data-field="">申請表檔名</th>
+                                <th data-field="">通過證明檔名</th>
+                                <th data-field="remark">備註</th>
+                                <th data-field="Duraton_end">主審的姓名與Email(請以,分隔)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -139,6 +95,13 @@
                         </tbody>
                     </table>
                 </div>
+                <div>
+                    <button type="button" class="btn btn-outline-success btn-addlist">新增一筆資料</button>
+                </div>
+            </div>
+            <br>
+            <div>
+                <button type="button" class="btn btn-outline-secondary btn-uploadProject">上傳匯入案件</button>
             </div>
         </div>
     </body>

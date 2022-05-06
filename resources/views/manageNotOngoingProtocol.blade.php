@@ -93,6 +93,7 @@
                                         <option value="rciti">資訊科技創新研究中心 Research Center for Information Technology Innovation</option>
                                         <option value="abrc">農業生物科技研究中心 Agricultural Biotechnology Research Center/option>
                                         <option value="imh">近代史研究所 Institute of Modern History</option>
+                                        <option value="btrc">生醫轉譯研究中心 Biomedical Translation Research Center</option>
                                     </select>
                                 </td>
                             </tr>
@@ -136,8 +137,8 @@
 
                 </div>
                 <div>
-                    <table  class="manageFlowTable"
-                            id="manageFlowTable"
+                    <table  class="manageNotOngoingProtocolTable"
+                            id="manageNotOngoingProtocolTable"
                             data-toggle="table"
                             data-pagination="true"
                             data-toolbar="#toolbar"
@@ -375,6 +376,9 @@
                 case 'imh':
                     selectResearch = "近代史研究所";
                     break;
+                case 'btrc':
+                    selectResearch = "生醫轉譯研究中心";
+                    break;
             }
 
             //審查狀態
@@ -455,24 +459,6 @@
                 }
             });
         }
-
-        //案件內容
-        $('.manageFlowTable').on('click', '.btn-content',function(e){
-            var row = $(this).parents('tr:first');
-            var caseAppNo = row.children('.row-caseAppNo').text();
-
-            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlowContent/" + username;
-            var condition = "where caseAppNo='" + caseAppNo+"'";
-
-            $.ajax({
-                method:'post',
-                url:loginURL,
-                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
-                success:function(data){
-                    openPostWindow("{{ route('manageFlowContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
-                }
-            });
-        });
 
     </script>
 

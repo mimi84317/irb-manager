@@ -95,5 +95,9 @@ Route::group([
     //管理追蹤審查預定日功能
     Route::get('manageProtocolTrackingInfoDetail', 'manageProtocolTrackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail');
     Route::post('manageProtocolTrackingInfoDetail', 'manageProtocolTrackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail.post');
+
+    //外部案件匯入
+    Route::get('projectImport', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('projectImport');
+    Route::post('projectImport', 'projectImportController@showprojectImport')->name('projectImport.post');
 });
 

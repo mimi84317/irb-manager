@@ -100,6 +100,7 @@
                                         <option value="rciti">資訊科技創新研究中心 Research Center for Information Technology Innovation</option>
                                         <option value="abrc">農業生物科技研究中心 Agricultural Biotechnology Research Center/option>
                                         <option value="imh">近代史研究所 Institute of Modern History</option>
+                                        <option value="btrc">生醫轉譯研究中心 Biomedical Translation Research Center</option>
                                     </select>
                                 </td>
                             </tr>
@@ -197,7 +198,13 @@
                                             </div>
                                         </div>
                                     </th>
-                                    <th></th>
+                                    <th>
+                                        @if ($projectList[$i]['isImport'] == "true")
+                                            是
+                                        @elseif ($projectList[$i]['isImport'] == "false")
+                                            否
+                                        @endif
+                                    </th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -464,6 +471,9 @@
                     break;
                 case 'imh':
                     selectResearch = "近代史研究所";
+                    break;
+                case 'btrc':
+                    selectResearch = "生醫轉譯研究中心";
                     break;
             }
 
