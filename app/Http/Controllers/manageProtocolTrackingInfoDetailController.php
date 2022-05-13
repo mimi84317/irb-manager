@@ -28,4 +28,27 @@ class manageProtocolTrackingInfoDetailController extends Controller
         return view('manageProtocolTrackingInfoDetail');
     }
 
+    public function showtracingDateSetting(Request $request)
+    {
+
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        $state = "select";
+        $obj = "";
+        $tableName = "irbProject";
+
+        //依案件流水號搜尋唯一案件
+        $projectCondition = $request->condition;
+        $projectResponse = $this->DBData($tableName, $projectCondition, $state, $obj);
+
+        //依計畫流水號搜尋同系列案件
+        $projectResponse = json_decode($projectResponse, true);
+        $txtAppNo = $projectResponse[0]['txtAppNo'];
+        $listCondition = "where txtAppNo='".$txtAppNo."'";
+        $listResponse = $this->DBData($tableName, $listCondition, $state, $obj);
+
+        return view('tracingDateSetting')->with('project', $projectResponse)
+                                    ->with('projectList', json_decode($listResponse->Body(), true));
+    }
+
+
 }

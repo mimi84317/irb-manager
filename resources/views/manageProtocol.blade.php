@@ -143,7 +143,6 @@
                             </tr>
                         </tbody>
                     </table>
-
                 </div>
                 <div>
                     <table  class="manageProtocolTable"
@@ -162,7 +161,7 @@
                                 <th data-field="field-txtSchool" data-sortable="true">所別</th>
                                 <th data-field="field-txtAppName" data-sortable="true">主持人</th>
                                 <th data-field="Duration" data-sortable="true">研究起迄期間</th>
-                                <th data-sortable="true">設定追蹤審查預定日*(IRB行政人員設定)</th>
+                                <th>設定追蹤審查預定日*(IRB行政人員設定)</th>
                                 <th data-sortable="true">狀態</th>
                                 <th data-sortable="true">其他計畫編號(衛署計畫編號、JIRB編號、科技部編號...)</th>
                                 <th data-sortable="true">是否為匯入案件</th>
@@ -187,8 +186,12 @@
                                     <th>{{ $projectList[$i]['txtSchool'] }}</th>
                                     <th>{{ $projectList[$i]['txtAppName'] }}</th>
                                     <th>{{ $projectList[$i]['Duration_start'] }} ~ {{ $projectList[$i]['Duraton_end'] }}</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th>
+                                        @if ($projectList[$i]['caseState'] == "計畫執行中")
+                                            <button class="btn btn-outline-success btn-tracingDateSetting" type="button">設定</button>
+                                        @endif
+                                    </th>
+                                    <th>{{ $projectList[$i]['caseState'] }}</th>
                                     <th class="row-txtOtherNo">
                                         <div class="input-group">
                                             <input type="text" class="form-control txtOtherNo" value="{{ $projectList[$i]['txtOtherNo'] }}" readonly>
@@ -547,6 +550,26 @@
                 }
             });
         }
+
+        //設定追蹤審查預定日*(IRB行政人員設定)
+        $('.manageProtocolTable').on('click', '.btn-tracingDateSetting',function(e){
+            var row = $(this).parents('tr:first');
+            var txtAppNo = row.children('.row-txtAppNo').text();
+
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/tracingDateSetting/" + username;
+            var condition = "where txtAppNo='" + txtAppNo+"'";
+            console.log(condition);
+
+            //return 0;
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('tracingDateSetting.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
+        });
 
     </script>
 

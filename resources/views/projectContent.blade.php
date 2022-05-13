@@ -89,6 +89,20 @@
                                     <th>相關文件和備註</th>
                                     <td><button type="button" class="btn btn-outline-primary btn-projectRemark">相關文件和備註</button></td>
                                 </tr>
+                                @if ($project[0]['isImport'] == "true")
+                                <tr>
+                                    <th>是否為匯入案件</th>
+                                    <td>是</td>
+                                </tr>
+                                <tr>
+                                    <th>匯入人</th>
+                                    <td>{{ $project[0]['Import'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th>匯入日期</th>
+                                    <td>{{ $project[0]['ImportDate'] }}</td>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                         <div class="card">

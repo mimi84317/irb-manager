@@ -78,6 +78,8 @@ Route::group([
     Route::get('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol');
     Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
     Route::post('manageProtocol', 'manageProtocolController@updatetxtField')->name('manageProtocol.update');
+    Route::get('tracingDateSetting', 'manageProtocolTrackingInfoDetailController@showtracingDateSetting')->name('tracingDateSetting');
+    Route::post('tracingDateSetting', 'manageProtocolTrackingInfoDetailController@showtracingDateSetting')->name('tracingDateSetting.post');
 
     //案件列表
     Route::get('projectContent', 'projectController@showprojectContent')->name('projectContent');

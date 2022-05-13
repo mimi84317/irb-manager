@@ -51,7 +51,18 @@
             <div class="col-12">
                 <div>
                     <button type="button" class="btn btn-outline-primary btn-downloadExample">下載範例檔</button>
-                    <button type="button" class="btn btn-outline-primary btn-csvImport">CSV檔匯入</button>
+                </div>
+                <br>
+                <div class="text-danger font-weight-bold">
+                    注意! CSV檔務必為UTF-8編碼
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <input class="form-control csvImport" type="file" name="files[]">
+                    </div>
+                    <div class="col-sm">
+                        <button type="button" class="btn btn-outline-primary btn-csvImport">CSV檔匯入</button>
+                    </div>
                 </div>
                 <div>
                     <table  class="projectImportTable"
@@ -79,15 +90,15 @@
                                 <th data-field="txtAppTel">計劃主持人電話</th>
                                 <th data-field="txtAppEmail">計劃主持人Email</th>
                                 <th data-field="committee">委員會</th>
-                                <th data-field="">審查通過日期</th>
-                                <th data-field="">審查頻率(每季一次/半年一次/一年一次/其它)</th>
-                                <th data-field="">期中審查預定日(以逗號分隔)</th>
-                                <th data-field="">結案審查預定日</th>
-                                <th data-field="">已完成期中審查次數</th>
-                                <th data-field="">申請表檔名</th>
-                                <th data-field="">通過證明檔名</th>
+                                <th data-field="reviewPassedDate">審查通過日期</th>
+                                <th data-field="reviewFrequency">審查頻率(每季一次/半年一次/一年一次/其它)</th>
+                                <th data-field="midcaseDate">期中審查預定日(以逗號分隔)</th>
+                                <th data-field="endcaseDate">結案審查預定日</th>
+                                <th data-field="midcaseTimes">已完成期中審查次數</th>
+                                <th data-field="merge">申請表檔名</th>
+                                <th data-field="proof_of_acceptance">通過證明檔名</th>
                                 <th data-field="remark">備註</th>
-                                <th data-field="Duraton_end">主審的姓名與Email(請以,分隔)</th>
+                                <th data-field="test">主審的姓名與Email(請以,分隔)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -102,6 +113,8 @@
             <br>
             <div>
                 <button type="button" class="btn btn-outline-secondary btn-uploadProject">上傳匯入案件</button>
+            </div>
+            <div id="dvCSV">
             </div>
         </div>
     </body>
@@ -195,6 +208,76 @@
             $('#projSubmitFromDate').val("");//預定送審日-起
             $('#projSubmitToDate').val("");//預定送審日-訖
         });
+
+        //匯入CSV
+        $('.btn-csvImport').on('click',function(e){
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+            if (regex.test($(".csvImport").val().toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var table = $("<table />");
+                        var rows = e.target.result.split("\n");
+                        for (var i = 0; i < rows.length; i++) {
+                            var row = $("<tr />");
+                            var cells = rows[i].split(",");
+                            if (cells.length > 1) {
+                                for (var j = 0; j < cells.length; j++) {
+                                    var cell = $("<td />");
+                                    cell.html(cells[j]);
+                                    row.append(cell);
+                                }
+                                table.append(row);
+                            }
+                        }
+                        $("#dvCSV").html('');
+                        $("#dvCSV").append(table);
+                        }
+                        reader.readAsText($(".csvImport")[0].files[0]);
+                    } else {
+                        alert("This browser does not support HTML5.");
+                    }
+                } else {
+                    alert("Please upload a valid CSV file.");
+                }
+        });
+
+        //新增清單
+        $('.btn-addlist').on('click', function(){
+            //刪除No matching records found
+            var row = $('.no-records-found');
+            row.remove();
+
+            var newrow = '';
+            newrow += '<tr>';
+            newrow += '<td class="row-txtAppNo"><input type="text" class="form-control txtAppNo-value" value=""></td>';
+            newrow += '<td class="row-caseAppNo"><input type="text" class="form-control caseAppNo-value" value=""></td>';
+            newrow += '<td class="row-txtReviewNo"><input type="text" class="form-control txtReviewNo-value" value=""></td>';
+            newrow += '<td class="row-proj_name"><input type="text" class="form-control proj_name-value" value=""></td>';
+            newrow += '<td class="row-proj_Ename"><input type="text" class="form-control proj_Ename-value" value=""></td>';
+            newrow += '<td class="row-Duration_start"><input type="text" class="form-control Duration_start-value" value=""></td>';
+            newrow += '<td class="row-Duraton_end"><input type="text" class="form-control Duraton_end-value" value=""></td>';
+            newrow += '<td class="row-txtAppName"><input type="text" class="form-control txtAppName-value" value=""></td>';
+            newrow += '<td class="row-txtAppEName"><input type="text" class="form-control txtAppEName-value" value=""></td>';
+            newrow += '<td class="row-txtAppSSO"><input type="text" class="form-control txtAppSSO-value" value=""></td>';
+            newrow += '<td class="row-txtSchool"><input type="text" class="form-control txtSchool-value" value=""></td>';
+            newrow += '<td class="row-JobTitle"><input type="text" class="form-control JobTitle-value" value=""></td>';
+            newrow += '<td class="row-txtAppTel"><input type="text" class="form-control txtAppTel-value" value=""></td>';
+            newrow += '<td class="row-txtAppEmail"><input type="text" class="form-control txtAppEmail-value" value=""></td>';
+            newrow += '<td class="row-committee"><input type="text" class="form-control committee-value" value=""></td>';
+            newrow += '<td class="row-reviewPassedDate"><input type="text" class="form-control reviewPassedDate-value" value=""></td>';
+            newrow += '<td class="row-reviewFrequency"><input type="text" class="form-control reviewFrequency-value" value=""></td>';
+            newrow += '<td class="row-midcaseDate"><input type="text" class="form-control midcaseDate-value" value=""></td>';
+            newrow += '<td class="row-endcaseDate"><input type="text" class="form-control endcaseDate-value" value=""></td>';
+            newrow += '<td class="row-midcaseTimes"><input type="text" class="form-control midcaseTimes-value" value=""></td>';
+            newrow += '<td class="row-merge"><input class="form-control merge" type="file" name="mergeFiles[]"></td>';
+            newrow += '<td class="row-proof_of_acceptance"><input class="form-control proof_of_acceptance" type="file" name="proofFiles[]"></td>';
+            newrow += '<td class="row-remark"><input type="text" class="form-control remark-value" value=""></td>';
+            newrow += '<td class="row-test"><input type="text" class="form-control test-value" value=""></td>';
+            newrow += "</tr>";
+            $('.projectImportTable').append(newrow);
+        });
+
 
     </script>
 
