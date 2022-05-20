@@ -91,7 +91,7 @@
                                 </tr>
                                 <tr>
                                     <th>計劃流水編號</th>
-                                    <th class="row-txtReviewNo"><a href="javascript:void(0)" onclick="changePage('{{ $content[0]['caseAppNo'] }}')">{{ $content[0]['txtAppNo'] }}</a></th>
+                                    <th class="row-txtReviewNo"><a href="javascript:void(0)" onclick="changePage('{{ $content[0]['txtAppNo'] }}')">{{ $content[0]['txtAppNo'] }}</a></th>
                                     <th>送審文件</th>
                                     <td>
                                         <button type="button" class="btn btn-outline-primary btn-download" value="merge"><i class="fas fa-download">下載最新版</i></button>
@@ -265,7 +265,7 @@
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, proj_name, txtAppName, txtAppNo, previousPage)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -300,23 +300,28 @@
 
             var hideInput6 = document.createElement("input");
             hideInput6.type = "hidden";
-            hideInput6.name = "proj_name";
-            hideInput6.value = proj_name;
+            hideInput6.name = "condition";
+            hideInput6.value = condition;
 
             var hideInput7 = document.createElement("input");
             hideInput7.type = "hidden";
-            hideInput7.name = "txtAppName";
-            hideInput7.value = txtAppName;
+            hideInput7.name = "proj_name";
+            hideInput7.value = proj_name;
 
             var hideInput8 = document.createElement("input");
             hideInput8.type = "hidden";
-            hideInput8.name = "txtAppNo";
-            hideInput8.value = txtAppNo;
+            hideInput8.name = "txtAppName";
+            hideInput8.value = txtAppName;
 
             var hideInput9 = document.createElement("input");
             hideInput9.type = "hidden";
-            hideInput9.name = "previousPage";
-            hideInput9.value = previousPage;
+            hideInput9.name = "txtAppNo";
+            hideInput9.value = txtAppNo;
+
+            var hideInput10 = document.createElement("input");
+            hideInput10.type = "hidden";
+            hideInput10.name = "previousPage";
+            hideInput10.value = previousPage;
 
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
@@ -327,6 +332,7 @@
             tempForm.appendChild(hideInput7);
             tempForm.appendChild(hideInput8);
             tempForm.appendChild(hideInput9);
+            tempForm.appendChild(hideInput10);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -346,9 +352,13 @@
         }
 
         //計劃流水編號-內容
-        function changePage(caseAppNo){
+        function changePage(txtAppNo){
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlowContent/" + username;
-            var condition = "where caseAppNo='" + caseAppNo + "'";
+            var condition = "where txtAppNo='" + txtAppNo + "'";
+            var proj_name = "";
+            var txtAppName = "";
+            var txtAppNo = "";
+            var previousPage = "manageFlowContent";
             console.log(condition);
 
             $.ajax({
@@ -356,13 +366,14 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('projectContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('projectContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, proj_name, txtAppName, txtAppNo, previousPage);
                 }
             });
         }
 
         //相關文件和備註
         $('.btn-projectRemark').on('click',function(e){
+            var condition = "";
             var proj_name = "{{ $content[0]['proj_name'] }}";
             var txtAppName = "{{ $content[0]['txtAppName'] }}";
             var txtAppNo = "{{ $content[0]['txtAppNo'] }}";
@@ -375,7 +386,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage);
+                    openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, proj_name, txtAppName, txtAppNo, previousPage);
                 }
             });
         });

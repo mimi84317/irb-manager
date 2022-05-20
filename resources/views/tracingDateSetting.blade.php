@@ -105,27 +105,22 @@
                                 @endif
                             </tbody>
                         </table>
-                        <div class="card">
-                            <div class="card-header">追蹤審查預定日</div>
-                            <div class="card-body">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">案件類別</th>
-                                            <th scope="col">說明</th>
-                                            <th scope="col">預定送審日期</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">案件類別</th>
+                                    <th scope="col">通過日期</th>
+                                    <th scope="col">審查頻率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>{{ $project[0]['auditType'] }}</th>
+                                    <th>{{ $project[0]['passDate'] }}</th>
+                                    <th>{{ $project[0]['frequency'] }}</th>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -133,7 +128,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        審核案件清單
+                        管理追蹤審查預定日
                     </div>
                     <div class="card-body">
                         <table  class="auditTable"
@@ -146,21 +141,9 @@
 
                             <thead>
                                 <tr>
-                                    <th data-field="insID" class="d-none">insID</th>
-                                    <th data-field="memID" class="d-none">memID</th>
-                                    <th data-field="txtAppNo" data-sortable="true">案件流水編號</th>
-                                    <th data-field="apply_time" data-sortable="true">送審日期</th>
-                                    <th data-field="auditType" data-sortable="true">案件類型</th>
-                                    <th data-field="txtReviewNo" data-sortable="true">案件編號</th>
-                                    <th data-field="">追蹤案(新案)編號</th>
-                                    <th data-field="formType" data-sortable="true">審查類型</th>
-                                    <th data-field="txtAppName" data-sortable="true">送件人</th>
-                                    <th data-sortable="true">案件狀態</th>
-                                    <th data-sortable="true">審核階段</th>
-                                    <th >收件證明</th>
-                                    <th>審查結果</th>
-                                    <th>送審文件核准版</th>
-                                    <th>送審文件下載</th>
+                                    <th data-field="insID" class="d-none">案件類別</th>
+                                    <th data-field="memID" class="d-none">說明</th>
+                                    <th data-field="txtAppNo" data-sortable="true">預定送審日期</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -169,22 +152,6 @@
                                         <th class="row-insID" style="display:none">{{ $projectList[$i]['insID'] }}</th>
                                         <th class="row-memID" style="display:none">{{ $projectList[$i]['memID'] }}</th>
                                         <th>{{ $projectList[$i]['caseAppNo'] }}</th>
-                                        <th>{{ $projectList[$i]['apply_time'] }}</th>
-                                        <th>{{ $projectList[$i]['auditType'] }}</th>
-                                        <th>{{ $projectList[$i]['txtReviewNo'] }}</th>
-                                        <th></th>
-                                        <th>{{ $projectList[$i]['formType'] }}</th>
-                                        <th>{{ $projectList[$i]['txtAppName'] }}</th>
-                                        <th></th>
-                                        <th></th>
-                                        <th>
-                                            <button type="button" class="btn btn-outline-primary btn-download" value="proof_of_acceptance"><i class="fas fa-download">下載</i></button>
-                                        </th>
-                                        <th></th>
-                                        <th></th>
-                                        <th>
-                                            <button type="button" class="btn btn-outline-primary btn-download" value="merge"><i class="fas fa-download">文件下載</i></button>
-                                        </th>
                                     </tr>
                                 @endfor
                             </tbody>
@@ -192,6 +159,8 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-back">返回上一頁</button>
         </div>
         <!--------Modal------->
         <!--計畫資訊-->
@@ -391,6 +360,24 @@
                 }
             });
 
+        });
+
+        //返回上一頁
+        $('.btn-back').on('click',function(e){
+            var proj_name = "";
+            var txtAppName = "";
+            var txtAppNo = "";
+            var previousPage = "";
+
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('manageProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage);
+                }
+            });
         });
 
     </script>

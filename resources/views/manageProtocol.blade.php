@@ -225,7 +225,7 @@
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, committeeType)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, committeeType, previousPage)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -268,6 +268,11 @@
             hideInput7.name = "committeeType";
             hideInput7.value = committeeType;
 
+            var hideInput8 = document.createElement("input");
+            hideInput8.type = "hidden";
+            hideInput8.name = "previousPage";
+            hideInput8.value = previousPage;
+
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
@@ -275,6 +280,7 @@
             tempForm.appendChild(hideInput5);
             tempForm.appendChild(hideInput6);
             tempForm.appendChild(hideInput7);
+            tempForm.appendChild(hideInput8);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -539,14 +545,16 @@
         function changePage(caseAppNo){
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectContent/" + username;
             var condition = "where caseAppNo='" + caseAppNo+"'";
-            console.log(condition)
+            var committeeType = "";
+            var previousPage = "manageProtocol";
+            console.log(previousPage)
 
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('projectContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('projectContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition,committeeType, previousPage);
                 }
             });
         }

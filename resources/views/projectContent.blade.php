@@ -192,6 +192,8 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-back">返回上一頁</button>
         </div>
         <!--------Modal------->
         <!--計畫資訊-->
@@ -261,7 +263,7 @@
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage, condition)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -314,6 +316,11 @@
             hideInput9.name = "previousPage";
             hideInput9.value = previousPage;
 
+            var hideInput10 = document.createElement("input");
+            hideInput10.type = "hidden";
+            hideInput10.name = "condition";
+            hideInput10.value = condition;
+
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
@@ -323,6 +330,7 @@
             tempForm.appendChild(hideInput7);
             tempForm.appendChild(hideInput8);
             tempForm.appendChild(hideInput9);
+            tempForm.appendChild(hideInput10);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -348,6 +356,7 @@
             var txtAppName = "{{ $project[0]['txtAppName'] }}";
             var txtAppNo = "{{ $project[0]['txtAppNo'] }}";
             var previousPage = "projectContent";
+            var condition = "";
 
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectRemark/" + username;
             //console.log(loginURL);
@@ -356,7 +365,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage);
+                    openPostWindow("{{ route('projectRemark.post') }}", "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage, condition);
                 }
             });
         });
@@ -391,6 +400,48 @@
                 }
             });
 
+        });
+
+        //返回上一頁
+        $('.btn-back').on('click',function(e){
+            var proj_name = "";
+            var txtAppName = "";
+            var txtAppNo = "";
+            var previousPage = "{{ app('request')->input('previousPage') }}";
+            var condition = "";
+            var loginURL = "";
+            var route = "";
+            console.log(previousPage);
+
+            if(previousPage == "manageFlow"){//瀏覽全部審查案
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+                route = "{{ route('manageFlow.post') }}";
+            }
+            else if(previousPage == "manageFlowContent"){//審核案件內容
+                var txtAppNo = "{{ $project[0]['txtAppNo'] }}";
+                condition = "where txtAppNo='" + txtAppNo + "'";
+
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlowContent/" + username;
+                route = "{{ route('manageFlowContent.post') }}";
+            }
+            else if(previousPage == "manageProtocol"){//管理全部計畫與追蹤審查預定日
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
+                route = "{{ route('manageProtocol.post') }}";
+            }
+            else if(previousPage == "manageNotOngoingProtocol"){//管理未正進行計畫
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageNotOngoingProtocol/" + username;
+                route = "{{ route('manageNotOngoingProtocol.post') }}";
+            }
+
+            //return 0;
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow(route, "", data["access_token"], username, clientid, client_secret, user, proj_name, txtAppName, txtAppNo, previousPage, condition);
+                }
+            });
         });
 
     </script>

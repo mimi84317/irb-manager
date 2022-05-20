@@ -183,7 +183,7 @@
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, previousPage)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -221,12 +221,18 @@
             hideInput6.name = "condition";
             hideInput6.value = condition;
 
+            var hideInput7 = document.createElement("input");
+            hideInput7.type = "hidden";
+            hideInput7.name = "previousPage";
+            hideInput7.value = previousPage;
+
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
             tempForm.appendChild(hideInput4);
             tempForm.appendChild(hideInput5);
             tempForm.appendChild(hideInput6);
+            tempForm.appendChild(hideInput7);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -449,13 +455,14 @@
         function changePage(caseAppNo){
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
             var condition = "where caseAppNo='" + caseAppNo + "'";
+            var previousPage = "manageNotOngoingProtocol";
 
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('projectContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('projectContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, previousPage);
                 }
             });
         }
