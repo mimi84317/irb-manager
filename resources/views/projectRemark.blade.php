@@ -363,7 +363,7 @@
                 var name = $('.remarkFileTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
                 if(name == ""){
                     alert("文件名稱不可空白!!!");
-                    break;
+                    return 0;
                 }
                 else{
                     remarkFileUpdate[i-1]['Id'] = $('.remarkFileTable tr:eq('+i+')').children('.row-id').text();

@@ -1,10 +1,8 @@
 <!doctype html>
 <html>
     <head>
-        <!--<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css'>-->
-        <link rel="stylesheet" href="{{ asset('js/bootstrap.min.css') }}">
-        <!--<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'>-->
-        <link rel="stylesheet" href="{{ asset('js/all.min.css') }}">
+        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css'>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'>
 
         <!--datepicker需要-->
         <!--<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">-->

@@ -113,7 +113,7 @@
                         <tbody>
                             @foreach($committeeList as $committee)
                                 <tr>
-                                    <th class="row-id" style="display:none">{{ $committee['Id'] }}</th>
+                                    <th class="row-id" class="d-none">{{ $committee['Id'] }}</th>
                                     <th>{{ $committee['committeeName'] }}</th>
                                     <th>{{ $committee['committeeDate'] }}</th>
                                     <th>{{ $committee['selectCommittee'] }}</th>

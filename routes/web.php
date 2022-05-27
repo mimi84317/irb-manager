@@ -78,8 +78,9 @@ Route::group([
     Route::get('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol');
     Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
     Route::post('manageProtocol', 'manageProtocolController@updatetxtField')->name('manageProtocol.update');
-    Route::get('tracingDateSetting', 'manageProtocolTrackingInfoDetailController@showtracingDateSetting')->name('tracingDateSetting');
-    Route::post('tracingDateSetting', 'manageProtocolTrackingInfoDetailController@showtracingDateSetting')->name('tracingDateSetting.post');
+    Route::get('tracingDateSetting', 'trackingInfoDetailController@showtracingDateSetting')->name('tracingDateSetting');
+    Route::post('tracingDateSetting', 'trackingInfoDetailController@showtracingDateSetting')->name('tracingDateSetting.post');
+    Route::post('tracingDateSetting', 'trackingInfoDetailController@updatetracingDateSetting')->name('tracingDateSetting.update');
 
     //案件列表
     Route::get('projectContent', 'projectController@showprojectContent')->name('projectContent');
@@ -95,8 +96,8 @@ Route::group([
     Route::post('manageNotOngoingProtocol', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('manageNotOngoingProtocol.post');
 
     //管理追蹤審查預定日功能
-    Route::get('manageProtocolTrackingInfoDetail', 'manageProtocolTrackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail');
-    Route::post('manageProtocolTrackingInfoDetail', 'manageProtocolTrackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail.post');
+    Route::get('manageProtocolTrackingInfoDetail', 'trackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail');
+    Route::post('manageProtocolTrackingInfoDetail', 'trackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail.post');
 
     //外部案件匯入
     Route::get('projectImport', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('projectImport');

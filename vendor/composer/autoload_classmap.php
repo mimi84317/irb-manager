@@ -22,7 +22,7 @@ return array(
     'App\\Http\\Controllers\\manageFlowController' => $baseDir . '/app/Http/Controllers/manageFlowController.php',
     'App\\Http\\Controllers\\manageNotOngoingProtocolController' => $baseDir . '/app/Http/Controllers/manageNotOngoingProtocolController.php',
     'App\\Http\\Controllers\\manageProtocolController' => $baseDir . '/app/Http/Controllers/manageProtocolController.php',
-    'App\\Http\\Controllers\\manageProtocolTrackingInfoDetailController' => $baseDir . '/app/Http/Controllers/manageProtocolTrackingInfoDetailController.php',
+    'App\\Http\\Controllers\\trackingInfoDetailController' => $baseDir . '/app/Http/Controllers/trackingInfoDetailController.php',
     'App\\Http\\Controllers\\projectController' => $baseDir . '/app/Http/Controllers/projectController.php',
     'App\\Http\\Controllers\\projectImportController' => $baseDir . '/app/Http/Controllers/projectImportController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',

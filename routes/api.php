@@ -44,11 +44,11 @@ Route::group([
     Route::post('delete', 'committeeController@deleteCommittee')->name('committee.delete');
     Route::post('manageFlow', 'manageFlowController@showmanageFlow')->name('manageFlow.post');
     Route::post('manageProtocol', 'manageProtocolController@showmanageProtocol')->name('manageProtocol.post');
-    Route::post('tracingDateSetting', 'manageProtocolTrackingInfoDetailController@showtracingDateSetting')->name('tracingDateSetting.post');
+    Route::post('tracingDateSetting', 'trackingInfoDetailController@showtracingDateSetting')->name('tracingDateSetting.post');
     Route::post('projectContent', 'projectController@showprojectContent')->name('projectContent.post');
     Route::post('projectRemark', 'projectController@showprojectRemark')->name('projectRemark.post');
     Route::post('manageNotOngoingProtocol', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('manageNotOngoingProtocol.post');
-    Route::post('manageProtocolTrackingInfoDetail', 'manageProtocolTrackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail.post');
+    Route::post('manageProtocolTrackingInfoDetail', 'trackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail.post');
     Route::post('projectImport', 'projectImportController@showprojectImport')->name('projectImport.post');
 
     // Route::get('fileupload', 'AuthController@me');

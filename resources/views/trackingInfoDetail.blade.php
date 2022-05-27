@@ -67,8 +67,8 @@
                                 <td>
                                     <select class="form-select" id="selectStatus">
                                         <option value="none" selected>請選擇</option>
-                                        <option value="iclp">計畫執行中</option>
-                                        <option value="rchss">計畫已結束</option>
+                                        <option value="projContinue">計畫執行中</option>
+                                        <option value="projEnd">計畫已結束</option>
                                     </select>
                                 </td>
                             </tr>
@@ -77,8 +77,8 @@
                                 <td>
                                     <select class="form-select" id="selectType">
                                         <option value="none" selected>請選擇</option>
-                                        <option value="iclp">期中審查</option>
-                                        <option value="rchss">結案審查</option>
+                                        <option value="midcase">期中審查</option>
+                                        <option value="closedcase">結案審查</option>
                                     </select>
                                 </td>
                             </tr>
@@ -111,7 +111,6 @@
                             </tr>
                         </tbody>
                     </table>
-
                 </div>
                 <div>
                     <table  class="manageProtocolTrackingInfoDetailTable"
@@ -135,7 +134,18 @@
                             </tr>
                         </thead>
                         <tbody>
-
+                            @for($i = 0; $i < count($tracinglist); $i++)
+                                <tr>
+                                    <td>{{ $tracinglist[$i]['tracingDateStart'] }}</td>
+                                    <td>{{ $tracinglist[$i]['status'] }}</td>
+                                    <td>{{ $tracinglist[$i]['description'] }}</td>
+                                    <td>{{ $tracinglist[$i]['txtAppNo'] }}</td>
+                                    <td>{{ $tracinglist[$i]['txtReviewNo'] }}</td>
+                                    <td>{{ $tracinglist[$i]['txtAppName'] }}</td>
+                                    <td>{{ $tracinglist[$i]['Duration_start'] }}</td>
+                                    <td>{{ $tracinglist[$i]['Duraton_end'] }}</td>
+                                </tr>
+                            @endfor
                         </tbody>
                     </table>
                 </div>
@@ -218,6 +228,63 @@
 
         //查詢
         $('.btn-search').on('click',function(e){
+            var projectHost = $('#projectHost').val();//計畫主持人
+            var projectNum = $('#projectNum').val();//案件編號或案件流水編號
+            var selectStatus = $('#selectStatus').val();//計畫狀態
+            var selectType = $('#selectType').val();//追蹤案類型
+            var projEnd = $('#projEnd').val();//計畫結束日
+            var projSubmit = $('#projSubmit').val();//預定送審日
+
+            //計畫狀態
+            if(selectStatus == "none"){
+                selectStatus = "";
+            }
+            else if(selectStatus == "projContinue"){
+                selectStatus = "計畫執行中";
+            }
+            else if(selectStatus == "projEnd"){
+                selectStatus = "計畫已結束";
+            }
+
+            //追蹤案類型
+            if(selectType == "none"){
+                selectType = "";
+            }
+            else if(selectType == "midcase"){
+                selectType = "新案審查";
+            }
+            else if(selectType == "closedcase"){
+                selectType = "結案審查";
+            }
+
+            var condition = "";
+            //condition += "where ??? like '%" + selectCasetype + "%' ";//案件類型
+            condition += "where txtReviewNo like '%" + projectNum + "%' ";//案件編號或案件流水編號
+            condition += "and txtSchool like '%" + selectResearch + "%' ";//所別
+            condition += "and txtAppName like '%" + projectHost + "%' ";//計畫主持人
+            condition += "and proj_name like '%" + projectName + "%' ";//計畫名稱
+            //condition += "and ??? like '%" + reviewStatus + "%' ";//審查狀態
+            //condition += "and ??? between '" + fromDate + "' and '" + toDate + "'";//計畫起訖日期
+            if(fromDate != ""){
+                condition += "and Duration_start > '" + fromDate + "' ";//計畫起訖日期
+            }
+            if(toDate != ""){
+                condition += "and Duraton_end < '" + toDate + "' ";//計畫起訖日期
+            }
+
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            console.log(condition);
+
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('manageFlow.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
+
 
         });
 

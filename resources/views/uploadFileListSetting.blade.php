@@ -283,7 +283,7 @@
                 var name = $('.filelistTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
                 if(name == ""){
                     alert("文件名稱不可空白!!!");
-                    break;
+                    return 0;
                 }
                 else{
                     filelistUpdate[i-1]['sort'] = $('.filelistTable tr:eq('+i+')').children('.row-sort').text();
@@ -335,6 +335,8 @@
                 }
             });
         });*/
+
+        //更新
         $('#ajax-data-update').submit(function(e) {
             event.preventDefault();
             var filelistTableLength = $('.filelistTable tr').length;
@@ -387,7 +389,7 @@
                 var name = $('.filelistTable tr:eq('+i+')').children('.row-name').children('.name-value').val();
                 if(name == ""){
                     alert("文件名稱不可空白!!!");
-                    break;
+                    return 0;
                 }
                 else{
                     filelistUpdate[i-1]['sort'] = $('.filelistTable tr:eq('+i+')').children('.row-sort').text();
