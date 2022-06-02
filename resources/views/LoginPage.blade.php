@@ -33,7 +33,7 @@
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="manageNotOngoingProtocol">管理未正進行的計畫</button>
             <br>
-            <button type="button" class="btn btn-outline-primary btn-login" id="manageProtocolTrackingInfoDetail">管理追蹤審查預定日功能</button>
+            <button type="button" class="btn btn-outline-primary btn-login" id="trackingInfoDetail">管理追蹤審查預定日功能</button>
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="projectImport">外部案件匯入</button>
         </div>
@@ -125,8 +125,8 @@
             else if(caseType == "manageNotOngoingProtocol"){
                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageNotOngoingProtocol/" + username;
             }
-            else if(caseType == "manageProtocolTrackingInfoDetail"){
-                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocolTrackingInfoDetail/" + username;
+            else if(caseType == "trackingInfoDetail"){
+                loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/trackingInfoDetail/" + username;
             }
             else if(caseType == "projectImport"){
                 loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/projectImport/" + username;
@@ -153,8 +153,8 @@
                     else if(caseType == "manageNotOngoingProtocol"){
                         openPostWindow("{{ route('manageNotOngoingProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user);
                     }
-                    else if(caseType == "manageProtocolTrackingInfoDetail"){
-                        openPostWindow("{{ route('manageProtocolTrackingInfoDetail.post') }}", "", data["access_token"], username, clientid, client_secret, user);
+                    else if(caseType == "trackingInfoDetail"){
+                        openPostWindow("{{ route('trackingInfoDetail.post') }}", "", data["access_token"], username, clientid, client_secret, user);
                     }
                     else if(caseType == "projectImport"){
                         openPostWindow("{{ route('projectImport.post') }}", "", data["access_token"], username, clientid, client_secret, user);

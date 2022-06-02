@@ -48,7 +48,7 @@ Route::group([
     Route::post('projectContent', 'projectController@showprojectContent')->name('projectContent.post');
     Route::post('projectRemark', 'projectController@showprojectRemark')->name('projectRemark.post');
     Route::post('manageNotOngoingProtocol', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('manageNotOngoingProtocol.post');
-    Route::post('manageProtocolTrackingInfoDetail', 'trackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail.post');
+    Route::post('trackingInfoDetail', 'trackingInfoDetailController@showtrackingInfoDetail')->name('trackingInfoDetail.post');
     Route::post('projectImport', 'projectImportController@showprojectImport')->name('projectImport.post');
 
     // Route::get('fileupload', 'AuthController@me');

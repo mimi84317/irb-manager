@@ -113,8 +113,8 @@
                     </table>
                 </div>
                 <div>
-                    <table  class="manageProtocolTrackingInfoDetailTable"
-                            id="manageProtocolTrackingInfoDetailTable"
+                    <table  class="trackingInfoDetailTable"
+                            id="trackingInfoDetailTable"
                             data-toggle="table"
                             data-pagination="true"
                             data-toolbar="#toolbar"
@@ -131,6 +131,7 @@
                                 <th data-field="txtAppName">主持人</th>
                                 <th data-field="Duration_start">計畫起日</th>
                                 <th data-field="Duraton_end">計畫結束日</th>
+                                <th data-field="tracingSumbit"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -144,6 +145,11 @@
                                     <td>{{ $tracinglist[$i]['txtAppName'] }}</td>
                                     <td>{{ $tracinglist[$i]['Duration_start'] }}</td>
                                     <td>{{ $tracinglist[$i]['Duraton_end'] }}</td>
+                                    <td>
+                                        @if ($tracinglist[$i]['tracingSumbit'] == "N")
+                                            <div><button type="button" class="btn btn-outline-primary btn-sumbit">已送審</button></div>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endfor
                         </tbody>
@@ -229,11 +235,13 @@
         //查詢
         $('.btn-search').on('click',function(e){
             var projectHost = $('#projectHost').val();//計畫主持人
-            var projectNum = $('#projectNum').val();//案件編號或案件流水編號
+            var projectNum = $('#projectNum').val();//iIRB No.或流水編號
             var selectStatus = $('#selectStatus').val();//計畫狀態
             var selectType = $('#selectType').val();//追蹤案類型
-            var projEnd = $('#projEnd').val();//計畫結束日
-            var projSubmit = $('#projSubmit').val();//預定送審日
+            var projEndFromDate = $('#projEndFromDate').val();//計畫結束日-起
+            var projEndToDate = $('#projEndToDate').val();//計畫結束日-迄
+            var projSubmitFromDate = $('#projSubmitFromDate').val();//預定送審日-起
+            var projSubmitToDate = $('#projSubmitToDate').val();//預定送審日-迄
 
             //計畫狀態
             if(selectStatus == "none"){
@@ -258,13 +266,13 @@
             }
 
             var condition = "";
-            //condition += "where ??? like '%" + selectCasetype + "%' ";//案件類型
-            condition += "where txtReviewNo like '%" + projectNum + "%' ";//案件編號或案件流水編號
-            condition += "and txtSchool like '%" + selectResearch + "%' ";//所別
-            condition += "and txtAppName like '%" + projectHost + "%' ";//計畫主持人
-            condition += "and proj_name like '%" + projectName + "%' ";//計畫名稱
-            //condition += "and ??? like '%" + reviewStatus + "%' ";//審查狀態
-            //condition += "and ??? between '" + fromDate + "' and '" + toDate + "'";//計畫起訖日期
+            condition += "where txtAppName like '%" + projectHost + "%' ";//計畫主持人
+            condition += "and txtAppNo like '%" + projectNum + "%' ";//iIRB No.或流水編號-流水編號
+            condition += "and txtReviewNo like '%" + projectNum + "%' ";//iIRB No.或流水編號-iIRB No.
+            condition += "and txtAppName like '%" + selectStatus + "%' ";//status
+            condition += "and proj_name like '%" + selectType + "%' ";//追蹤案類型
+            condition += "and ??? between '" + projEndFromDate + "' and '" + projEndToDate + "'";//計畫結束日
+            condition += "and ??? between '" + projSubmitFromDate + "' and '" + projSubmitToDate + "'";//預定送審日
             if(fromDate != ""){
                 condition += "and Duration_start > '" + fromDate + "' ";//計畫起訖日期
             }
@@ -298,6 +306,25 @@
             $('#projEndToDate').val("");//計畫結束日-迄
             $('#projSubmitFromDate').val("");//預定送審日-起
             $('#projSubmitToDate').val("");//預定送審日-訖
+        });
+
+        //已送審
+        $('.trackingInfoDetailTable').on('click', '.btn-sumbit',function(e){
+            var row = $(this).parents('tr:first');
+            var caseAppNo = row.children('.row-caseAppNo').text();
+
+            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            var condition = "where caseAppNo='" + caseAppNo+"'";
+
+            return 0;
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('manageFlowContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
         });
 
     </script>

@@ -451,6 +451,7 @@
                     tracingDatetUpdate[i-1]['txtAppName'] = "{{ $project[0]['txtAppName'] }}";
                     tracingDatetUpdate[i-1]['Duration_start'] = "{{ $project[0]['Duration_start'] }}";
                     tracingDatetUpdate[i-1]['Duraton_end'] = "{{ $project[0]['Duraton_end'] }}";
+                    tracingDatetUpdate[i-1]['tracingSumbit'] = "N";
                 }
             }
             console.log(tracingDatetUpdate);

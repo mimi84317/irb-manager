@@ -132,16 +132,16 @@
             <br>
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">繳費紀錄</div>
+                    <!--<div class="card-header">繳費紀錄</div>-->
                     <div class="card-body">
                         <table class="table table-bordered">
                             <thead>
                             </thead>
                             <tbody>
-                                <tr>
+                                <!--<tr>
                                     <td>支票</td>
                                     <td></td>
-                                </tr>
+                                </tr>-->
                                 <tr>
                                     <td>下載收件證明</td>
                                     <td>
@@ -152,7 +152,7 @@
                                     <td>下載審查結果證明</td>
                                     <td></td>
                                 </tr>
-                                <tr>
+                                <!--<tr>
                                     <td>下載網路版審查結果</td>
                                     <td></td>
                                 </tr>
@@ -167,7 +167,7 @@
                                 <tr>
                                     <td>設定審查期限</td>
                                     <td></td>
-                                </tr>
+                                </tr>-->
                             </tbody>
                         </table>
                     </div>

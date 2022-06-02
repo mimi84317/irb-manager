@@ -96,8 +96,8 @@ Route::group([
     Route::post('manageNotOngoingProtocol', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('manageNotOngoingProtocol.post');
 
     //管理追蹤審查預定日功能
-    Route::get('manageProtocolTrackingInfoDetail', 'trackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail');
-    Route::post('manageProtocolTrackingInfoDetail', 'trackingInfoDetailController@showmanageProtocolTrackingInfoDetail')->name('manageProtocolTrackingInfoDetail.post');
+    Route::get('trackingInfoDetail', 'trackingInfoDetailController@showtrackingInfoDetail')->name('trackingInfoDetail');
+    Route::post('trackingInfoDetail', 'trackingInfoDetailController@showtrackingInfoDetail')->name('trackingInfoDetail.post');
 
     //外部案件匯入
     Route::get('projectImport', 'manageNotOngoingProtocolController@showmanageNotOngoingProtocol')->name('projectImport');

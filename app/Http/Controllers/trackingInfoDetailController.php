@@ -22,7 +22,7 @@ class trackingInfoDetailController extends Controller
     }
 
     use showData;
-    public function showmanageProtocolTrackingInfoDetail(Request $request)
+    public function showtrackingInfoDetail(Request $request)
     {
 
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
@@ -59,7 +59,35 @@ class trackingInfoDetailController extends Controller
 
     public function updatetracingDateSetting(Request $request)
     {
-        //更新上傳清單
+        $tracingDatetUpdate = $request->tracingDatetUpdate;
+        $tableName = "irbProjectTracing";
+        $condition = "";
+        $state = "";
+
+        $count = count($tracingDatetUpdate);
+        for($i = 0; $i < $count; $i++){
+            if($tracingDatetUpdate[$i]['Id'] != ""){
+                $state = "update";
+                $condition = "where Id=".$tracingDatetUpdate[$i]['Id'];
+            }
+            else{
+                $state = "insert";
+            }
+            unset($tracingDatetUpdate[$i]['Id']);
+            $update = json_encode($tracingDatetUpdate[$i], JSON_UNESCAPED_UNICODE);
+            $response = $this->DBData($tableName, $condition, $state, $update);
+
+            //return $update;
+
+            if(strpos($response ,'Success') == false){
+                return $response;
+            }
+        }
+        return 0;
+    }
+
+    public function updatetracingDateSettingSumbit(Request $request)
+    {
         $tracingDatetUpdate = $request->tracingDatetUpdate;
         $tableName = "irbProjectTracing";
         $condition = "";
