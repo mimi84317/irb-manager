@@ -123,6 +123,7 @@
 
                         <thead>
                             <tr>
+                                <th>id</th>
                                 <th data-field="traceDate" data-sortable="true">追蹤審查預定日</th>
                                 <th data-field="traceType" data-sortable="true">追蹤案類型</th>
                                 <th data-field="traceRemark">追蹤審查備註</th>
@@ -137,6 +138,7 @@
                         <tbody>
                             @for($i = 0; $i < count($tracinglist); $i++)
                                 <tr>
+                                    <td class="row-id">{{ $tracinglist[$i]['Id'] }}</td>
                                     <td>{{ $tracinglist[$i]['tracingDateStart'] }}</td>
                                     <td>{{ $tracinglist[$i]['status'] }}</td>
                                     <td>{{ $tracinglist[$i]['description'] }}</td>
@@ -315,6 +317,11 @@
 
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
             var condition = "where caseAppNo='" + caseAppNo+"'";
+
+            var row = $(this).parents('tr:first');
+            var id = row.children('.row-id').text();
+
+            console.log(id);
 
             return 0;
             $.ajax({
