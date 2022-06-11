@@ -269,29 +269,36 @@
 
             var condition = "";
             condition += "where txtAppName like '%" + projectHost + "%' ";//計畫主持人
-            condition += "and txtAppNo like '%" + projectNum + "%' ";//iIRB No.或流水編號-流水編號
-            condition += "and txtReviewNo like '%" + projectNum + "%' ";//iIRB No.或流水編號-iIRB No.
+            condition += "and (txtAppNo like '%" + projectNum + "%' or txtReviewNo like '%" + projectNum + "%' ) ";//iIRB No.或流水編號
             condition += "and txtAppName like '%" + selectStatus + "%' ";//status
-            condition += "and proj_name like '%" + selectType + "%' ";//追蹤案類型
-            condition += "and ??? between '" + projEndFromDate + "' and '" + projEndToDate + "'";//計畫結束日
-            condition += "and ??? between '" + projSubmitFromDate + "' and '" + projSubmitToDate + "'";//預定送審日
-            if(fromDate != ""){
-                condition += "and Duration_start > '" + fromDate + "' ";//計畫起訖日期
+            //condition += "and proj_name like '%" + selectType + "%' ";//追蹤案類型
+
+            //計畫結束日
+            if(projEndFromDate != "" && projEndToDate == ""){
+                condition += "and Duration_start > '" + projEndFromDate + "' ";
             }
-            if(toDate != ""){
-                condition += "and Duraton_end < '" + toDate + "' ";//計畫起訖日期
+            if(projEndFromDate == "" && projEndToDate != ""){
+                condition += "and Duraton_end < '" + projEndToDate + "' ";
             }
 
-            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            //預定送審日
+            if(projSubmitFromDate != "" && projSubmitToDate == ""){
+                condition += "and tracingDateStart > '" + projSubmitFromDate + "' ";//計畫起訖日期
+            }
+            if(projSubmitFromDate == "" && projSubmitToDate != ""){
+                condition += "and tracingDateStart < '" + projSubmitToDate + "' ";//計畫起訖日期
+            }
+
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/trackingInfoDetail/" + username;
             console.log(condition);
 
-
+            //return 0;
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('manageFlow.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('trackingInfoDetail.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                 }
             });
 
@@ -300,38 +307,59 @@
 
         //重設
         $('.btn-clear').on('click',function(e){
-            $('#projectHost').val("");//計畫主持人
+            /*$('#projectHost').val("");//計畫主持人
             $('#projectNum').val("");//iIRB No.或流水編號
             $('#selectStatus').val("none");//計畫狀態
             $('#selectType').val("none");//追蹤案類型
             $('#projEndFromDate').val("");//計畫結束日-起
             $('#projEndToDate').val("");//計畫結束日-迄
             $('#projSubmitFromDate').val("");//預定送審日-起
-            $('#projSubmitToDate').val("");//預定送審日-訖
-        });
+            $('#projSubmitToDate').val("");//預定送審日-訖*/
 
-        //已送審
-        $('.trackingInfoDetailTable').on('click', '.btn-sumbit',function(e){
-            var row = $(this).parents('tr:first');
-            var caseAppNo = row.children('.row-caseAppNo').text();
+            var condition = "";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/trackingInfoDetail/" + username;
 
-            var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
-            var condition = "where caseAppNo='" + caseAppNo+"'";
-
-            var row = $(this).parents('tr:first');
-            var id = row.children('.row-id').text();
-
-            console.log(id);
-
-            return 0;
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('manageFlowContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('trackingInfoDetail.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                 }
             });
+        });
+
+        //已送審
+        $('.trackingInfoDetailTable').on('click', '.btn-sumbit',function(e){
+            var row = $(this).parents('tr:first');
+            var id = row.children('.row-id').text();
+
+            var condition = "where Id='" + id + "'";
+            var token = "{{ app('request')->input('token') }}";
+
+            var updateValue = {'tracingSumbit': 'Y'};
+
+            //return 0;
+            $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    method:'post',
+                    url:"{{ route('trackingInfoDetail.update') }}",
+                    data: {updateValue:updateValue, condition:condition, token:token},
+                    success:function(data){
+                        console.log(data);
+                        if(data != 0){
+                            alert("更新失敗，請洽系統管理員");
+                        }
+                        else{
+                            alert("更新成功");
+                            setTimeout(function () { document.location.reload(true); }, 5);
+                        }
+                    }
+                });
         });
 
     </script>

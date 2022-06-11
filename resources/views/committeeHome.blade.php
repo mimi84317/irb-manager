@@ -264,9 +264,21 @@
 
         //重設
         $('.btn-clear').on('click',function(e){
-            $('#selectCommittee').val("none");
+            /*$('#selectCommittee').val("none");
             $('#fromDate').val("");
-            $('#toDate').val("");
+            $('#toDate').val("");*/
+
+            var condition = "";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
         });
 
         //會議內容-編輯

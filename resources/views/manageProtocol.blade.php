@@ -508,17 +508,23 @@
             condition += "and txtSchool like '%" + selectResearch + "%' ";
             condition += "and txtAppName like '%" + projectHost + "%' ";
             condition += "and txtReviewNo like '%" + projectNum + "%' ";
-            //condition += "and ??? between '" + fromDate + "' and '" + toDate + "'";//計畫起訖日期
-            if(fromDate != ""){
-                condition += "and Duration_start > '" + fromDate + "' ";//計畫起訖日期
+
+            if(fromDate == ""){
+                fromDate = "01/01/1990";
             }
-            if(toDate != ""){
-                condition += "and Duraton_end < '" + toDate + "' ";//計畫起訖日期
+            if(toDate == ""){
+                toDate = "12/31/2121";
             }
-            //condition += "and ??? = '" + selectStatus + "'";//狀態
+
+            condition += "and Duration_start >= '" + fromDate + "' ";//計畫起訖日期
+            condition += "and Duraton_end <= '" + toDate + "' ";//計畫起訖日期
+
+            condition += "and caseState = '" + selectStatus + "'";//狀態
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
             console.log(condition);
 
+            //
+            return 0;
             $.ajax({
                 method:'post',
                 url:loginURL,
@@ -532,13 +538,26 @@
 
         //重設
         $('.btn-clear').on('click',function(e){
-            $('#projectName').val("");//計畫名稱
+            /*$('#projectName').val("");//計畫名稱
             $('#selectResearch').val("none");//所別
             $('#projectHost').val("");//計畫主持人
             $('#projectNum').val("");//iIRB No.或流水編號
             $('#fromDate').val("");//計畫起訖日期-起
             $('#toDate').val("");//計畫起訖日期-訖
-            $('#selectStatus').val("none");//狀態
+            $('#selectStatus').val("none");//狀態*/
+
+            var condition = "";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_
+                    secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('manageProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
         });
 
         //計劃名稱-內容

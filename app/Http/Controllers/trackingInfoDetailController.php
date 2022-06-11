@@ -115,5 +115,22 @@ class trackingInfoDetailController extends Controller
         return 0;
     }
 
+    //更新送審狀態
+    public function updatesumbit(Request $request)
+    {
+        $updateValue = $request->updateValue;
+        $updateType = "update";
+        $tableName = "irbProjectTracing";
+        $condition = $request->condition;
+
+        $updateValue = json_encode($updateValue, JSON_UNESCAPED_UNICODE);
+        $response = $this->DBData($tableName, $condition, $updateType, $updateValue);
+        if(strpos($response ,'Success') == false){
+            return $response;
+        }
+        else{
+            return 0;
+        }
+    }
 
 }

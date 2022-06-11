@@ -417,15 +417,18 @@
             condition += "and txtAppName like '%" + projectHost + "%' ";//計畫主持人
             condition += "and proj_name like '%" + projectName + "%' ";//計畫名稱
             //condition += "and ??? like '%" + reviewStatus + "%' ";//審查狀態
-            //condition += "and ??? between '" + fromDate + "' and '" + toDate + "'";//計畫起訖日期
-            if(fromDate != ""){
-                condition += "and Duration_start > '" + fromDate + "' ";//計畫起訖日期
+
+            if(fromDate == ""){
+                fromDate = "01/01/1990";
             }
-            if(toDate != ""){
-                condition += "and Duraton_end < '" + toDate + "' ";//計畫起訖日期
+            if(toDate == ""){
+                toDate = "12/31/2121";
             }
 
-            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageFlow/" + username;
+            condition += "and Duration_start >= '" + fromDate + "' ";//計畫起訖日期
+            condition += "and Duraton_end <= '" + toDate + "' ";//計畫起訖日期
+
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageNotOngoingProtocol/" + username;
             console.log(condition);
 
             $.ajax({
@@ -433,7 +436,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('manageFlow.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('manageNotOngoingProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                 }
             });
 
@@ -441,14 +444,26 @@
 
         //重設
         $('.btn-clear').on('click',function(e){
-            $('#selectCasetype').val("none");//案件類型
+            /*$('#selectCasetype').val("none");//案件類型
             $('#projectNum').val("");//案件編號或案件流水編號
             $('#selectResearch').val("none");//所別
             $('#projectHost').val("");//計畫主持人
             $('#projectName').val("");//計畫名稱
             $('input[name=reviewStatus]').attr('checked',false);//審查狀態
             $('#fromDate').val("");//計畫起訖日期-起
-            $('#toDate').val("");//計畫起訖日期-訖
+            $('#toDate').val("");//計畫起訖日期-訖*/
+
+            var condition = "";
+            loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageNotOngoingProtocol/" + username;
+
+            $.ajax({
+                method:'post',
+                url:loginURL,
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
+                success:function(data){
+                    openPostWindow("{{ route('manageNotOngoingProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                }
+            });
         });
 
         //案件編號-內容

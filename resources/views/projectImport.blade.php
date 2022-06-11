@@ -192,23 +192,6 @@
             });
         });
 
-        //查詢
-        $('.btn-search').on('click',function(e){
-
-        });
-
-        //重設
-        $('.btn-clear').on('click',function(e){
-            $('#projectHost').val("");//計畫主持人
-            $('#projectNum').val("");//iIRB No.或流水編號
-            $('#selectStatus').val("none");//計畫狀態
-            $('#selectType').val("none");//追蹤案類型
-            $('#projEndFromDate').val("");//計畫結束日-起
-            $('#projEndToDate').val("");//計畫結束日-迄
-            $('#projSubmitFromDate').val("");//預定送審日-起
-            $('#projSubmitToDate').val("");//預定送審日-訖
-        });
-
         //匯入CSV
         $('.btn-csvImport').on('click',function(e){
             var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
