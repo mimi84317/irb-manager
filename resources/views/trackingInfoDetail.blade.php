@@ -270,7 +270,7 @@
             var condition = "";
 
             if(selectStatus != "none"){
-                condition += "inner join irbProject on irbProject.caseState like '%" + selectType + "%' ";//追蹤案類型
+                condition += "inner join irbProject on irbProject.caseState like '%" + selectStatus + "%' ";//追蹤案類型
                 condition += "and irbProjectTracing.txtAppNo=irbProject.txtAppNo "
             }
 
@@ -295,7 +295,7 @@
             }
 
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/trackingInfoDetail/" + username;
-            //console.log(condition);
+            console.log(condition);
 
             //return 0;
             $.ajax({
