@@ -26,8 +26,10 @@ class manageProtocolController extends Controller
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
-        //$condition = $request->condition;
-        $condition = "where status = 'newcase'";
+        $condition = $request->condition;
+        /*if($condition == ""){
+            $condition = "where status = 'newcase'";
+        }*/
         $obj = "";
 
         $tableName = "irbProject";

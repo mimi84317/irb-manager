@@ -140,7 +140,7 @@
                                 <tr>
                                     <td class="row-id">{{ $tracinglist[$i]['Id'] }}</td>
                                     <td>{{ $tracinglist[$i]['tracingDateStart'] }}</td>
-                                    <td>{{ $tracinglist[$i]['status'] }}</td>
+                                    <td>{{ $tracinglist[$i]['tracingStatus'] }}</td>
                                     <td>{{ $tracinglist[$i]['description'] }}</td>
                                     <td>{{ $tracinglist[$i]['txtAppNo'] }}</td>
                                     <td>{{ $tracinglist[$i]['txtReviewNo'] }}</td>
@@ -261,38 +261,42 @@
                 selectType = "";
             }
             else if(selectType == "midcase"){
-                selectType = "新案審查";
+                selectType = "期中審查";
             }
             else if(selectType == "closedcase"){
                 selectType = "結案審查";
             }
 
             var condition = "";
-            condition += "where txtAppName like '%" + projectHost + "%' ";//計畫主持人
-            condition += "and (txtAppNo like '%" + projectNum + "%' or txtReviewNo like '%" + projectNum + "%' ) ";//iIRB No.或流水編號
-            condition += "and txtAppName like '%" + selectStatus + "%' ";//status
-            //condition += "and proj_name like '%" + selectType + "%' ";//追蹤案類型
+
+            if(selectStatus != "none"){
+                condition += "inner join irbProject on irbProject.caseState like '%" + selectType + "%' ";//追蹤案類型
+            }
+
+            condition += "where irbProjectTracing.txtAppName like '%" + projectHost + "%' ";//計畫主持人
+            condition += "and (irbProjectTracing.txtAppNo like '%" + projectNum + "%' or irbProjectTracing.txtReviewNo like '%" + projectNum + "%' ) ";//iIRB No.或流水編號
+            condition += "and irbProjectTracing.tracingStatus like '%" + selectType + "%' ";//追蹤案類型
 
             //計畫結束日
             if(projEndFromDate != "" && projEndToDate == ""){
-                condition += "and Duration_start > '" + projEndFromDate + "' ";
+                condition += "and irbProjectTracing.Duration_start > '" + projEndFromDate + "' ";
             }
             if(projEndFromDate == "" && projEndToDate != ""){
-                condition += "and Duraton_end < '" + projEndToDate + "' ";
+                condition += "and irbProjectTracing.Duraton_end < '" + projEndToDate + "' ";
             }
 
             //預定送審日
             if(projSubmitFromDate != "" && projSubmitToDate == ""){
-                condition += "and tracingDateStart > '" + projSubmitFromDate + "' ";//計畫起訖日期
+                condition += "and irbProjectTracing.tracingDateStart > '" + projSubmitFromDate + "' ";//計畫起訖日期
             }
             if(projSubmitFromDate == "" && projSubmitToDate != ""){
-                condition += "and tracingDateStart < '" + projSubmitToDate + "' ";//計畫起訖日期
+                condition += "and irbProjectTracing.tracingDateStart < '" + projSubmitToDate + "' ";//計畫起訖日期
             }
 
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/trackingInfoDetail/" + username;
             console.log(condition);
 
-            //return 0;
+            return 0;
             $.ajax({
                 method:'post',
                 url:loginURL,

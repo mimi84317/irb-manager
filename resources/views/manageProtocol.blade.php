@@ -519,12 +519,12 @@
             condition += "and Duration_start >= '" + fromDate + "' ";//計畫起訖日期
             condition += "and Duraton_end <= '" + toDate + "' ";//計畫起訖日期
 
-            condition += "and caseState = '" + selectStatus + "'";//狀態
+            condition += "and caseState = '" + selectStatus + "' ";//狀態
+            condition += "and status = 'newcase'";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/manageProtocol/" + username;
             console.log(condition);
 
-            //
-            return 0;
+            //return 0;
             $.ajax({
                 method:'post',
                 url:loginURL,
@@ -552,8 +552,7 @@
             $.ajax({
                 method:'post',
                 url:loginURL,
-                data: {username:username, clientid:clientid, client_secret:client_
-                    secret, user:user},
+                data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
                     openPostWindow("{{ route('manageProtocol.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
                 }

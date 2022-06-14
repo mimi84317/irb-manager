@@ -119,7 +119,7 @@
                                 <th>計畫名稱</th>
                                 <td><input type="text" class="form-control" id="projectName" value=""></td>
                             </tr>
-                            <tr>
+                            <!--<tr>
                                 <th>審查狀態</th>
                                 <td>
                                     <div class="form-check form-check-inline">
@@ -144,7 +144,7 @@
                                         <input class="form-check-input" type="radio" name="reviewStatus" value="disagree"><label>所長不同意</label>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr>-->
                             <tr>
                                 <th>計畫起訖日期</th>
                                 <td>
@@ -430,7 +430,7 @@
             }
 
             //審查狀態
-            if(reviewStatus == "allStatus"){
+            /*if(reviewStatus == "allStatus"){
                 reviewStatus = "";
             }
             else if(reviewStatus == "review"){
@@ -450,7 +450,7 @@
             }
             else if(reviewStatus == "disagree"){
                 reviewStatus = "所長不同意";
-            }
+            }*/
 
             var condition = "";
             condition += "where auditType like '%" + selectCasetype + "%' ";//案件類型

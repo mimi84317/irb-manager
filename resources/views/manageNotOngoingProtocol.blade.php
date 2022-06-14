@@ -147,7 +147,7 @@
 
                         <thead>
                             <tr>
-                                <th data-field="chooseProject">選擇</th>
+                                <!--<th data-field="chooseProject">選擇</th>-->
                                 <th data-field="txtAppNo" data-sortable="true">流水編號</th>
                                 <th data-field="txtReviewNo" data-sortable="true">iIRB No.</th>
                                 <th data-field="proj_name" data-sortable="true">計劃名稱</th>
@@ -159,16 +159,18 @@
                         </thead>
                         <tbody>
                             @for($i = 0; $i < count($projectList); $i++)
-                                <tr>
-                                    <th><input class="form-check-input require-checked" type="checkbox"></th>
-                                    <th>{{ $projectList[$i]['txtAppNo'] }}</th>
-                                    <th><a href="javascript:void(0)" onclick="changePage('{{ $projectList[$i]['caseAppNo'] }}')">{{ $projectList[$i]['txtReviewNo'] }}</a></th>
-                                    <th>{{ $projectList[$i]['proj_name'] }}</th>
-                                    <th>{{ $projectList[$i]['txtSchool'] }}</th>
-                                    <th>{{ $projectList[$i]['txtAppName'] }}</th>
-                                    <th>{{ $projectList[$i]['Duration_start'] }} ~ {{ $projectList[$i]['Duraton_end'] }}</th>
-                                    <th>{{ $projectList[$i]['status'] }}</th>
-                                </tr>
+                                @if ($projectList[$i]['caseState'] == "計畫已結束" || $projectList[$i]['caseState'] == "計畫不成立")
+                                    <tr>
+                                        <!--<th><input class="form-check-input require-checked" type="checkbox"></th>-->
+                                        <th>{{ $projectList[$i]['txtAppNo'] }}</th>
+                                        <th><a href="javascript:void(0)" onclick="changePage('{{ $projectList[$i]['caseAppNo'] }}')">{{ $projectList[$i]['txtReviewNo'] }}</a></th>
+                                        <th>{{ $projectList[$i]['proj_name'] }}</th>
+                                        <th>{{ $projectList[$i]['txtSchool'] }}</th>
+                                        <th>{{ $projectList[$i]['txtAppName'] }}</th>
+                                        <th>{{ $projectList[$i]['Duration_start'] }} ~ {{ $projectList[$i]['Duraton_end'] }}</th>
+                                        <th>{{ $projectList[$i]['status'] }}</th>
+                                    </tr>
+                                @endif
                             @endfor
                         </tbody>
                     </table>
