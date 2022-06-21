@@ -253,7 +253,7 @@ public function fileUploadPost($caseType, Request $request)
 ```php
 public function showCommittee(Request $request)
 ```
-### 設定委員會議程-主頁查詢
+### 設定委員會議程-主頁查詢(未使用)
 ```php
 public function searchCommittee(Request $request)
 ```

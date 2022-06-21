@@ -23,7 +23,7 @@
             clientid  <input type="text" value="test" id="clientid"><br>
             client_secret  <input type="text" value="123456" id="client_secret"><br>
             user  <input type="text" value="MEMC_6002124" id="user"><br>
-            <button type="button" class="btn btn-outline-primary btn-login" id="uploadFilelist">設定案件上傳清單</button>
+            <button type="button" class="btn btn-outline-primary btn-login" id="uploadFilelist">設定案件上傳清單(完成)</button>
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="committee">設定委員會議程</button>
             <br>
@@ -31,11 +31,13 @@
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="manageProtocol">管理全部計畫與追蹤審查預定日</button>
             <br>
-            <button type="button" class="btn btn-outline-primary btn-login" id="manageNotOngoingProtocol">管理未正進行的計畫</button>
+            <button type="button" class="btn btn-outline-primary btn-login" id="manageNotOngoingProtocol">管理未正進行的計畫(完成)</button>
             <br>
-            <button type="button" class="btn btn-outline-primary btn-login" id="trackingInfoDetail">管理追蹤審查預定日功能</button>
+            <button type="button" class="btn btn-outline-primary btn-login" id="trackingInfoDetail">管理追蹤審查預定日功能(完成)</button>
             <br>
             <button type="button" class="btn btn-outline-primary btn-login" id="projectImport">外部案件匯入</button>
+            <br>
+            <button type="button" class="btn btn-outline-primary btn-login" id="email">查詢系統寄信紀錄</button>
         </div>
 
     </body>

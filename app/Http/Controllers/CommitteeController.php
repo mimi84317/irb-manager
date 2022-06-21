@@ -40,7 +40,7 @@ class committeeController extends Controller
     }
 
     //主頁查詢
-    public function searchCommittee(Request $request)
+    /*public function searchCommittee(Request $request)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
         $state = "select";
@@ -55,7 +55,7 @@ class committeeController extends Controller
         return view('committeeHome')
                         ->with('committeeList', json_decode($response->Body(), true));
 
-    }
+    }*/
 
     //會議紀錄、會議內容顯示
     public function showCommitteeContent(Request $request)
@@ -118,7 +118,7 @@ class committeeController extends Controller
         $condition = $request->condition;
         $obj = "";
 
-        $tableName = "IRB_committee";
+        $tableName = "irbProject";
         $response = $this->DBData($tableName, $condition, $state, $obj);
 
         return view('committeeList')->with('committeeList', json_decode($response->Body(), true));

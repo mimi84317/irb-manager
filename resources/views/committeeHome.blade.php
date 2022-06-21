@@ -113,8 +113,8 @@
                         <tbody>
                             @foreach($committeeList as $committee)
                                 <tr>
-                                    <th class="row-id" class="d-none">{{ $committee['Id'] }}</th>
-                                    <th>{{ $committee['committeeName'] }}</th>
+                                    <th class="row-id" style="display:none">{{ $committee['Id'] }}</th>
+                                    <th class="row-committeeName">{{ $committee['committeeName'] }}</th>
                                     <th>{{ $committee['committeeDate'] }}</th>
                                     <th>{{ $committee['selectCommittee'] }}</th>
                                     <th class="committee-editContent"><button type="button" class="btn btn-outline-success btn-editContent">編輯 <i class="fas fa-edit"></i></th>
@@ -304,12 +304,14 @@
         //討論案件清單
         $('.committeeTable').on('click', '.btn-list',function(e){
             var row = $(this).parents('tr:first');
-            var id = row.children('.row-id').text();
-            console.log(id);
+            //var id = row.children('.row-id').text();
+            var committeeName = row.children('.row-committeeName').text();
+            console.log(committeeName);
 
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeList/" + username;
-            var condition = "where Id=" + id;
+            var condition = "where committeeName=" + committeeName;
 
+            //return 0;
             $.ajax({
                 method:'post',
                 url:loginURL,

@@ -27,10 +27,10 @@
 
         <div class="container">
             <div class="col-form-label">
-                <p class="titleText">會議名稱: {{ $committeeList[0]['committeeName'] }}</p>
+                <p class="titleText">會議名稱: {{ app('request')->input('committeeName') }}</p>
             </div>
             <div class="">
-                會議說明: {{ $committeeList[0]['committeeName'] }}
+                會議說明: {{ app('request')->input('committeeName') }}
             </div>
             <div>
                 <div>
@@ -696,9 +696,9 @@
                         <p class="subjectText">二、本次會議審查案件</p>
                         <div>
                             <div>
-                                <div>
+                                <!--<div>
                                     <p>1.新案審查</p>
-                                </div>
+                                </div>-->
                                 <div>
                                     <table class="table table-hover">
                                         <thead>
@@ -717,24 +717,51 @@
                                                 <th scope="col">初審意見表</th>
                                                 <th scope="col">複審意見表</th>
                                                 <th scope="col">審查意見往返紀錄</th>
-                                                <th scope="col">須迴避機構</th>
+                                                <th scope="col">審查結果</th>
+                                                <th scope="col">同意書/結果通知編號</th>
+                                                <th scope="col">發函日期</th>
+                                                <th scope="col">進度/成果報告應繳期限</th>
                                                 <th scope="col">會議備註</th>
                                                 <th scope="col">填寫會議記錄</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th></th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-
+                                            @for($i = 0; $i < count($committeeList); $i++)
+                                                <tr>
+                                                    <td>{{ $committeeList[$i]['caseAppNo'] }}</td>
+                                                    <td>{{ $committeeList[$i]['auditType'] }}</td>
+                                                    <td>{{ $committeeList[$i]['txtReviewNo'] }}</td>
+                                                    <td>{{ $committeeList[$i]['apply_time'] }}</td>
+                                                    <td>{{ $committeeList[$i]['txtAppName'] }}</td>
+                                                    <td>{{ $committeeList[$i]['txtSchool'] }}</td>
+                                                    <td>{{ $committeeList[$i]['proj_name'] }}</td>
+                                                    <td>
+                                                        @if ($committeeList[$i]['inFunds'] == "true")
+                                                            院內: {{ $committeeList[$i]['inFunds_1'] }} ;
+                                                        @endif
+                                                        @if ($committeeList[$i]['outFunds'] == "true")
+                                                            院外: {{ $committeeList[$i]['outFunds_1'] }} ;
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $committeeList[$i]['Duration_start'] }} ~ {{ $committeeList[$i]['Duraton_end'] }}</td>
+                                                    <td>??</td>
+                                                    <td>下載</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>審查意見往返紀錄</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>會議記錄</td>
+                                                </tr>
+                                            @endfor
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div>
+                            <!--<div>
                                 <div>
                                     <p>2.修正審查</p>
                                 </div>
@@ -811,7 +838,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                 </div>
             </div>
