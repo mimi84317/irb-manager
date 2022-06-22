@@ -36,7 +36,6 @@ class committeeController extends Controller
 
         return view('committeeHome')
                         ->with('committeeList', json_decode($response->Body(), true));
-
     }
 
     //主頁查詢
@@ -78,10 +77,7 @@ class committeeController extends Controller
         else if($committeeType == "minutes"){
             return view('committeeMinutes')->with('committeeContentList', json_decode($response->Body(), true));
         }
-
     }
-
-
 
     //更新會議紀錄、會議內容顯示
     public function updateCommittee(Request $request)
@@ -110,7 +106,7 @@ class committeeController extends Controller
         }
     }
 
-    //	討論案件清單
+    //討論案件清單
     public function showCommitteeList(Request $request)
     {
         $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
@@ -121,9 +117,9 @@ class committeeController extends Controller
         $tableName = "irbProject";
         $response = $this->DBData($tableName, $condition, $state, $obj);
 
-        return view('committeeList')->with('committeeList', json_decode($response->Body(), true));
+        //return $response;
+        return view('committeeList')->with('list', json_decode($response->Body(), true));
         //return view('committeeListNew')->with('committeeList', json_decode($response->Body(), true));
-
     }
 
     //刪除會議
@@ -143,8 +139,22 @@ class committeeController extends Controller
         else{
             return 0;
         }
+    }
 
+    //討論案件清單-會議記錄
+    public function showCommitteeListMinutes(Request $request)
+    {
+        $bpmapi = env('BPMAPI_URL').'/BPMAPI/index.php';
+        $state = "select";
+        $condition = $request->condition;
+        $obj = "";
 
+        $tableName = "irbProject";
+        $response = $this->DBData($tableName, $condition, $state, $obj);
+
+        //return $response;
+        return view('committeeList')->with('list', json_decode($response->Body(), true));
+        //return view('committeeListNew')->with('committeeList', json_decode($response->Body(), true));
     }
 
 }

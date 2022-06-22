@@ -136,7 +136,7 @@
         var client_secret = "{{ app('request')->input('client_secret') }}";
         var user = "{{ app('request')->input('user') }}";
 
-        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, committeeType)
+        function openPostWindow(url, name, token, username, clientid, client_secret, user, condition, committeeType, committeeName)
         {
             var tempForm = document.createElement("form");
             tempForm.id = "tempForm1";
@@ -179,6 +179,11 @@
             hideInput7.name = "committeeType";
             hideInput7.value = committeeType;
 
+            var hideInput8 = document.createElement("input");
+            hideInput8.type = "hidden";
+            hideInput8.name = "committeeName";
+            hideInput8.value = committeeName;
+
             tempForm.appendChild(hideInput1);
             tempForm.appendChild(hideInput2);
             tempForm.appendChild(hideInput3);
@@ -186,6 +191,7 @@
             tempForm.appendChild(hideInput5);
             tempForm.appendChild(hideInput6);
             tempForm.appendChild(hideInput7);
+            tempForm.appendChild(hideInput8);
 
             if(document.all){
                 tempForm.attachEvent("onsubmit",function(){});        //IE
@@ -214,12 +220,13 @@
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeNew/" + username;
             condition = "where Id=0";
             var committeeType = "content";
+            var committeeName = "";
             $.ajax({
                 method:'post',
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType);
+                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType, committeeName);
                 }
             });
         });
@@ -229,6 +236,9 @@
             var selectCommittee = $('#selectCommittee').val();//委員會
             var fromDate = $('#fromDate').val();//會議期間-起
             var toDate = $('#toDate').val();//會議期間-迄
+
+            var committeeType = "";
+            var committeeName = "";
 
             if(selectCommittee == "none"){
                 selectCommittee = "";
@@ -255,7 +265,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType, committeeName);
                 }
             });
 
@@ -268,6 +278,9 @@
             $('#fromDate').val("");
             $('#toDate').val("");*/
 
+            var committeeType = "";
+            var committeeName = "";
+
             var condition = "";
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
 
@@ -276,7 +289,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('committee.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType, committeeName);
                 }
             });
         });
@@ -287,6 +300,9 @@
             var id = row.children('.row-id').text();
             console.log(id)
 
+            var committeeType = "";
+            var committeeName = "";
+
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeContent/" + username;
             var condition = "where Id=" + id;
             var committeeType = "content";
@@ -296,7 +312,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType);
+                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType, committeeName);
                 }
             });
         });
@@ -306,10 +322,13 @@
             var row = $(this).parents('tr:first');
             //var id = row.children('.row-id').text();
             var committeeName = row.children('.row-committeeName').text();
-            console.log(committeeName);
+
+            var committeeType = "";
+            //var committeeName = "";
 
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeList/" + username;
-            var condition = "where committeeName=" + committeeName;
+            var condition = "where committeeName='" + committeeName + "'";
+            console.log(condition);
 
             //return 0;
             $.ajax({
@@ -317,7 +336,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeList.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition);
+                    openPostWindow("{{ route('committeeList.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType, committeeName);
                 }
             });
         });
@@ -329,6 +348,9 @@
                 var row = $(this).parents('tr:first');
                 var id = row.children('.row-id').text();
                 //row.remove();
+
+                var committeeType = "";
+                var committeeName = "";
 
                 var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeMinutes/" + username;
                 var condition = id;
@@ -360,6 +382,9 @@
             var row = $(this).parents('tr:first');
             var id = row.children('.row-id').html();
 
+            //var committeeType = "";
+            var committeeName = "";
+
             var loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committeeMinutes/" + username;
             var condition = "where Id=" + id;
             var committeeType = "minutes";
@@ -369,7 +394,7 @@
                 url:loginURL,
                 data: {username:username, clientid:clientid, client_secret:client_secret, user:user},
                 success:function(data){
-                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType);
+                    openPostWindow("{{ route('committeeContent.post') }}", "", data["access_token"], username, clientid, client_secret, user, condition, committeeType, committeeName);
                 }
             });
         });

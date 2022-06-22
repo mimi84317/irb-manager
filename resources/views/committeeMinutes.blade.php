@@ -318,7 +318,6 @@
             });
         });
 
-
         //返回上一頁
         $('.btn-back').on('click',function(e){
             loginURL = "{{ env('SERVER_URL') }}" + "/api/auth/login/committee/" + username;
